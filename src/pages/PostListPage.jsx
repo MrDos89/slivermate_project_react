@@ -6,3 +6,5 @@ const PostListPage = () => {
     </div>
   );
 };
+
+export default PostListPage;
