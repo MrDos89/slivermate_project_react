@@ -1,6 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import styled from "styled-components";
+import image1 from "../images/vkfmt1.png";
+import image2 from "../images/vkfmt2.png";
+import image3 from "../images/vkfmt3.png";
 
 const SectionWrapper = styled.div`
   width: 100vw;
@@ -8,88 +11,141 @@ const SectionWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  position: relative;
-  background: white; /* 배경 흰색 */
-  overflow: hidden;
-`;
-
-const Sun = styled(motion.div)`
-  position: absolute;
-  bottom: -300px; /* 시작 위치 더 아래 */
-  width: 50vw; /* 브라우저 절반 크기 */
-  height: 50vw;
-  max-width: 500px; /* 최대 크기 제한 */
-  max-height: 500px;
-  background-color: #ffdd57;
-  border-radius: 50%;
-`;
-
-const Sprout = styled(motion.div)`
-  position: absolute;
-  bottom: -50px;
-  width: 30vw;
-  height: 40vh;
-  max-width: 200px;
-  max-height: 250px;
-  background: url("/path_to_sprout_image.png") no-repeat center/contain;
-  opacity: 0;
-`;
-
-const Title = styled(motion.h1)`
-  font-size: 4rem;
+  flex-direction: row;
+  gap: 10vw;
+  background: white;
   color: black;
-  font-weight: bold;
-  position: absolute;
-  top: 35%;
-  opacity: 0;
 `;
+
+const ItemWrapper = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 350px;
+  scale: 1.1;
+`;
+
+const CircleImage = styled.div`
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  font-size: 1.2rem;
+  color: #00aaff;
+`;
+
+const Step = styled.div`
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+`;
+
+const Title = styled.div`
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 0.6rem;
+  white-space: pre-line;
+`;
+
+const Description = styled.div`
+  font-size: 1rem;
+  color: #333;
+`;
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.4,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.8, ease: "easeOut" },
+  },
+};
 
 const SectionThree = () => {
-  const controlsSun = useAnimation();
-  const controlsSprout = useAnimation();
-  const controlsText = useAnimation();
-  const sectionRef = useInView({ triggerOnce: true, threshold: 0.6 });
+  const controls = useAnimation();
+  const ref = useRef(null);
+  const inView = useInView(ref, { threshold: 0.4 });
 
   useEffect(() => {
-    if (sectionRef) {
-      animateElements();
+    if (inView) {
+      controls.start("visible");
+    } else {
+      controls.start("hidden");
     }
-  }, [sectionRef]);
-
-  const animateElements = () => {
-    controlsSun.start({
-      bottom: "15%", // 위로 올라오게
-      scale: 1.5,
-      transition: { duration: 2, ease: "easeOut" },
-    });
-
-    controlsSprout.start({
-      bottom: "5%",
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 1.5, delay: 1 },
-    });
-
-    controlsText.start({
-      opacity: 1,
-      y: -30,
-      transition: { duration: 1.2, delay: 2 },
-    });
-  };
+  }, [inView]);
 
   return (
-    <SectionWrapper ref={sectionRef}>
-      <Sun animate={controlsSun} />
-      <Sprout animate={controlsSprout} />
-      <Title animate={controlsText}>파릇이란?</Title>
+    <SectionWrapper
+      as={motion.div}
+      ref={ref}
+      variants={containerVariants}
+      initial="hidden"
+      animate={controls}
+    >
+      <ItemWrapper variants={itemVariants}>
+        <CircleImage
+          style={{
+            backgroundImage: `url(${image1})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <Step>첫번째 파릇</Step>
+        <Title>수준 높은 강의 서비스</Title>
+        <Description>
+          파릇에서 제공하는 수준 높은 강의를 통해 새로운 도전과 배움을
+          시작하세요
+        </Description>
+      </ItemWrapper>
+
+      <ItemWrapper variants={itemVariants}>
+        <CircleImage
+          style={{
+            backgroundImage: `url(${image2})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <Step>두번째 파릇</Step>
+        <Title>{"같은 취미를 가진\n파릇과의 만남"}</Title>
+        <Description>
+          같은 취미를 가진 회원들과 모임을 통해 다양한 소통과 활동을 할 수 있는
+          기회
+        </Description>
+      </ItemWrapper>
+
+      <ItemWrapper variants={itemVariants}>
+        <CircleImage
+          style={{
+            backgroundImage: `url(${image3})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <Step>세번째 파릇</Step>
+        <Title>보류 장점</Title>
+        <Description>
+          이건 뭐 추가하면 좋을까나 시니어에게 필요한 소식을 가장 빨리 전달하는
+          파릇?
+        </Description>
+      </ItemWrapper>
     </SectionWrapper>
   );
 };
-
-
-
-
-
 
 export default SectionThree;

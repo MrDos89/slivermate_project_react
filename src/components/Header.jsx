@@ -16,9 +16,17 @@ const HeaderContainer = styled.header`
 `;
 
 const Logo = styled.div`
-  font-size: 24px;
+  @font-face {
+    font-family: "KCCHyerim-Regular";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/KCCHyerim-Regular.woff2")
+      format("woff2");
+    font-weight: normal;
+    font-style: normal;
+  }
+  font-family: "KCCHyerim-Regular";
+  font-size: 40px;
   font-weight: bold;
-  color: #67dbff;
+  color: rgb(39, 233, 0);
   flex: 1;
 `;
 
@@ -90,7 +98,9 @@ function Header({ setScrollIndex }) {
         <NavItem onClick={() => setScrollIndex(8)}>자유게시판</NavItem>
         <NavItem onClick={() => setScrollIndex(8)}>시니어칼럼</NavItem>
         {/* NavItem 대신 Link를 쓰는 경우는 아래처럼 */}
-        <NavItem as={Link} to="/mypage">마이페이지</NavItem>
+        <NavItem as={Link} to="/mypage">
+          마이페이지
+        </NavItem>
       </Nav>
       <AuthButtons>
         <Button to="/login">로그인</Button>

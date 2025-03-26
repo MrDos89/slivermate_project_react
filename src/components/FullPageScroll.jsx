@@ -27,7 +27,6 @@ const FullPageWrapper = styled.div`
   overflow: hidden;
 `;
 
-
 const NavigationContainer = styled.div`
   position: fixed;
   right: 20px;
@@ -58,10 +57,9 @@ const NavButton = styled.button`
   }
 `;
 
-
 const SectionsContainer = styled.div`
   position: fixed;
-  top: 0;
+  top: 60px; // ✅ 헤더 높이만큼 내려줘야 겹치지 않음
   left: 0;
   width: 100vw;
   height: 900vh; /* 9개 섹션이므로 900vh */
@@ -72,45 +70,44 @@ const SectionsContainer = styled.div`
 `;
 
 function FullPageScroll({ scrollIndex, setScrollIndex }) {
-    useEffect(() => {
-      const handleScroll = (event) => {
-        if (event.deltaY > 0) {
-          setScrollIndex((prev) => Math.min(prev + 1, 8));
-        } else {
-          setScrollIndex((prev) => Math.max(prev - 1, 0));
-        }
-      };
-  
-      window.addEventListener("wheel", handleScroll);
-      return () => window.removeEventListener("wheel", handleScroll);
-    }, [setScrollIndex]);
-  
-    return (
-      <FullPageWrapper>
-        <NavigationContainer>
-          {[...Array(9)].map((_, index) => (
-            <NavButton
-              key={index}
-              active={scrollIndex === index}
-              onClick={() => setScrollIndex(index)}
-            />
-          ))}
-        </NavigationContainer>
-  
-        <SectionsContainer scrollIndex={scrollIndex}>
-          <SectionOne />
-          <SectionTwo />
-          <SectionThree />
-          <SectionFour />
-          <SectionFive />
-          <SectionSix />
-          <SectionSeven />
-          <SectionEight />
-          <SectionNine />
-        </SectionsContainer>
-      </FullPageWrapper>
-    );
-  }
-  
+  useEffect(() => {
+    const handleScroll = (event) => {
+      if (event.deltaY > 0) {
+        setScrollIndex((prev) => Math.min(prev + 1, 8));
+      } else {
+        setScrollIndex((prev) => Math.max(prev - 1, 0));
+      }
+    };
+
+    window.addEventListener("wheel", handleScroll);
+    return () => window.removeEventListener("wheel", handleScroll);
+  }, [setScrollIndex]);
+
+  return (
+    <FullPageWrapper>
+      <NavigationContainer>
+        {[...Array(9)].map((_, index) => (
+          <NavButton
+            key={index}
+            active={scrollIndex === index}
+            onClick={() => setScrollIndex(index)}
+          />
+        ))}
+      </NavigationContainer>
+
+      <SectionsContainer scrollIndex={scrollIndex}>
+        <SectionOne />
+        <SectionTwo />
+        <SectionThree />
+        <SectionFour />
+        <SectionFive />
+        <SectionSix />
+        <SectionSeven />
+        <SectionEight />
+        <SectionNine />
+      </SectionsContainer>
+    </FullPageWrapper>
+  );
+}
 
 export default FullPageScroll;
