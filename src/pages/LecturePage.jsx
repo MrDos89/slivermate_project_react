@@ -25,8 +25,8 @@ const lectureDummy = [
   {
     lesson_id: 2,
     user_id: 102,
-    lesson_name: "등산 제대로 배우기",
-    lesson_desc: "장비부터 실전까지 배우는 등산 입문",
+    lesson_name: "북쪽으로 go",
+    lesson_desc: "강해지고 싶은 자, 북쪽 산으로 모여라 정상에서 회춘을 할지니",
     lesson_category: 2, // 실외
     lesson_sub_category: "등산",
     lesson_free_lecture: "",
@@ -46,7 +46,7 @@ const lectureDummy = [
     user_id: 103,
     lesson_name: "참 쉽죠?",
     lesson_desc: "밥 아저씨가 될 마지막 기회",
-    lesson_category: 1, // 실외
+    lesson_category: 1, // 실내
     lesson_sub_category: "그림",
     lesson_free_lecture: "",
     lesson_cost_lecture: "",
@@ -64,9 +64,47 @@ const lectureDummy = [
     lesson_id: 4,
     user_id: 104,
     lesson_name: "노안을 이기는 모임",
-    lesson_desc: "노안때문에 책 읽기 힘들다? 전부 핑계입니다",
-    lesson_category: 1, // 실외
-    lesson_sub_category: "그림",
+    lesson_desc: "노안때문에 책 읽기 힘들다? 전부 핑계입니다 츄ㅜ라이츄라이",
+    lesson_category: 1,
+    lesson_sub_category: "독서",
+    lesson_free_lecture: "",
+    lesson_cost_lecture: "",
+    lesson_thumbnail: "https://via.placeholder.com/150",
+    lesson_price: 15000,
+    register_date: "2024-02-15",
+    is_hidden: false,
+    upd_date: "2024-02-20",
+    user_name: "이몽룡",
+    user_thumbnail: "https://via.placeholder.com/50",
+    likes: 30,
+    recommended: 80,
+  },
+  {
+    lesson_id: 5,
+    user_id: 105,
+    lesson_name: "영화관 팝콘이 세상에서 제일 맛있는 60대 모임",
+    lesson_desc: "근데 너무 비싸죠? 그러니 n빵을 하기 위해 만들었습니다",
+    lesson_category: 1,
+    lesson_sub_category: "영화감상",
+    lesson_free_lecture: "",
+    lesson_cost_lecture: "",
+    lesson_thumbnail: "https://via.placeholder.com/150",
+    lesson_price: 15000,
+    register_date: "2024-02-15",
+    is_hidden: false,
+    upd_date: "2024-02-20",
+    user_name: "이몽룡",
+    user_thumbnail: "https://via.placeholder.com/50",
+    likes: 30,
+    recommended: 80,
+  },
+  {
+    lesson_id: 5,
+    user_id: 105,
+    lesson_name: "내 발로 뛰기 힘들어서 자전거를 샀다",
+    lesson_desc: "근데 더 힘들다 허벅지 자극 미쳤죠;;",
+    lesson_category: 2, // 실외
+    lesson_sub_category: "자전거",
     lesson_free_lecture: "",
     lesson_cost_lecture: "",
     lesson_thumbnail: "https://via.placeholder.com/150",
@@ -111,7 +149,32 @@ const CATEGORY_MAP = {
 const SORT_OPTIONS = ["가격순", "추천순", "최신순", "좋아요순"];
 
 const Wrapper = styled.div`
-  padding: 40px;
+  width: 100%;
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 20px 20px;
+  padding-top: 60px;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh; // 전체 높이
+  overflow: hidden;
+`;
+
+const FixedTop = styled.div`
+  flex-shrink: 0;
+  padding: 20px;
+  background-color: white;
+  z-index: 10;
+  border-bottom: 1px solid #eee;
+`;
+
+const ScrollableContent = styled.div`
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
 `;
 
 const SearchBar = styled.input`
@@ -221,18 +284,18 @@ const LecturePage = () => {
     });
 
   return (
-    <Wrapper>
-      <SearchBar
-        placeholder="검색어를 입력하세요"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+    <Container>
+      <FixedTop>
+        <SearchBar
+          placeholder="검색어를 입력하세요"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
 
-      <CategoryWrapper>
-        {Object.entries(CATEGORY_MAP).map(([group, buttons]) => (
-          <div key={group}>
-            <CategoryTitle>{group}</CategoryTitle>
-            <SubCategoryRow>
+        <CategoryWrapper>
+          {Object.entries(CATEGORY_MAP).map(([group, buttons]) => (
+            <SubCategoryRow key={group}>
+              <CategoryTitle style={{ marginTop: 0 }}>{group}</CategoryTitle>
               {buttons.map((btn) => (
                 <CategoryButton
                   key={btn}
@@ -246,29 +309,34 @@ const LecturePage = () => {
                 </CategoryButton>
               ))}
             </SubCategoryRow>
-          </div>
-        ))}
-      </CategoryWrapper>
+          ))}
+        </CategoryWrapper>
+      </FixedTop>
 
-      <SortDropdown value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-        {SORT_OPTIONS.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
-          </option>
-        ))}
-      </SortDropdown>
+      <ScrollableContent>
+        <SortDropdown
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
+          {SORT_OPTIONS.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </SortDropdown>
 
-      <CardGrid>
-        {filtered.map((lesson) => (
-          <Card key={lesson.lesson_id}>
-            <Thumb src={lesson.lesson_thumbnail} />
-            <Title>{lesson.lesson_name}</Title>
-            <Author>{lesson.user_name}</Author>
-            <Desc>{lesson.lesson_desc}</Desc>
-          </Card>
-        ))}
-      </CardGrid>
-    </Wrapper>
+        <CardGrid>
+          {filtered.map((lesson) => (
+            <Card key={lesson.lesson_id}>
+              <Thumb src={lesson.lesson_thumbnail} />
+              <Title>{lesson.lesson_name}</Title>
+              <Author>{lesson.user_name}</Author>
+              <Desc>{lesson.lesson_desc}</Desc>
+            </Card>
+          ))}
+        </CardGrid>
+      </ScrollableContent>
+    </Container>
   );
 };
 
