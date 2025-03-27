@@ -1,123 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { FaLeaf } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { lectureDummy } from "../data/lectureDummy";
 
-// 더미 데이터 (SliverLesson 기반)
-const lectureDummy = [
-  {
-    lesson_id: 1,
-    user_id: 101,
-    lesson_name: "따뜻한 hot뜨개질 클래스",
-    lesson_desc: "초보자도 쉽게 배우는 겨울 준비 뜨개질!",
-    lesson_category: 1, // 실내
-    lesson_sub_category: "뜨개질",
-    lesson_free_lecture: "",
-    lesson_cost_lecture: "",
-    lesson_thumbnail: "https://via.placeholder.com/150",
-    lesson_price: 10000,
-    register_date: "2024-01-01",
-    is_hidden: false,
-    upd_date: "2024-01-02",
-    user_name: "홍길동",
-    user_thumbnail: "https://via.placeholder.com/50",
-    likes: 12,
-    recommended: 50,
-  },
-  {
-    lesson_id: 2,
-    user_id: 102,
-    lesson_name: "북쪽으로 go",
-    lesson_desc: "강해지고 싶은 자, 북쪽 산으로 모여라 정상에서 회춘을 할지니",
-    lesson_category: 2, // 실외
-    lesson_sub_category: "등산",
-    lesson_free_lecture: "",
-    lesson_cost_lecture: "",
-    lesson_thumbnail: "https://via.placeholder.com/150",
-    lesson_price: 15000,
-    register_date: "2024-02-15",
-    is_hidden: false,
-    upd_date: "2024-02-20",
-    user_name: "이몽룡",
-    user_thumbnail: "https://via.placeholder.com/50",
-    likes: 30,
-    recommended: 80,
-  },
-  {
-    lesson_id: 3,
-    user_id: 103,
-    lesson_name: "참 쉽죠?",
-    lesson_desc: "밥 아저씨가 될 마지막 기회",
-    lesson_category: 1, // 실내
-    lesson_sub_category: "그림",
-    lesson_free_lecture: "",
-    lesson_cost_lecture: "",
-    lesson_thumbnail: "https://via.placeholder.com/150",
-    lesson_price: 15000,
-    register_date: "2024-02-15",
-    is_hidden: false,
-    upd_date: "2024-02-20",
-    user_name: "이몽룡",
-    user_thumbnail: "https://via.placeholder.com/50",
-    likes: 30,
-    recommended: 80,
-  },
-  {
-    lesson_id: 4,
-    user_id: 104,
-    lesson_name: "노안을 이기는 모임",
-    lesson_desc: "노안때문에 책 읽기 힘들다? 전부 핑계입니다 츄ㅜ라이츄라이",
-    lesson_category: 1,
-    lesson_sub_category: "독서",
-    lesson_free_lecture: "",
-    lesson_cost_lecture: "",
-    lesson_thumbnail: "https://via.placeholder.com/150",
-    lesson_price: 15000,
-    register_date: "2024-02-15",
-    is_hidden: false,
-    upd_date: "2024-02-20",
-    user_name: "이몽룡",
-    user_thumbnail: "https://via.placeholder.com/50",
-    likes: 30,
-    recommended: 80,
-  },
-  {
-    lesson_id: 5,
-    user_id: 105,
-    lesson_name: "영화관 팝콘이 세상에서 제일 맛있는 60대 모임",
-    lesson_desc: "근데 너무 비싸죠? 그러니 n빵을 하기 위해 만들었습니다",
-    lesson_category: 1,
-    lesson_sub_category: "영화감상",
-    lesson_free_lecture: "",
-    lesson_cost_lecture: "",
-    lesson_thumbnail: "https://via.placeholder.com/150",
-    lesson_price: 15000,
-    register_date: "2024-02-15",
-    is_hidden: false,
-    upd_date: "2024-02-20",
-    user_name: "이몽룡",
-    user_thumbnail: "https://via.placeholder.com/50",
-    likes: 30,
-    recommended: 80,
-  },
-  {
-    lesson_id: 5,
-    user_id: 105,
-    lesson_name: "내 발로 뛰기 힘들어서 자전거를 샀다",
-    lesson_desc: "근데 더 힘들다 허벅지 자극 미쳤죠;;",
-    lesson_category: 2, // 실외
-    lesson_sub_category: "자전거",
-    lesson_free_lecture: "",
-    lesson_cost_lecture: "",
-    lesson_thumbnail: "https://via.placeholder.com/150",
-    lesson_price: 15000,
-    register_date: "2024-02-15",
-    is_hidden: false,
-    upd_date: "2024-02-20",
-    user_name: "이몽룡",
-    user_thumbnail: "https://via.placeholder.com/50",
-    likes: 30,
-    recommended: 80,
-  },
-];
+
+
 
 const CATEGORY_MAP = {
   실내: [
@@ -156,14 +44,7 @@ const SORT_OPTIONS = ["가격순", "추천순", "최신순", "좋아요순"];
 //   padding-top: 60px;
 // `;
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh; // 전체 높이
-  overflow: hidden;
-  padding-top: 60px;
-`;
-
+{/* 
 const FixedTop = styled.div`
   flex-shrink: 0;
   padding: 20px;
@@ -172,26 +53,117 @@ const FixedTop = styled.div`
   border-bottom: 1px solid #eee;
 `;
 
+const Inner = styled.div`
+  width: 100%;
+  /* max-width: 1900px;  
+  margin: 0 auto;
+  /* padding: 0 20px; // 좌우 여백 살짝 
+`;
+*/}
+
+const FixedTop = styled.div`
+  flex-shrink: 0;
+  background-color: white;
+  z-index: 10;
+  border-bottom: 1px solid #eee;
+  /* padding: 20px; 제거 */
+`;
+
+const Inner = styled.div`
+  width: 100vw;  // ← 브라우저 기준으로 설정
+  padding: 20px; // ← 여기서 여백 조정
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh; // 전체 높이
+  overflow: hidden;
+  padding-top: 60px;
+`;
+
+
+
 const ScrollableContent = styled.div`
   flex-grow: 1;
   overflow-y: auto;
   padding: 20px;
+
+  /* 스크롤바 숨기기 (크로스브라우징 처리) */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+`;
+
+const SearchBarWrapper = styled.form`
+  position: relative;
+  //width: 60%;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
 `;
 
 const SearchBar = styled.input`
   width: 100%;
-  padding: 12px;
+  padding: 12px 50px 12px 20px; // 오른쪽 패딩 확보
   font-size: 1rem;
-  margin-bottom: 30px;
+  border: 2px solid #a5d6a7;
+  border-radius: 30px;
+  outline: none;
+  transition: border-color 0.3s;
+
+  &:focus {
+    border-color: #66bb6a;
+  }
+
+  &::placeholder {
+    color: #a5a5a5;
+    font-style: italic;
+  }
+`;
+
+const SearchButton = styled.button`
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #66bb6a;
+  font-size: 1.2rem;
+
+  &:hover {
+    color: #43a047;
+  }
+`;
+
+const CenteredBlock = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; // 가운데 정렬 핵심!
 `;
 
 const CategoryWrapper = styled.div`
+width: 100%;
+max-width: 1200px;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  // align-items: center; // 가운데 정렬
+  gap: 10px;
 `;
 
 const CategoryTitle = styled.div`
   font-weight: bold;
   margin-top: 20px;
+  margin-right: 30px;
 `;
 
 const SubCategoryRow = styled.div`
@@ -199,21 +171,32 @@ const SubCategoryRow = styled.div`
   flex-wrap: wrap;
   margin-top: 10px;
   gap: 10px;
+  align-items: center;
+  
 `;
 
 const CategoryButton = styled.button`
   padding: 8px 16px;
   border: none;
-  background: ${({ $active }) => ($active ? "#28a745" : "#ddd")};
-  color: ${({ $active }) => ($active ? "white" : "black")};
-  font-weight: ${({ $active }) => ($active ? "bold" : "normal")};
+  background: transparent;
+  color: #4caf50;
+  font-weight: ${({ $active, $isTotal }) =>
+    $active || $isTotal ? "bold" : "normal"};
   border-radius: 5px;
   cursor: pointer;
+  transition: font-weight 0.2s ease;
+
+  &:hover {
+    font-weight: bold;
+  }
 `;
+
 
 const SortDropdown = styled.select`
   margin-top: 20px;
   padding: 8px 12px;
+  display: block; /*  block 요소로 */
+  margin-left: 0;  
 `;
 
 const CardGrid = styled.div`
@@ -258,6 +241,8 @@ const LecturePage = () => {
   const [sortBy, setSortBy] = useState("가격순");
   const [searchTerm, setSearchTerm] = useState("");
 
+  const navigate = useNavigate();
+
   const filtered = lectureDummy
     .filter((lesson) => {
       const categoryMatch =
@@ -266,7 +251,9 @@ const LecturePage = () => {
           : lesson.lesson_category === 2;
       const subMatch =
         subCategory === "전체" || lesson.lesson_sub_category === subCategory;
-      const searchMatch = lesson.lesson_name.includes(searchTerm);
+        const searchMatch =
+        lesson.lesson_name.includes(searchTerm) ||
+        lesson.lesson_sub_category.includes(searchTerm);
       return categoryMatch && subMatch && searchMatch;
     })
     .sort((a, b) => {
@@ -287,46 +274,70 @@ const LecturePage = () => {
   return (
     <Container>
       <FixedTop>
-        <SearchBar
-          placeholder="검색어를 입력하세요"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-
+      <Inner>
+      <SearchBarWrapper
+  onSubmit={(e) => {
+    e.preventDefault();
+    // 검색 실행 로직 (현재 상태 그대로 유지하므로 자동 실행됨)
+  }}
+>
+  <SearchBar
+    placeholder="검색어를 입력하세요"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+  />
+  <SearchButton type="submit">
+    <FaLeaf />
+  </SearchButton>
+</SearchBarWrapper>
         <CategoryWrapper>
           {Object.entries(CATEGORY_MAP).map(([group, buttons]) => (
             <SubCategoryRow key={group}>
               <CategoryTitle style={{ marginTop: 0 }}>{group}</CategoryTitle>
-              {buttons.map((btn) => (
-                <CategoryButton
-                  key={btn}
-                  $active={mainCategory === group && subCategory === btn}
-                  onClick={() => {
-                    setMainCategory(group);
-                    setSubCategory(btn);
-                  }}
-                >
-                  {btn}
-                </CategoryButton>
-              ))}
+              {buttons.map((btn) => {
+  const isActive =
+    mainCategory === group &&
+    (subCategory === btn || (btn === "전체" && subCategory === "전체"));
+  const isTotal = btn === "전체";
+
+  return (
+    <CategoryButton
+      key={btn}
+      $active={isActive}
+      $isTotal={isTotal} // ✅ 추가!
+      onClick={() => {
+        setMainCategory(group);
+        setSubCategory(btn);
+      }}
+    >
+      {btn}
+    </CategoryButton>
+  );
+})}
+
+
             </SubCategoryRow>
           ))}
         </CategoryWrapper>
+        </Inner>
       </FixedTop>
 
       <ScrollableContent>
-        <SortDropdown
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-        >
-          {SORT_OPTIONS.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </SortDropdown>
+      
+  <div style={{ textAlign: "left" }}>
+    <SortDropdown
+      value={sortBy}
+      onChange={(e) => setSortBy(e.target.value)}
+    >
+      {SORT_OPTIONS.map((opt) => (
+        <option key={opt} value={opt}>
+          {opt}
+        </option>
+      ))}
+    </SortDropdown>
+  </div>
 
-        <CardGrid>
+        {/* <CardGrid>
           {filtered.map((lesson) => (
             <Card key={lesson.lesson_id}>
               <Thumb src={lesson.lesson_thumbnail} />
@@ -335,7 +346,22 @@ const LecturePage = () => {
               <Desc>{lesson.lesson_desc}</Desc>
             </Card>
           ))}
-        </CardGrid>
+        </CardGrid> */}
+        <CardGrid>
+  {filtered.map((lesson) => (
+    <Card
+      key={lesson.lesson_id}
+      onClick={() => navigate(`/lecture/${lesson.lesson_id}`)}
+      style={{ cursor: "pointer" }}
+    >
+      <Thumb src={lesson.lesson_thumbnail} />
+      <Title>{lesson.lesson_name}</Title>
+      <Author>{lesson.user_name}</Author>
+      <Desc>{lesson.lesson_desc}</Desc>
+    </Card>
+  ))}
+</CardGrid>
+
       </ScrollableContent>
     </Container>
   );

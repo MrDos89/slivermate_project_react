@@ -108,7 +108,7 @@ const ThumbnailSlider = styled.div`
   width: 100%;
   overflow-x: hidden;
   position: relative;
-  margin-top: 40px;
+  margin-top: 110px;
 `;
 
 const SliderTrack = styled.div`
@@ -129,16 +129,26 @@ const Thumbnail = styled.img`
 const ArrowButton = styled.button`
   position: absolute;
   top: 50%;
-  ${({ direction }) => (direction === "left" ? "left: 0" : "right: 0")};
+  ${({ direction }) => (direction === "left" ? "left: -10px" : "right: -10px")};
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  font-size: 2rem;
-  padding: 10px;
+  width: 32px;
+  height: 32px;
+
+  color: #66bb6a;                       // 연초록
+  border-radius: 50%;
+  font-size: 1.2rem;
   cursor: pointer;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);          // 부드러운 유리 느낌
+  transition: all 0.2s ease;
+
+
 `;
+
+
 
 const Button = styled.button`
   padding: 10px 20px;
