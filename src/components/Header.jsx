@@ -15,11 +15,10 @@ const HeaderContainer = styled.header`
   z-index: 1000;
 `;
 
-const Logo = styled.div`
+const Logo = styled(Link)`
   @font-face {
     font-family: "KCCHyerim-Regular";
-    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/KCCHyerim-Regular.woff2")
-      format("woff2");
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/KCCHyerim-Regular.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
   }
@@ -28,7 +27,14 @@ const Logo = styled.div`
   font-weight: bold;
   color: rgb(39, 233, 0);
   flex: 1;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(39, 233, 0); /* 호버 시에도 원래 색상 유지 */
+  }
 `;
+
 
 const Nav = styled.nav`
   display: flex;
@@ -90,7 +96,7 @@ const Button = styled(Link)`
 function Header({ setScrollIndex }) {
   return (
     <HeaderContainer>
-      <Logo>파릇</Logo>
+      <Logo to="/">파릇</Logo>
       <Nav>
         <NavItem onClick={() => setScrollIndex(1)}>파릇 소개</NavItem>
         <NavItem onClick={() => setScrollIndex(3)}>강의실</NavItem>
