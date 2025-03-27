@@ -4,15 +4,23 @@ import ReactModal from "react-modal";
 const LoginPage = () => {
   const API_USER_URL = `http://localhost:18090/api/user`;
 
-  const [isModalOpen, setModalOpen] = useState(false);
-  const modalBackground = useRef();
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const [isRegisterModalOpen, setRegisterModalOpen] = useState(false);
 
-  const openModal = () => {
-    setModalOpen(true);
+  const openLoginModal = () => {
+    setLoginModalOpen(true);
   };
 
-  const closeModal = () => {
-    setModalOpen(false);
+  const closeLoginModal = () => {
+    setLoginModalOpen(false);
+  };
+
+  const openRegisterModal = () => {
+    setRegisterModalOpen(true);
+  };
+
+  const closeRegisterModal = () => {
+    setRegisterModalOpen(false);
   };
 
   const customStyles = {
@@ -36,21 +44,46 @@ const LoginPage = () => {
         <h1>Login Page</h1>
         <button
           onClick={() => {
-            openModal();
+            openLoginModal();
           }}
         >
           로그인
         </button>
-        <button onClick={() => {}}>회원가입</button>
+        <button
+          onClick={() => {
+            openRegisterModal();
+          }}
+        >
+          회원가입
+        </button>
       </div>
       <ReactModal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
+        isOpen={isLoginModalOpen}
+        onRequestClose={closeLoginModal}
         style={customStyles}
       >
         로그인 없어용.
         <br />
-        <button onClick={closeModal}>닫기</button>
+        <button onClick={closeLoginModal}>닫기</button>
+      </ReactModal>
+      <ReactModal
+        isOpen={isRegisterModalOpen}
+        onRequestClose={closeRegisterModal}
+        style={customStyles}
+      >
+        <form>
+          <label className="signup-profileImg-label" htmlFor="profileImg">
+            이미지 업로드 테스트
+          </label>
+          <input
+            className="signup-profileImg-input"
+            type="file"
+            accept="image/*"
+            id="profileImg"
+          />
+        </form>
+        <br />
+        <button onClick={closeRegisterModal}>닫기</button>
       </ReactModal>
     </>
   );
