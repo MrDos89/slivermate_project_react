@@ -148,19 +148,20 @@ const CATEGORY_MAP = {
 
 const SORT_OPTIONS = ["가격순", "추천순", "최신순", "좋아요순"];
 
-const Wrapper = styled.div`
-  width: 100%;
-  max-width: 1700px;
-  margin: 0 auto;
-  padding: 20px 20px;
-  padding-top: 60px;
-`;
+// const Wrapper = styled.div`
+//   width: 100%;
+//   max-width: 1700px;
+//   margin: 0 auto;
+//   padding: 20px 20px;
+//   padding-top: 60px;
+// `;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh; // 전체 높이
   overflow: hidden;
+  padding-top: 60px;
 `;
 
 const FixedTop = styled.div`
