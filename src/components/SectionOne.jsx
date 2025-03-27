@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes, css } from "styled-components";
-import backgroundImg from "../images/back.png";
+import backgroundImg from "../images/back7.jpg";
 
 // ✅ "책 펼치듯" 등장 애니메이션
 const bookOpen = keyframes`
