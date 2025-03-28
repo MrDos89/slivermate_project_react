@@ -2,21 +2,17 @@ import { useEffect, useState, useRef } from "react";
 import ReactModal from "react-modal";
 import config from "../js/config";
 // import AWS from "aws-sdk";
-import { Row, Col, Button, Input, Alert } from "reactstrap";
-import { S3Client } from "@aws-sdk/client-s3";
-import { Upload } from "@aws-sdk/lib-storage";
-
-if (typeof window !== "undefined") {
-  window.global = window;
-}
+// import { Row, Col, Button, Input, Alert } from "reactstrap";
+// import { S3Client } from "@aws-sdk/client-s3";
+// import { Upload } from "@aws-sdk/lib-storage";
 
 const LoginPage = () => {
   const API_USER_URL = `http://localhost:18090/api/user`;
 
-  const ACCESS_KEY = config !== null ? config.ACCESS_KEY : "";
-  const SECRET_ACCESS_KEY = config !== null ? config.SECRET_ACCESS_KEY : "";
-  const REGION = config !== null ? config.AWS_REGION : "";
-  const S3_BUCKET = config !== null ? config.S3_BUCKET_NAME : "";
+  // const ACCESS_KEY = config !== null ? config.ACCESS_KEY : "";
+  // const SECRET_ACCESS_KEY = config !== null ? config.SECRET_ACCESS_KEY : "";
+  // const REGION = config !== null ? config.AWS_REGION : "";
+  // const S3_BUCKET = config !== null ? config.S3_BUCKET_NAME : "";
 
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setRegisterModalOpen] = useState(false);
@@ -41,62 +37,62 @@ const LoginPage = () => {
     setRegisterModalOpen(false);
   };
 
-  const s3 = new S3Client({
-    region: REGION,
-    credentials: {
-      accessKeyId: ACCESS_KEY,
-      secretAccessKey: SECRET_ACCESS_KEY,
-    },
-    forcePathStyle: true, // ✅ 추가
-    computeChecksums: false, // ✅ 추가 (체크섬 비활성화)
-  });
+  // const s3 = new S3Client({
+  //   region: REGION,
+  //   credentials: {
+  //     accessKeyId: ACCESS_KEY,
+  //     secretAccessKey: SECRET_ACCESS_KEY,
+  //   },
+  //   forcePathStyle: true, // ✅ 추가
+  //   computeChecksums: false, // ✅ 추가 (체크섬 비활성화)
+  // });
 
-  const handleFileInput = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  // const handleFileInput = (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
 
-    const fileExt = file.name.split(".").pop();
-    if (file.type !== "image/jpeg" || fileExt !== "jpg") {
-      alert("jpg 파일만 Upload 가능합니다.");
-      return;
-    }
+  //   const fileExt = file.name.split(".").pop();
+  //   if (file.type !== "image/jpeg" || fileExt !== "jpg") {
+  //     alert("jpg 파일만 Upload 가능합니다.");
+  //     return;
+  //   }
 
-    setProgress(0);
-    setSelectedFile(e.target.files[0]);
-  };
+  //   setProgress(0);
+  //   setSelectedFile(e.target.files[0]);
+  // };
 
-  const uploadFile = async (file) => {
-    const upload = new Upload({
-      client: s3,
-      params: {
-        Bucket: S3_BUCKET,
-        Key: `upload/${file.name}`,
-        Body: file, // Blob 사용
-        ACL: "public-read",
-      },
-      tags: [], // 태그 추가 가능
-      queueSize: 4, // 병렬 업로드 수
-      partSize: 1024 * 1024 * 5, // 5MB씩 업로드
-    });
+  // const uploadFile = async (file) => {
+  //   const upload = new Upload({
+  //     client: s3,
+  //     params: {
+  //       Bucket: S3_BUCKET,
+  //       Key: `upload/${file.name}`,
+  //       Body: file, // Blob 사용
+  //       ACL: "public-read",
+  //     },
+  //     tags: [], // 태그 추가 가능
+  //     queueSize: 4, // 병렬 업로드 수
+  //     partSize: 1024 * 1024 * 5, // 5MB씩 업로드
+  //   });
 
-    upload.on("httpUploadProgress", (progress) => {
-      if (progress.loaded && progress.total) {
-        setProgress(Math.round((progress.loaded / progress.total) * 100));
-      }
-    });
+  //   upload.on("httpUploadProgress", (progress) => {
+  //     if (progress.loaded && progress.total) {
+  //       setProgress(Math.round((progress.loaded / progress.total) * 100));
+  //     }
+  //   });
 
-    try {
-      await upload.done();
-      setShowAlert(true);
-      setTimeout(() => {
-        setShowAlert(false);
-        setSelectedFile(null);
-        setProgress(0); // 완료 후 초기화
-      }, 3000);
-    } catch (err) {
-      console.error("S3 업로드 오류:", err);
-    }
-  };
+  //   try {
+  //     await upload.done();
+  //     setShowAlert(true);
+  //     setTimeout(() => {
+  //       setShowAlert(false);
+  //       setSelectedFile(null);
+  //       setProgress(0); // 완료 후 초기화
+  //     }, 3000);
+  //   } catch (err) {
+  //     console.error("S3 업로드 오류:", err);
+  //   }
+  // };
 
   const customStyles = {
     overlay: {
@@ -141,7 +137,7 @@ const LoginPage = () => {
         <br />
         <button onClick={closeLoginModal}>닫기</button>
       </ReactModal>
-      <ReactModal
+      {/* <ReactModal
         isOpen={isRegisterModalOpen}
         onRequestClose={closeRegisterModal}
         style={customStyles}
@@ -165,7 +161,7 @@ const LoginPage = () => {
         </form>
         <br />
         <button onClick={closeRegisterModal}>닫기</button>
-      </ReactModal>
+      </ReactModal> */}
     </>
   );
 };
