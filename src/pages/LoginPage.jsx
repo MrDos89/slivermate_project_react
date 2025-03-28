@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import ReactModal from "react-modal";
-import config from "../js/config";
+// import config from "../js/config";
 // import AWS from "aws-sdk";
 // import { Row, Col, Button, Input, Alert } from "reactstrap";
 // import { S3Client } from "@aws-sdk/client-s3";
