@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes, css } from "styled-components";
-import image1 from "../images/ghtmxm2.jpg"; // 기존 배경 이미지
+import image1 from "../images/ghtmxm2.jpg";
+import { useNavigate } from "react-router-dom";
 
 const expandCircle = keyframes`
   from {
@@ -120,10 +121,16 @@ const SectionFive = () => {
   const [viewCount, setViewCount] = useState(0);
   const [contentVisible, setContentVisible] = useState(false);
 
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate("/host-info"); // 이동
+  };
+
   const startCounting = () => {
     let host = 54; // 목표 숫자
-    let views = 1175; // 목표 숫자
-    let duration = 2000; // 3초 동안 증가
+    let views = 11175; // 목표 숫자
+    let duration = 1500;
     let steps = 60; // 60번 증가할 거야 (프레임 레이트 개념)
     let stepTime = duration / steps; // 한 번 증가할 때 걸리는 시간
 
@@ -191,7 +198,7 @@ const SectionFive = () => {
             <Counter>{viewCount}</Counter>
           </InfoText>
         </InfoWrapper>
-        <Button>자세히 보기</Button>
+        <Button onClick={handleButtonClick}>자세히 보기</Button>
       </ContentWrapper>
     </SectionWrapper>
   );

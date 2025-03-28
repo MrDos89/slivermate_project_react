@@ -203,7 +203,8 @@ const LectureDetailPage = () => {
   }
 
   const sameLectures = lectureDummy.filter(
-    (item) => item.user_id === lesson.user_id && item.lesson_id !== lesson.lesson_id
+    (item) =>
+      item.user_id === lesson.user_id && item.lesson_id !== lesson.lesson_id
   );
 
   return (
@@ -245,7 +246,9 @@ const LectureDetailPage = () => {
               >
                 <StampCircle>
                   {step === 1 && step <= completedSteps && (
-                    <FancyGrass className={visibleSteps.includes(step) ? "animate" : ""}>
+                    <FancyGrass
+                      className={visibleSteps.includes(step) ? "animate" : ""}
+                    >
                       {[...Array(16)].map((_, i) => (
                         <div key={i} className="blade" />
                       ))}

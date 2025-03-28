@@ -9,6 +9,8 @@ import Header from "./components/Header";
 import FullPageScroll from "./components/FullPageScroll";
 import LecturePage from "./pages/LecturePage";
 import LectureDetailPage from "./pages/LectureDetailPage";
+import HostInfoPage from "./pages/HostInfoPage";
+import HostApplyPage from "./pages/HostApplyPage";
 
 function App() {
   const [scrollIndex, setScrollIndex] = useState(0); // 상태 분리
@@ -31,6 +33,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/lecture" element={<LecturePage />} />
         <Route path="/lecture/:id" element={<LectureDetailPage />} />
+        <Route path="/host-info" element={<HostInfoPage />} />
+        <Route path="/host-apply" element={<HostApplyPage />} />
       </Routes>
     </Router>
   );
