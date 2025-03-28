@@ -356,7 +356,27 @@ const HostApplyPage = () => {
             <img src={thumbnailPreview} alt="썸네일 미리보기" />
           )}
         </ThumbnailUploadBox>
+
+        <AddPlaylistButton
+          style={{ width: "100%", marginTop: "1.5rem" }}
+          onClick={() => {
+            alert("기능 준비중입니다 😅");
+            console.log({
+              videoPreview,
+              thumbnailPreview,
+              lectureName,
+              teacherName,
+              mainCategory,
+              subCategory,
+              selectedPlaylist,
+            });
+          }}
+        >
+          업로드 하기
+        </AddPlaylistButton>
       </Inner>
+
+      
     </Container>
   );
 };
