@@ -1,9 +1,27 @@
 import { useEffect, useRef } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import image1 from "../images/vkfmt1.png";
 import image2 from "../images/vkfmt2.png";
 import image3 from "../images/vkfmt3.png";
+
+const waveAnimation = keyframes`
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+`;
+
+const WaveBackground = styled.div`
+  position: absolute;
+  top: -200px; // ✔ 화면 위에서부터 내려오게
+  left: 0;
+  width: 300%;
+  height: 800px; // ✔ 충분히 크게 잡기
+  background: url("https://svgshare.com/i/15nF.svg") repeat-x;
+  background-size: cover;
+  animation: ${waveAnimation} 10s linear infinite;
+  opacity: 0.2;
+  z-index: 0;
+`;
 
 const SectionWrapper = styled.div`
   width: 100vw;
@@ -15,6 +33,9 @@ const SectionWrapper = styled.div`
   gap: 10vw;
   background: white;
   color: black;
+  overflow: hidden;
+  // z-index: 0;
+  position: relative;
 `;
 
 const ItemWrapper = styled(motion.div)`
@@ -97,6 +118,8 @@ const SectionThree = () => {
       initial="hidden"
       animate={controls}
     >
+
+<WaveBackground />
       <ItemWrapper variants={itemVariants}>
         <CircleImage
           style={{

@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
 
 const HeaderContainer = styled.header`
   width: 100%;
@@ -15,7 +16,7 @@ const HeaderContainer = styled.header`
   z-index: 1000;
 `;
 
-const Logo = styled(Link)`
+const Logo = styled.div`
   @font-face {
     font-family: "KCCHyerim-Regular";
     src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/KCCHyerim-Regular.woff2") format("woff2");
@@ -94,15 +95,24 @@ const Button = styled(Link)`
 `;
 
 function Header({ setScrollIndex }) {
+  const navigate = useNavigate(); // 추가
+
+  const handleNavigateToScroll = (index) => {
+    navigate(`/?scrollTo=${index}`);
+  };
+
+
   return (
     <HeaderContainer>
-      <Logo to="/">파릇</Logo>
+      {/* <Logo to="/">파릇</Logo> */}
+      {/* <Logo onClick={() => setScrollIndex(0)}>파릇</Logo> */}
+      <Logo onClick={() => handleNavigateToScroll(0)}>파릇</Logo>
       <Nav>
-        <NavItem onClick={() => setScrollIndex(1)}>파릇 소개</NavItem>
-        <NavItem onClick={() => setScrollIndex(3)}>강의실</NavItem>
-        <NavItem onClick={() => setScrollIndex(5)}>모임</NavItem>
-        <NavItem onClick={() => setScrollIndex(8)}>자유게시판</NavItem>
-        <NavItem onClick={() => setScrollIndex(8)}>시니어칼럼</NavItem>
+      <NavItem onClick={() => handleNavigateToScroll(1)}>파릇 소개</NavItem>
+        <NavItem onClick={() => handleNavigateToScroll(3)}>강의실</NavItem>
+        <NavItem onClick={() => handleNavigateToScroll(5)}>모임</NavItem>
+        <NavItem onClick={() => handleNavigateToScroll(8)}>자유게시판</NavItem>
+        <NavItem onClick={() => handleNavigateToScroll(8)}>시니어칼럼</NavItem>
         {/* NavItem 대신 Link를 쓰는 경우는 아래처럼 */}
         <NavItem as={Link} to="/mypage">
           마이페이지

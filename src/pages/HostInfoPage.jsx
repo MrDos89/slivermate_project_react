@@ -138,11 +138,14 @@ const CounterWrapper = styled.div`
 const CounterBox = styled.div`
   background-color: white;
   padding: 40px 60px;
-  border-radius: 16px;
+  // border-radius: 16px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
   min-width: 150px;
   text-align: center;
   transition: transform 0.3s ease;
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
 
   &:hover {
     transform: translateY(-5px);
@@ -154,12 +157,14 @@ const CounterLabel = styled.div`
   color: #555;
   margin-bottom: 10px;
   font-weight: 500;
+  margin-top: 50px;
 `;
 
 const CounterValue = styled.div`
   font-size: 2.2rem;
   font-weight: 700;
   color: #2e7d32;
+  
 `;
 
 const fadeUp = keyframes`

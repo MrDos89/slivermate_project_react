@@ -12,6 +12,12 @@ const SectionWrapper = styled.div`
   color: white;
 `;
 
+const ButtonRow = styled.div`
+  margin-top: 20px;
+  display: flex;
+  gap: 16px;
+`;
+
 const Button = styled.button`
   margin-top: 20px;
   padding: 12px 24px;
@@ -33,8 +39,10 @@ const SectionNine = () => {
 
   return (
     <SectionWrapper>
-      Section 9
-      <Button onClick={() => navigate("/freeboard")}>자세히 보기</Button>
+      <ButtonRow>
+        <Button onClick={() => navigate("/freeboard")}>자세히 보기</Button>
+        <Button onClick={() => navigate("/senior-column")}>시니어 칼럼</Button>
+      </ButtonRow>
     </SectionWrapper>
   );
 };

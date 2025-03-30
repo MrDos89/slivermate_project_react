@@ -12,6 +12,7 @@ import LectureDetailPage from "./pages/LectureDetailPage";
 import HostInfoPage from "./pages/HostInfoPage";
 import HostApplyPage from "./pages/HostApplyPage";
 import FreeBoardPage from "./pages/FreeBoardPage";
+import SeniorColumnPage from "./pages/SeniorColumnPage";
 
 function App() {
   const [scrollIndex, setScrollIndex] = useState(0); // 상태 분리
@@ -37,6 +38,8 @@ function App() {
         <Route path="/host-info" element={<HostInfoPage />} />
         <Route path="/host-apply" element={<HostApplyPage />} />
         <Route path="/freeboard" element={<FreeBoardPage />} />
+        <Route path="/senior-column" element={<SeniorColumnPage />} />
+        
       </Routes>
     </Router>
   );

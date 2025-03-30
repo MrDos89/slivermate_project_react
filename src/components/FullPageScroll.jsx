@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import SectionOne from "./SectionOne.jsx";
 import SectionTwo from "./SectionTwo.jsx";
@@ -9,6 +10,7 @@ import SectionSix from "./SectionSix.jsx";
 import SectionSeven from "./SectionSeven.jsx";
 import SectionEight from "./SectionEight.jsx";
 import SectionNine from "./SectionNine.jsx";
+
 
 // const FullPageWrapper = styled.div`
 //   position: fixed;
@@ -70,6 +72,19 @@ const SectionsContainer = styled.div`
 `;
 
 function FullPageScroll({ scrollIndex, setScrollIndex }) {
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const scrollTo = params.get("scrollTo");
+    if (scrollTo !== null) {
+      const index = parseInt(scrollTo, 10);
+      if (!isNaN(index)) {
+        setScrollIndex(index);
+      }
+    }
+  }, [location.search, setScrollIndex]);
+  
   useEffect(() => {
     const handleScroll = (event) => {
       if (event.deltaY > 0) {
