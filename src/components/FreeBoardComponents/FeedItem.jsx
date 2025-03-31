@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { formatDistanceToNow, format } from "date-fns";
 import { ko } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 
 const Card = styled.div`
   background-color: #ffffff;
@@ -123,6 +124,13 @@ const FeedItem = ({ post }) => {
   const [showFull, setShowFull] = useState(false);
   const MAX_LENGTH = 80;
 
+  const navigate = useNavigate(); 
+
+  const handleClick = () => {
+    navigate(`/post/${post.id}`);
+  };
+
+
   const renderTime = () => {
     const createdAt = new Date(post.createdAt || Date.now());
     const diff = Date.now() - createdAt.getTime();
@@ -151,7 +159,7 @@ const prevImage = () => {
 
 
   return (
-    <Card>
+    <Card onClick={handleClick}>
       <TopRow>
         <Profile>
           <ProfileImg src={post.userThumbnail || "/images/defaultUserThumbnail.png"} alt="user" />

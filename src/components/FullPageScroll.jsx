@@ -71,6 +71,32 @@ const SectionsContainer = styled.div`
   transform: translateY(${(props) => props.scrollIndex * -100}vh);
 `;
 
+const FixedButtonContainer = styled.div`
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 1000;
+`;
+
+const FixedButton = styled.button`
+  padding: 20px 20px;
+  background-color: #67dbff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #46c3e3;
+  }
+`;
+
 function FullPageScroll({ scrollIndex, setScrollIndex }) {
   const location = useLocation();
 
@@ -84,7 +110,7 @@ function FullPageScroll({ scrollIndex, setScrollIndex }) {
       }
     }
   }, [location.search, setScrollIndex]);
-  
+
   useEffect(() => {
     const handleScroll = (event) => {
       if (event.deltaY > 0) {
@@ -121,6 +147,12 @@ function FullPageScroll({ scrollIndex, setScrollIndex }) {
         <SectionEight />
         <SectionNine />
       </SectionsContainer>
+
+      <FixedButtonContainer>
+  <FixedButton onClick={() => alert("고객센터 연결 준비 중입니다.")}>📞</FixedButton>
+  <FixedButton onClick={() => alert("채팅 기능은 추후 추가 예정입니다.")}>💬</FixedButton>
+</FixedButtonContainer>
+
     </FullPageWrapper>
   );
 }
