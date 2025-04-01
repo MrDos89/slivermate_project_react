@@ -1,9 +1,8 @@
-// src/components/MyPage/PostSection.jsx
+import styled from "styled-components";
 
-import React, { useState } from "react";
-import styled from "styled-components"; // styled-components import
-
-// 🔹 PostSection 스타일 (CSS 포함)
+const PostSectionWrapper = styled.div`
+  margin-top: 170px;
+`;
 
 const PostTitle = styled.h2`
   text-align: left;
@@ -29,7 +28,7 @@ const Table = styled.table`
 `;
 
 const TableHeader = styled.th`
-  background-color: rgb(100, 196, 120);
+  background-color: rgb(115, 170, 127);
   color: white;
   padding: 12px;
   font-size: 16px;
@@ -68,21 +67,19 @@ const PageButton = styled.button`
   }
 `;
 
-// 🔹 PostSection 컴포넌트
-
-const PostSection = ({
+function PostSection({
   user,
-  hobbyMap,
-  selectedPostType,
-  handlePostTypeChange,
-  handlePostPrev,
-  handlePostNext,
   visiblePosts,
+  selectedPostType,
   postVisibleCount,
   startPostIndex,
-}) => {
+  handlePostPrev,
+  handlePostNext,
+  handlePostTypeChange,
+  hobbyMap,
+}) {
   return (
-    <div>
+    <PostSectionWrapper>
       <PostTitle>내가 쓴 글 & 댓글 보기</PostTitle>
       <PostDropdown onChange={handlePostTypeChange}>
         <option value={1}>게시글 보기</option>
@@ -109,7 +106,11 @@ const PostSection = ({
                 <TableCell>{post.date}</TableCell>
                 <TableCell>{user.nickname}</TableCell>
                 <TableCell>
-                  {hobbyMap.indoor?.list[post.hobby.hobbyId]}
+                  {
+                    hobbyMap[
+                      post.hobby.categoryId === 1 ? "indoor" : "outdoor"
+                    ]?.list[post.hobby.hobbyId]
+                  }
                 </TableCell>
                 <TableCell>{post.clubName}</TableCell>
               </TableRow>
@@ -118,14 +119,16 @@ const PostSection = ({
         </Table>
       </TableWrapper>
 
-      {/* 페이지네이션 */}
       <PaginationWrapper>
         <PageButton onClick={handlePostPrev} disabled={startPostIndex === 0}>
           이전
         </PageButton>
         <span>
           {Math.floor(startPostIndex / postVisibleCount) + 1} /{" "}
-          {Math.ceil(user.posts.length / postVisibleCount)}
+          {Math.ceil(
+            user.posts.filter((post) => post.type === selectedPostType).length /
+              postVisibleCount
+          )}
         </span>
         <PageButton
           onClick={handlePostNext}
@@ -137,8 +140,8 @@ const PostSection = ({
           다음
         </PageButton>
       </PaginationWrapper>
-    </div>
+    </PostSectionWrapper>
   );
-};
+}
 
 export default PostSection;

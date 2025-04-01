@@ -1,8 +1,10 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import userThumbnail from "../images/thumb3.png";
 import thumb2 from "../images/thumb2.png";
-// import PostSection from "./PostSection";
+import PostSection from "../components/MyPageComponents/PostSection";
+import ClubSection from "../components/MyPageComponents/ClubSection";
+import LectureSection from "../components/MyPageComponents/LectureSection";
 
 // 🔹 더미 유저 데이터
 const dummyUser = {
@@ -186,6 +188,8 @@ const MyPageContainer = styled.div`
   // max-width: 1200px;
   margin: 0 auto;
   width: 1300px;
+  position: relative; 
+  z-index: 3;
 `;
 
 const UserInfoWrapper = styled.div`
@@ -251,198 +255,13 @@ const StatusItem = styled.div`
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 `;
 
-const LectureSection = styled.div`
-  margin-top: 40px;
-`;
+// const LectureSection = styled.div`
+//   margin-top: 40px;
+// `;
 
-const SectionTitle = styled.h2`
-  margin-bottom: 10px;
-  text-align: left; /* 왼쪽 정렬 */
-`;
 
-const DividerWrapper = styled.div`
-  //   display: flex;
-  //   justify-content: center; /* 중앙 정렬 */
-  position: relative;
-  width: 1300px; /* 구분선 너비 = 뷰포트 너비 */
-  margin: 0 auto; /* 중앙 정렬 */
-  overflow: hidden; /* ❗️ 히든 영역 처리 */
-`;
 
-const Divider = styled.hr`
-  //   width: 900px; /*구분선 길이*/
-  width: 100%;
-  margin: 15px 0;
-`;
 
-const LectureSliderWrapper = styled.div`
-  // position: relative;
-  width: 100%;
-  // overflow: hidden;
-`;
-
-const LectureList = styled.div`
-  display: flex;
-  gap: 12px;
-  // width: 100%;
-  width: fit-content;
-  transition: transform 0.4s ease-in-out;
-`;
-
-const LectureThumbnail = styled.img`
-  width: 190px;
-  height: 100px;
-  border-radius: 8px;
-  object-fit: cover;
-  flex-shrink: 0;
-`;
-
-const NavButton = styled.button`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgb(0, 0, 0);
-  border: none;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 50%;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 1;
-
-  &:hover {
-    background: #4fc3f7;
-  }
-`;
-
-const LeftButton = styled(NavButton)`
-  left: -10px;
-`;
-
-const RightButton = styled(NavButton)`
-  right: -10px;
-`;
-
-const ClubSection = styled.div`
-  margin-top: 60px;
-`;
-
-const ClubGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 28px;
-`;
-
-const ClubCard = styled.div`
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: white;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  height: 220px; /* ✅ 카드 높이 지정 (예: 220px ~ 250px 권장) */
-  display: flex;
-  flex-direction: column;
-`;
-
-const ClubThumbnailWrapper = styled.div`
-  position: relative;
-  height: 120px;
-  background-image: url(${(props) => props.img});
-  background-size: cover;
-  background-position: center;
-  opacity: 0.9;
-`;
-
-const ClubOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.35);
-  color: white;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding: 10px;
-  box-sizing: border-box;
-  text-align: right;
-`;
-
-const ClubName = styled.div`
-  font-size: 18px;
-  font-weight: bold;
-`;
-
-const ClubInfo = styled.div`
-  font-size: 14px;
-  font-weight: normal;
-`;
-
-const ClubPosts = styled.div`
-  padding: 10px;
-  font-size: 13px;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-`;
-
-const ClubPost = styled.div`
-  margin-bottom: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-// 내 글 쓰기
-const TableWrapper = styled.div`
-  width: 100%;
-  overflow-x: auto;
-  margin-bottom: 20px;
-`;
-
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-`;
-
-const TableHeader = styled.th`
-  background-color: rgb(100, 196, 120);
-  color: white;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: bold;
-`;
-
-const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #f4f4f4;
-  }
-`;
-
-const TableCell = styled.td`
-  padding: 12px;
-  font-size: 14px;
-  border-bottom: 1px solid #ddd;
-`;
-
-const PostSection = styled.div`
-  margin-top: 170px;
-`;
-
-const PostTitle = styled.h2`
-  text-align: left;
-  margin-bottom: 20px;
-`;
-
-const PostDropdown = styled.select`
-  padding: 5px 10px;
-  font-size: 16px;
-  margin-bottom: 20px;
-`;
 
 const PostListWrapper = styled.div`
   display: flex;
@@ -464,25 +283,52 @@ const PostDetails = styled.div`
   margin-top: 5px;
 `;
 
-const PaginationWrapper = styled.div`
+
+// 스크롤 버튼 
+const MenuGroup = styled.div`
   display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 350px; /* 첫 버튼과의 간격을 크게 */
 `;
 
-const PageButton = styled.button`
-  padding: 8px 12px;
-  background-color: rgb(100, 196, 120);
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  margin: 0 5px;
 
+const SideMenu = styled.div`
+  //position: absolute; //  fixed → absolute
+  position: fixed;
+  /* top: 0;
+  left: -110px; //  MyPageContainer 밖 왼쪽으로 살짝 나가게 */
+  top: 120px;
+  left: 390px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 70px;
+  z-index: 1;
+`;
+
+const MenuButton = styled.button`
+  width: 120px;
+  height: 80px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  // border: 2px solid #67dbff;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #333;
+  
+  cursor: pointer;
   &:hover {
-    background-color: rgb(100, 196, 120);
+    background-color: #c9c9c9;
+    border: 2px solid #c9c9c9;
   }
 `;
+
+const ScrollAnchor = styled.div`
+  scroll-margin-top: 120px;
+`;
+
+
 
 function MyPage() {
   const user = dummyUser;
@@ -492,6 +338,16 @@ function MyPage() {
   const postVisibleCount = 5; // 한 페이지에 보일 게시글/댓글 개수
 
   const VISIBLE_COUNT = 5;
+
+  const userInfoRef = useRef(null);
+const postSectionRef = useRef(null);
+
+const handleScrollTo = (ref) => {
+  if (ref.current) {
+    ref.current.scrollIntoView({ behavior: "smooth" });
+  }
+};
+  
 
   const handlePrev = () => {
     if (startIndex > 0) setStartIndex(startIndex - 1);
@@ -533,8 +389,19 @@ function MyPage() {
     .slice(startPostIndex, startPostIndex + postVisibleCount);
 
   return (
+    <>
+    <SideMenu>
+      <MenuButton onClick={() => handleScrollTo(userInfoRef)}>유저 정보</MenuButton>
+      <MenuGroup>
+        <MenuButton onClick={() => handleScrollTo(postSectionRef)}>내가 쓴 글</MenuButton>
+      </MenuGroup>
+    </SideMenu>
     <MyPageContainer>
+    
+    
+
       {/* 1. 유저 정보 */}
+      <ScrollAnchor ref={userInfoRef}>
       <UserInfoWrapper>
         <UserProfile>
           <Thumbnail src={userThumbnail} alt="썸네일" />
@@ -545,6 +412,7 @@ function MyPage() {
           <Button>로그아웃</Button>
         </Buttons>
       </UserInfoWrapper>
+      </ScrollAnchor>
 
       {/* 2. 유저 상태 */}
       <StatusSection>
@@ -556,127 +424,37 @@ function MyPage() {
       </StatusSection>
 
       {/* 3. 내가 시청 중인 강의 */}
-      <LectureSection>
-        <SectionTitle>내가 시청중인 강의</SectionTitle>
-        <DividerWrapper>
-          <Divider />
-          <LectureSliderWrapper>
-            {startIndex > 0 && <LeftButton onClick={handlePrev}>‹</LeftButton>}
-            <LectureList
-              style={{
-                transform: `translateX(-${startIndex * 132}px)`,
-              }}
-            >
-              {user.watchingLectures.map((lecture) => (
-                <LectureThumbnail
-                  key={lecture.id}
-                  src={lecture.thumbnail}
-                  alt={lecture.title}
-                />
-              ))}
-            </LectureList>
-            {startIndex + VISIBLE_COUNT < user.watchingLectures.length && (
-              <RightButton onClick={handleNext}>›</RightButton>
-            )}
-          </LectureSliderWrapper>
-          <Divider />
-        </DividerWrapper>
-      </LectureSection>
+      <LectureSection
+  user={user}
+  startIndex={startIndex}
+  handlePrev={handlePrev}
+  handleNext={handleNext}
+  VISIBLE_COUNT={VISIBLE_COUNT}
+/>
 
       {/* 4. 내 동아리 */}
-      <ClubSection>
-        <SectionTitle>내 동아리</SectionTitle>
-        <DividerWrapper>
-          <Divider />
-        </DividerWrapper>
-        <ClubGrid>
-          {dummyClubs.map((club) => {
-            const regionName = regionMap[club.regionId] || "지역 미정";
-            const hobbyKey = club.categoryId === 1 ? "indoor" : "outdoor";
-            const hobbyName =
-              hobbyMap[hobbyKey]?.list[club.hobbyId] || "취미 미정";
-
-            return (
-              <ClubCard key={club.id}>
-                <ClubThumbnailWrapper img={club.thumbnail}>
-                  <ClubOverlay>
-                    <div style={{ textAlign: "right" }}>
-                      <ClubName>{club.name}</ClubName>
-                      <ClubInfo>
-                        {regionName} / {hobbyName} / {club.members}명
-                      </ClubInfo>
-                    </div>
-                  </ClubOverlay>
-                </ClubThumbnailWrapper>
-                <ClubPosts>
-                  {club.posts.map((post, i) => (
-                    <ClubPost key={i}>• {post}</ClubPost>
-                  ))}
-                </ClubPosts>
-              </ClubCard>
-            );
-          })}
-        </ClubGrid>
-      </ClubSection>
+      <ClubSection
+  dummyClubs={dummyClubs}
+  regionMap={regionMap}
+  hobbyMap={hobbyMap}
+/>
 
       {/* 5. 내가 쓴 글 보기 */}
-      <PostSection>
-        <PostTitle>내가 쓴 글 & 댓글 보기</PostTitle>
-        <PostDropdown onChange={handlePostTypeChange}>
-          <option value={1}>게시글 보기</option>
-          <option value={2}>댓글 보기</option>
-        </PostDropdown>
-
-        <TableWrapper>
-          <Table>
-            <thead>
-              <tr>
-                <TableHeader>번호</TableHeader>
-                <TableHeader>내용</TableHeader>
-                <TableHeader>작성일</TableHeader>
-                <TableHeader>유저이름</TableHeader>
-                <TableHeader>취미</TableHeader>
-                <TableHeader>동아리 이름</TableHeader>
-              </tr>
-            </thead>
-            <tbody>
-              {visiblePosts.map((post, index) => (
-                <TableRow key={post.id}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{post.content}</TableCell>
-                  <TableCell>{post.date}</TableCell>
-                  <TableCell>{user.nickname}</TableCell>
-                  <TableCell>
-                    {hobbyMap.indoor?.list[post.hobby.hobbyId]}
-                  </TableCell>
-                  <TableCell>{post.clubName}</TableCell>
-                </TableRow>
-              ))}
-            </tbody>
-          </Table>
-        </TableWrapper>
-
-        {/* 페이지네이션 */}
-        <PaginationWrapper>
-          <PageButton onClick={handlePostPrev} disabled={startPostIndex === 0}>
-            이전
-          </PageButton>
-          <span>
-            {Math.floor(startPostIndex / postVisibleCount) + 1} /{" "}
-            {Math.ceil(user.posts.length / postVisibleCount)}
-          </span>
-          <PageButton
-            onClick={handlePostNext}
-            disabled={
-              startPostIndex + postVisibleCount >=
-              user.posts.filter((post) => post.type === selectedPostType).length
-            }
-          >
-            다음
-          </PageButton>
-        </PaginationWrapper>
-      </PostSection>
+      <ScrollAnchor ref={postSectionRef}>
+      <PostSection
+  user={user}
+  visiblePosts={visiblePosts}
+  selectedPostType={selectedPostType}
+  postVisibleCount={postVisibleCount}
+  startPostIndex={startPostIndex}
+  handlePostPrev={handlePostPrev}
+  handlePostNext={handlePostNext}
+  handlePostTypeChange={handlePostTypeChange}
+  hobbyMap={hobbyMap}
+/>
+</ScrollAnchor>
     </MyPageContainer>
+    </>
   );
 }
 

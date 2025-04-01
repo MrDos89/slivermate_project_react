@@ -4,6 +4,7 @@ import styled from "styled-components";
 import image1 from "../images/cnlal.jpg";
 import image2 from "../images/cnlal2.jpg";
 import image3 from "../images/cnlal3.jpg";
+import { useNavigate } from "react-router-dom"; 
 
 // 섹션 전체 컨테이너
 const SectionWrapper = styled.div`
@@ -67,12 +68,32 @@ const AnimatedText = styled(motion.div)`
   margin-bottom: 10px;
 `;
 
+const ViewMoreButton = styled.button`
+  margin-top: 30px;
+  padding: 12px 24px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 10;
+
+  &:hover {
+    background-color: #ffffff;
+    color: #000000;
+  }
+`;
+
 const SectionSix = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { threshold: 0.3 });
   const controls = useAnimation();
   const text1Controls = useAnimation();
   const text2Controls = useAnimation();
+
+  const navigate = useNavigate(); //  라우터 훅
 
   useEffect(() => {
     if (inView) {
@@ -119,6 +140,9 @@ const SectionSix = () => {
         <AnimatedText initial={{ x: -200, opacity: 0 }} animate={text2Controls}>
           세상은 넓고 취미는 많다!
         </AnimatedText>
+        <ViewMoreButton onClick={() => navigate("/club")}>
+          자세히 보기
+        </ViewMoreButton>
       </TextContainer>
     </SectionWrapper>
   );
