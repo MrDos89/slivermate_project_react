@@ -3,7 +3,7 @@ import styled from "styled-components";
 import FeedItem from "./FeedItem";
 
 const ListWrapper = styled.div`
-  margin-top: 60px;
+  margin-top: 50px;
 `;
 
 const PaginationWrapper = styled.div`
@@ -34,7 +34,11 @@ const FeedList = ({ posts }) => {
   const totalPages = Math.ceil(posts.length / postsPerPage);
 
   if (posts.length === 0) {
-    return <div style={{ textAlign: "center", marginTop: "60px", color: "#aaa" }}>게시글이 없습니다.</div>;
+    return (
+      <div style={{ textAlign: "center", marginTop: "60px", color: "#aaa" }}>
+        게시글이 없습니다.
+      </div>
+    );
   }
 
   return (
@@ -55,19 +59,19 @@ const FeedList = ({ posts }) => {
         ))}
       </PaginationWrapper> */}
       <PaginationWrapper>
-  {Array.from({ length: totalPages }, (_, i) => (
-    <PageButton
-      key={i}
-      active={currentPage === i + 1}
-      onClick={() => {
-        setCurrentPage(i + 1);
-        window.scrollTo({ top: 0, behavior: "smooth" }); // 👈 페이지 전환 시 위로 이동
-      }}
-    >
-      {i + 1}
-    </PageButton>
-  ))}
-</PaginationWrapper>
+        {Array.from({ length: totalPages }, (_, i) => (
+          <PageButton
+            key={i}
+            active={currentPage === i + 1}
+            onClick={() => {
+              setCurrentPage(i + 1);
+              window.scrollTo({ top: 0, behavior: "smooth" }); // 👈 페이지 전환 시 위로 이동
+            }}
+          >
+            {i + 1}
+          </PageButton>
+        ))}
+      </PaginationWrapper>
     </ListWrapper>
   );
 };

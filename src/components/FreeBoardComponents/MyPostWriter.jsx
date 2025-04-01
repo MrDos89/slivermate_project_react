@@ -6,10 +6,9 @@ const WriterWrapper = styled.div`
   top: 0;
   background-color: white;
   // border-bottom: 1px solid #ddd;
-    z-index: 50;
+  z-index: 50;
   width: 800px;
   margin: 0 auto;
-  
 `;
 
 const ProfileRow = styled.div`
@@ -118,7 +117,6 @@ const SubmitBtn = styled.button`
   cursor: pointer;
 `;
 
-
 const hobbyOptions = [
   { id: 0, name: "일상" },
   { id: 1, name: "뜨개질" },
@@ -151,7 +149,9 @@ const MyPostWriter = ({ onSubmit }) => {
 
   const toggleTag = (tagId) => {
     setSelectedTags((prev) =>
-      prev.includes(tagId) ? prev.filter((id) => id !== tagId) : [...prev, tagId]
+      prev.includes(tagId)
+        ? prev.filter((id) => id !== tagId)
+        : [...prev, tagId]
     );
   };
 
@@ -247,7 +247,9 @@ const MyPostWriter = ({ onSubmit }) => {
       )}
 
       <ButtonRow>
-        <UploadBtn onClick={() => fileRef.current.click()}>이미지 추가</UploadBtn>
+        <UploadBtn onClick={() => fileRef.current.click()}>
+          이미지 추가
+        </UploadBtn>
         <SubmitBtn onClick={handleSubmit}>게시하기</SubmitBtn>
         <input
           type="file"

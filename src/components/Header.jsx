@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-
 const HeaderContainer = styled.header`
   width: 100%;
   height: 60px;
@@ -19,7 +18,8 @@ const HeaderContainer = styled.header`
 const Logo = styled.div`
   @font-face {
     font-family: "KCCHyerim-Regular";
-    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/KCCHyerim-Regular.woff2") format("woff2");
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/KCCHyerim-Regular.woff2")
+      format("woff2");
     font-weight: normal;
     font-style: normal;
   }
@@ -35,7 +35,6 @@ const Logo = styled.div`
     color: rgb(39, 233, 0); /* 호버 시에도 원래 색상 유지 */
   }
 `;
-
 
 const Nav = styled.nav`
   display: flex;
@@ -101,22 +100,18 @@ function Header({ setScrollIndex }) {
     navigate(`/?scrollTo=${index}`);
   };
 
-
   return (
     <HeaderContainer>
       {/* <Logo to="/">파릇</Logo> */}
       {/* <Logo onClick={() => setScrollIndex(0)}>파릇</Logo> */}
       <Logo onClick={() => handleNavigateToScroll(0)}>파릇</Logo>
       <Nav>
-      <NavItem onClick={() => handleNavigateToScroll(1)}>파릇 소개</NavItem>
+        <NavItem onClick={() => handleNavigateToScroll(1)}>파릇 소개</NavItem>
         <NavItem onClick={() => handleNavigateToScroll(3)}>강의실</NavItem>
         <NavItem onClick={() => handleNavigateToScroll(5)}>모임</NavItem>
         <NavItem onClick={() => handleNavigateToScroll(8)}>자유게시판</NavItem>
         <NavItem onClick={() => handleNavigateToScroll(8)}>시니어칼럼</NavItem>
-        {/* NavItem 대신 Link를 쓰는 경우는 아래처럼 */}
-        <NavItem as={Link} to="/mypage">
-          마이페이지
-        </NavItem>
+        <NavItem onClick={() => navigate("/mypage")}>마이페이지</NavItem>
       </Nav>
       <AuthButtons>
         <Button to="/login">로그인</Button>

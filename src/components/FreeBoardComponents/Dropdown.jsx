@@ -8,9 +8,9 @@ const DropdownWrapper = styled.div`
 
 const DropdownButton = styled.button`
   padding: 20px 30px;
-  width: 300px;;
-  height: 70px;
-  font-size: 1.6rem;
+  width: 150px;
+  height: 60px;
+  font-size: 1.3rem;
   cursor: pointer;
   background-color: #ffffff;
   border: 2px solid #ccc;
@@ -32,7 +32,7 @@ const DropdownList = styled.ul`
   background: #ffffff;
   border: 2px solid #b4cfb5;
   border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   z-index: 10;
   list-style: none;
   padding: 0;

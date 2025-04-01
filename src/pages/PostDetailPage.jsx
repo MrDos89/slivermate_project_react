@@ -129,7 +129,11 @@ const PostDetailPage = () => {
         <ProfileImg src={post.userThumbnail} />
         <div>
           <UserName>{post.user}</UserName>
-          <PostDate>{format(new Date(post.createdAt), "yyyy.MM.dd HH:mm", { locale: ko })}</PostDate>
+          <PostDate>
+            {format(new Date(post.createdAt), "yyyy.MM.dd HH:mm", {
+              locale: ko,
+            })}
+          </PostDate>
         </div>
       </UserInfo>
 
@@ -149,7 +153,9 @@ const PostDetailPage = () => {
       <Meta>
         <span>❤️ 좋아요 {post.likes}</span>
         <span>💬 댓글 {post.comments}</span>
-        <span>📅 업로드일 {format(new Date(post.createdAt), "yyyy.MM.dd")}</span>
+        <span>
+          📅 업로드일 {format(new Date(post.createdAt), "yyyy.MM.dd")}
+        </span>
       </Meta>
 
       <CommentBox>

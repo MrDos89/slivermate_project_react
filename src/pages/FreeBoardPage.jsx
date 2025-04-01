@@ -5,14 +5,10 @@ import Dropdown from "../components/FreeBoardComponents/Dropdown";
 import MyPostWriter from "../components/FreeBoardComponents/MyPostWriter";
 import FeedList from "../components/FreeBoardComponents/FeedList";
 
-
-
-
-
 const Wrapper = styled.div`
-width: 1200px;;
+  width: 1200px;
   // padding: 60px;
-  padding: 200px 60px 60px;
+  padding: 165px 60px 60px;
   text-align: center;
   font-size: 1.8rem;
 `;
@@ -21,12 +17,12 @@ const DropdownContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 200px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
 const FixedPostBar = styled.div`
   position: fixed;
-  top: 60px; 
+  top: 60px;
   left: 0;
   width: 100%;
   background-color: white;
@@ -35,12 +31,7 @@ const FixedPostBar = styled.div`
   border-bottom: 1px solid #eee;
 `;
 
-
 const FreeBoardPage = () => {
-  
-
-  
-
   const regionId = [
     { id: -1, name: "전체" },
     { id: 1, name: "서울특별시" },
@@ -56,15 +47,27 @@ const FreeBoardPage = () => {
   ];
 
   const indoorHobbies = [
-    { id: 1, name: "뜨개질" }, { id: 2, name: "그림" }, { id: 3, name: "독서" },
-    { id: 4, name: "영화 감상" }, { id: 5, name: "퍼즐" }, { id: 6, name: "요리" },
-    { id: 7, name: "통기타" }, { id: 8, name: "당구" }, { id: 9, name: "바둑" },
+    { id: 1, name: "뜨개질" },
+    { id: 2, name: "그림" },
+    { id: 3, name: "독서" },
+    { id: 4, name: "영화 감상" },
+    { id: 5, name: "퍼즐" },
+    { id: 6, name: "요리" },
+    { id: 7, name: "통기타" },
+    { id: 8, name: "당구" },
+    { id: 9, name: "바둑" },
   ];
 
   const outdoorHobbies = [
-    { id: 10, name: "등산" }, { id: 11, name: "자전거" }, { id: 12, name: "캠핑" },
-    { id: 13, name: "낚시" }, { id: 14, name: "러닝/마라톤" }, { id: 15, name: "수영" },
-    { id: 16, name: "골프" }, { id: 17, name: "테니스" }, { id: 18, name: "족구" },
+    { id: 10, name: "등산" },
+    { id: 11, name: "자전거" },
+    { id: 12, name: "캠핑" },
+    { id: 13, name: "낚시" },
+    { id: 14, name: "러닝/마라톤" },
+    { id: 15, name: "수영" },
+    { id: 16, name: "골프" },
+    { id: 17, name: "테니스" },
+    { id: 18, name: "족구" },
   ];
 
   const allHobbies = [
@@ -77,9 +80,11 @@ const FreeBoardPage = () => {
   // const [selectedRegion, setSelectedRegion] = useState({ id: null, name: "지역 선택" });
   // const [selectedHobby, setSelectedHobby] = useState({ id: null, name: "카테고리 선택" });
 
-
-  const [selectedRegion, setSelectedRegion] = useState({ id: -1, name: "전체" });
-const [selectedHobby, setSelectedHobby] = useState({ id: -1, name: "전체" });
+  const [selectedRegion, setSelectedRegion] = useState({
+    id: -1,
+    name: "전체",
+  });
+  const [selectedHobby, setSelectedHobby] = useState({ id: -1, name: "전체" });
 
   const [showRegionList, setShowRegionList] = useState(false);
   const [showHobbyList, setShowHobbyList] = useState(false);
@@ -95,40 +100,37 @@ const [selectedHobby, setSelectedHobby] = useState({ id: -1, name: "전체" });
   //   ? posts
   //   : posts.filter((post) => post.tags.includes(selectedHobby.id));
   const filteredPosts = posts
-  .filter((post) =>
-    selectedHobby.id === -1 || post.tags.includes(selectedHobby.id)
-  )
-  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-    
-
+    .filter(
+      (post) => selectedHobby.id === -1 || post.tags.includes(selectedHobby.id)
+    )
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
     <>
-    <FixedPostBar>
-      <DropdownContainer>
-        <Dropdown
-          selected={selectedRegion}
-          setSelected={setSelectedRegion}
-          show={showRegionList}
-          setShow={setShowRegionList}
-          options={regionId}
-        />
-        <Dropdown
-          selected={selectedHobby}
-          setSelected={setSelectedHobby}
-          show={showHobbyList}
-          setShow={setShowHobbyList}
-          options={allHobbies}
-        />
-      </DropdownContainer>
-    </FixedPostBar>
+      <FixedPostBar>
+        <DropdownContainer>
+          <Dropdown
+            selected={selectedRegion}
+            setSelected={setSelectedRegion}
+            show={showRegionList}
+            setShow={setShowRegionList}
+            options={regionId}
+          />
+          <Dropdown
+            selected={selectedHobby}
+            setSelected={setSelectedHobby}
+            show={showHobbyList}
+            setShow={setShowHobbyList}
+            options={allHobbies}
+          />
+        </DropdownContainer>
+      </FixedPostBar>
 
-    <Wrapper>
-    <MyPostWriter onSubmit={handleAddPost} />
-      <FeedList posts={filteredPosts} />
-    </Wrapper>
-  </>
+      <Wrapper>
+        <MyPostWriter onSubmit={handleAddPost} />
+        <FeedList posts={filteredPosts} />
+      </Wrapper>
+    </>
   );
 };
 
