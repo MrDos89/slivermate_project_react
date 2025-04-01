@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import userThumbnail from "../images/thumb3.png";
 import thumb2 from "../images/thumb2.png";
+// import PostSection from "./PostSection";
 
 // 🔹 더미 유저 데이터
 const dummyUser = {
@@ -395,9 +396,100 @@ const ClubPost = styled.div`
   text-overflow: ellipsis;
 `;
 
+// 내 글 쓰기
+const TableWrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 20px;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+`;
+
+const TableHeader = styled.th`
+  background-color: rgb(100, 196, 120);
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+`;
+
+const TableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: #f4f4f4;
+  }
+`;
+
+const TableCell = styled.td`
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #ddd;
+`;
+
+const PostSection = styled.div`
+  margin-top: 170px;
+`;
+
+const PostTitle = styled.h2`
+  text-align: left;
+  margin-bottom: 20px;
+`;
+
+const PostDropdown = styled.select`
+  padding: 5px 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+`;
+
+const PostListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const PostItem = styled.div`
+  background-color: white;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const PostDetails = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-top: 5px;
+`;
+
+const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const PageButton = styled.button`
+  padding: 8px 12px;
+  background-color: rgb(100, 196, 120);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  margin: 0 5px;
+
+  &:hover {
+    background-color: rgb(100, 196, 120);
+  }
+`;
+
 function MyPage() {
   const user = dummyUser;
   const [startIndex, setStartIndex] = useState(0);
+  const [startPostIndex, setStartPostIndex] = useState(0); // 게시글/댓글 페이지네이션 시작 인덱스
+  const [selectedPostType, setSelectedPostType] = useState(1); // 기본적으로 게시글 보기
+  const postVisibleCount = 5; // 한 페이지에 보일 게시글/댓글 개수
 
   const VISIBLE_COUNT = 5;
 
@@ -414,6 +506,31 @@ function MyPage() {
     startIndex,
     startIndex + VISIBLE_COUNT
   );
+
+  // 2. 이전 페이지로 이동하는 함수
+  const handlePostPrev = () => {
+    if (startPostIndex > 0) setStartPostIndex(startPostIndex - 1);
+  };
+
+  // 3. 다음 페이지로 이동하는 함수
+  const handlePostNext = () => {
+    const filteredPosts = user.posts.filter(
+      (post) => post.type === selectedPostType
+    );
+    if (startPostIndex + postVisibleCount < filteredPosts.length)
+      setStartPostIndex(startPostIndex + 1);
+  };
+
+  // 4. 드롭다운에서 게시글/댓글을 선택하면 해당 항목만 필터링
+  const handlePostTypeChange = (e) => {
+    setSelectedPostType(Number(e.target.value));
+    setStartPostIndex(0); // 게시글/댓글 변경 시 첫 페이지로 돌아가도록
+  };
+
+  // 5. 선택된 게시글/댓글 목록을 필터링
+  const visiblePosts = user.posts
+    .filter((post) => post.type === selectedPostType)
+    .slice(startPostIndex, startPostIndex + postVisibleCount);
 
   return (
     <MyPageContainer>
@@ -501,6 +618,64 @@ function MyPage() {
           })}
         </ClubGrid>
       </ClubSection>
+
+      {/* 5. 내가 쓴 글 보기 */}
+      <PostSection>
+        <PostTitle>내가 쓴 글 & 댓글 보기</PostTitle>
+        <PostDropdown onChange={handlePostTypeChange}>
+          <option value={1}>게시글 보기</option>
+          <option value={2}>댓글 보기</option>
+        </PostDropdown>
+
+        <TableWrapper>
+          <Table>
+            <thead>
+              <tr>
+                <TableHeader>번호</TableHeader>
+                <TableHeader>내용</TableHeader>
+                <TableHeader>작성일</TableHeader>
+                <TableHeader>유저이름</TableHeader>
+                <TableHeader>취미</TableHeader>
+                <TableHeader>동아리 이름</TableHeader>
+              </tr>
+            </thead>
+            <tbody>
+              {visiblePosts.map((post, index) => (
+                <TableRow key={post.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{post.content}</TableCell>
+                  <TableCell>{post.date}</TableCell>
+                  <TableCell>{user.nickname}</TableCell>
+                  <TableCell>
+                    {hobbyMap.indoor?.list[post.hobby.hobbyId]}
+                  </TableCell>
+                  <TableCell>{post.clubName}</TableCell>
+                </TableRow>
+              ))}
+            </tbody>
+          </Table>
+        </TableWrapper>
+
+        {/* 페이지네이션 */}
+        <PaginationWrapper>
+          <PageButton onClick={handlePostPrev} disabled={startPostIndex === 0}>
+            이전
+          </PageButton>
+          <span>
+            {Math.floor(startPostIndex / postVisibleCount) + 1} /{" "}
+            {Math.ceil(user.posts.length / postVisibleCount)}
+          </span>
+          <PageButton
+            onClick={handlePostNext}
+            disabled={
+              startPostIndex + postVisibleCount >=
+              user.posts.filter((post) => post.type === selectedPostType).length
+            }
+          >
+            다음
+          </PageButton>
+        </PaginationWrapper>
+      </PostSection>
     </MyPageContainer>
   );
 }
