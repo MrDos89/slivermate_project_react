@@ -40,7 +40,7 @@ const SignUpPage = () => {
     nickname: "",
     user_id: "",
     user_password: "",
-    confirmPassword: "",
+    pin_password: "",
     tel_number: "",
     email: "",
     region_id: 1,
@@ -52,12 +52,18 @@ const SignUpPage = () => {
     upd_date: new Date().toISOString(),
   });
 
+  const [checkPasswords, setCheckPasswords] = useState({
+    confirmPassword: "",
+    confirmPinPassword: "",
+  });
+
   const [allUserData, setAllUserData] = useState([]);
   const [allUserGroupData, setAllUserGroupData] = useState([]);
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
   const [passwordStrength, setPasswordStrength] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(null);
+  const [pinPasswordMatch, setPinPasswordMatch] = useState(null);
   const navigate = useNavigate();
 
   // 뒤로가기 버튼
@@ -97,7 +103,7 @@ const SignUpPage = () => {
   //@note - 비밀번호 사용 가능한지 확인
   const handlePasswordAvailability = (e) => {
     const password = e.target.value;
-    setUserData({ ...userData, password });
+    setUserData({ ...userData, user_password: password });
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     setPasswordStrength(
@@ -107,11 +113,24 @@ const SignUpPage = () => {
     );
   };
 
+  //@note - pin 비밀번호 사용 가능한지 확인
+  const handlePinPasswordAvailability = (e) => {
+    const pinPassword = e.target.value;
+    setUserData({ ...userData, pin_password: pinPassword });
+  };
+
   //@note - 비밀번호 확인 기능
   const handleConfirmPasswordChange = (e) => {
     const confirmPassword = e.target.value;
-    setUserData({ ...userData, confirmPassword });
-    setPasswordMatch(userData.password === confirmPassword);
+    setCheckPasswords({ ...checkPasswords, confirmPassword });
+    setPasswordMatch(userData.user_password === confirmPassword);
+  };
+
+  //@note - pin 비밀번호 확인 기능
+  const handleConfirmPinPasswordChange = (e) => {
+    const confirmPinPassword = e.target.value;
+    setCheckPasswords({ ...checkPasswords, confirmPinPassword });
+    setPinPasswordMatch(userData.pin_password === confirmPinPassword);
   };
 
   const handleSignup = (e) => {
@@ -149,8 +168,6 @@ const SignUpPage = () => {
       return;
     }
 
-    const { confirmPassword, ...userDataToSend } = userData;
-
     setUserData({ ...userData, group_id: allUserGroupData.length + 1 });
 
     console.log(
@@ -168,6 +185,9 @@ const SignUpPage = () => {
         ", " +
         "password : " +
         userData.user_password +
+        ", " +
+        "pin_password : " +
+        userData.pin_password +
         ", " +
         "tel_number : " +
         userData.tel_number +
@@ -207,7 +227,7 @@ const SignUpPage = () => {
     });
 
     alert("회원가입 성공! 로그인 페이지로 이동합니다.");
-    navigate("/loginPage");
+    navigate("/login");
   };
 
   return (
@@ -270,12 +290,34 @@ const SignUpPage = () => {
         <input
           type="password"
           placeholder="비밀번호를 다시 입력하세요"
-          value={userData.confirmPassword}
+          value={checkPasswords.confirmPassword}
           onChange={handleConfirmPasswordChange}
         />
         {passwordMatch !== null && (
           <span style={{ color: passwordMatch ? "green" : "red" }}>
             {passwordMatch ? "비밀번호 일치" : "비밀번호 불일치"}
+          </span>
+        )}
+        <br />
+        <label>pin 비밀번호:</label>
+        <input
+          type="pin_password"
+          placeholder="6자리 숫자"
+          value={userData.pin_password}
+          onChange={handlePinPasswordAvailability}
+        />
+        <span>{passwordStrength}</span>
+        <br />
+        <label>비밀번호 확인:</label>
+        <input
+          type="pin_password"
+          placeholder="pin 비밀번호를 다시 입력하세요"
+          value={checkPasswords.confirmPinPassword}
+          onChange={handleConfirmPinPasswordChange}
+        />
+        {pinPasswordMatch !== null && (
+          <span style={{ color: pinPasswordMatch ? "green" : "red" }}>
+            {pinPasswordMatch ? "pin 비밀번호 일치" : "pin 비밀번호 불일치"}
           </span>
         )}
         <br />
