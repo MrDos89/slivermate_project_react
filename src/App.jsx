@@ -16,6 +16,7 @@ import SeniorColumnPage from "./pages/SeniorColumnPage";
 import PostDetailPage from "./pages/PostDetailPage";
 
 import SignUpPage from "./pages/SignUpPage";
+import LoginGroupPage from "./pages/LoginGroupPage";
 import MyPage from "./pages/MyPage";
 import ClubPage from "./pages/ClubPage";
 import ClubDetailPage from "./pages/ClubDetailPage";
@@ -48,6 +49,7 @@ function App() {
         <Route path="/post/:id" element={<PostDetailPage />} />
 
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/grouplogin" element={<LoginGroupPage />} />
 
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/club" element={<ClubPage />} />

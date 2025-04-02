@@ -139,7 +139,8 @@ const LoginPage = () => {
       const data = await response.json();
       console.log("data", data);
 
-      navigate("/");
+      navigate("/grouplogin", { state: { group_id: data.group_id } });
+
       if (!response.ok) {
         throw new Error("로그인 실패");
       }
