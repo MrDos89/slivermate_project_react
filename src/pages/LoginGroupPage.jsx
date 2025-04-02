@@ -5,7 +5,11 @@ import {
   BackButton,
   UserList,
   UserButton,
-} from "../js/loginGroup.styles"; // 스타일 임포트
+  UserThumbnail,
+} from "../js/loginGroup.styles"; // 스타일 파일 불러오기
+
+const defaultThumbnail =
+  "https://cdn-icons-png.flaticon.com/512/847/847969.png"; // 기본 실루엣 이미지
 
 const LoginGroupPage = () => {
   const [userGroupData, setUserGroupData] = useState([]);
@@ -38,7 +42,6 @@ const LoginGroupPage = () => {
 
   const handleUserSelect = (user) => {
     console.log("Selected user:", user);
-    // navigate(`/dashboard`, { state: { user_id: user.user_id } });
   };
 
   return (
@@ -52,6 +55,10 @@ const LoginGroupPage = () => {
             key={user.user_id ?? `user-${index}`}
             onClick={() => handleUserSelect(user)}
           >
+            <UserThumbnail
+              src={user.thumbnail || defaultThumbnail}
+              alt={`${user.user_name} 프로필`}
+            />
             <h2>{user.user_name}</h2>
           </UserButton>
         ))}

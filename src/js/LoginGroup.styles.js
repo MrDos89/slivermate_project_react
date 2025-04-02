@@ -22,17 +22,31 @@ export const UserList = styled.div`
 `;
 
 export const UserButton = styled.button`
-  background-color: #ff6600; /* sweet potato 컬러 */
+  background-color: #ff6600;
   color: white;
   border: none;
-  padding: 15px 25px;
-  font-size: 18px;
-  border-radius: 50px;
+  padding: 20px;
+  font-size: 16px;
+  border-radius: 15px;
   cursor: pointer;
   transition: transform 0.2s, background-color 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 180px;
 
   &:hover {
     background-color: #e65c00;
     transform: scale(1.1);
   }
+`;
+
+export const UserThumbnail = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
 `;
