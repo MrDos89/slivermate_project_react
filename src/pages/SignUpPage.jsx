@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import UploadImage from "../components/UploadImage/UploadImage";
 
 const allRegions = [
   [1, "서울특별시"],
@@ -263,6 +264,7 @@ const SignUpPage = () => {
       </div>
       <h2 className="join-h2">회원가입</h2>
       <form className="join-form" onSubmit={handleSignup}>
+        <UploadImage />
         <label>이름:</label>
         <input
           type="text"
