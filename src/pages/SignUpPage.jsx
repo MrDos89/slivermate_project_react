@@ -30,24 +30,30 @@ const userType = [
 ];
 
 const SignUpPage = () => {
-  const API_USER_URL = `http://localhost:18090/api/user`;
+  const API_USER_URL = `http://54.180.127.164:18090/api/user`;
+  const API_USER_GROUP_URL = `http://54.180.127.164:18090/api/usergroup`;
+
   const [userData, setUserData] = useState({
     name: "",
+    group_id: 0,
+    user_name: "",
     nickname: "",
     user_id: "",
-    password: "",
+    user_password: "",
+    confirmPassword: "",
     tel_number: "",
     email: "",
     region_id: 1,
     thumbnail: "",
     register_date: "",
-    user_type: "",
+    user_type: 1,
     is_deleted: false,
     is_admin: false,
     upd_date: new Date().toISOString(),
   });
 
   const [allUserData, setAllUserData] = useState([]);
+  const [allUserGroupData, setAllUserGroupData] = useState([]);
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
   const [passwordStrength, setPasswordStrength] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
@@ -66,6 +72,13 @@ const SignUpPage = () => {
       .then((response) => response.json())
       .then((data) => setAllUserData(data))
       .catch((error) => console.error("회원 정보 불러오기 오류", error));
+  }, []);
+
+  useEffect(() => {
+    fetch(API_USER_GROUP_URL)
+      .then((response) => response.json())
+      .then((data) => setAllUserGroupData(data))
+      .catch((error) => console.error("유저 그룹 정보 불러오기 오류", error));
   }, []);
 
   //@note - 유저 아이디 가능 여부 확인
@@ -107,7 +120,7 @@ const SignUpPage = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const phoneRegex = /^\d{11}$/;
 
-    if (!userData.name) {
+    if (!userData.user_id) {
       alert("아이디를 입력하세요.");
       return;
     }
@@ -136,19 +149,25 @@ const SignUpPage = () => {
       return;
     }
 
-    // const { confirmPassword, ...userDataToSend } = userData;
+    const { confirmPassword, ...userDataToSend } = userData;
+
+    setUserData({ ...userData, group_id: allUserGroupData.length + 1 });
 
     console.log(
-      "name : " +
-        userData.name +
+      "group_id : " +
+        userData.group_id +
+        ", " +
+        "name : " +
+        userData.user_name +
         ", " +
         "nickname : " +
         userData.nickname +
         ", " +
         "user_id : " +
+        userData.user_id +
         ", " +
         "password : " +
-        userData.password +
+        userData.user_password +
         ", " +
         "tel_number : " +
         userData.tel_number +
@@ -206,8 +225,10 @@ const SignUpPage = () => {
         <input
           type="text"
           placeholder="성함"
-          value={userData.name}
-          onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+          value={userData.user_name}
+          onChange={(e) =>
+            setUserData({ ...userData, user_name: e.target.value })
+          }
         />
         <br />
         <label>닉네임:</label>
@@ -240,7 +261,7 @@ const SignUpPage = () => {
         <input
           type="password"
           placeholder="8~20자 영문, 숫자, 특수문자 조합"
-          value={userData.password}
+          value={userData.user_password}
           onChange={handlePasswordAvailability}
         />
         <span>{passwordStrength}</span>
@@ -288,7 +309,7 @@ const SignUpPage = () => {
           }
         >
           {userType.map((type, index) => (
-            <option key={index} value={type[1]}>
+            <option key={index} value={type[0]}>
               {type[1]}
             </option>
           ))}
