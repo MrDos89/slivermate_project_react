@@ -5,16 +5,20 @@ import { useNavigate } from "react-router-dom";
 // 스타일 정의
 const GridWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
-  margin-top: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 0 auto;
+  max-width: 1200px;
+  justify-items: center; // 이미지 중앙 정렬
+  padding: 0 auto;
 `;
 
 const ImageItem = styled.img`
   width: 100%;
-  height: 180px;
+  max-width: 280px;
+  height: 280px;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 4px;
   cursor: pointer;
   transition: transform 0.2s;
 
@@ -31,7 +35,7 @@ const NoImageText = styled.div`
 `;
 
 // 컴포넌트
-const PhotoFeed = ({ posts = [] }) => {
+const PhotoFeed = ({ posts = [], clubId }) => {
   const navigate = useNavigate();
 
   const imageItems = posts
@@ -54,7 +58,7 @@ const PhotoFeed = ({ posts = [] }) => {
         <ImageItem
           key={img.key}
           src={img.src}
-          onClick={() => navigate(`/post/${img.postId}`)}
+          onClick={() => navigate(`/club/${clubId}/post/${img.postId}`)}
           alt="feed"
         />
       ))}

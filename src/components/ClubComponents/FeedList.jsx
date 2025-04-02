@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import FeedItem from "./FeedItem";
+import { useNavigate } from "react-router-dom";
 
 const ListWrapper = styled.div`
-  margin-top: 50px;
+  margin-top: 0px;
 `;
 
 const PaginationWrapper = styled.div`
@@ -23,7 +24,9 @@ const PageButton = styled.button`
   cursor: pointer;
 `;
 
-const FeedList = ({ posts }) => {
+const FeedList = ({ posts, clubId }) => {
+  const navigate = useNavigate();
+
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 5;
 
@@ -44,7 +47,12 @@ const FeedList = ({ posts }) => {
   return (
     <ListWrapper>
       {currentPosts.map((post) => (
-        <FeedItem key={post.id} post={post} />
+        <div
+          key={post.id}
+          onClick={() => navigate(`/club/${clubId}/post/${post.id}`)}
+        >
+          <FeedItem post={post} />
+        </div>
       ))}
 
       {/* <PaginationWrapper>
@@ -65,7 +73,7 @@ const FeedList = ({ posts }) => {
             active={currentPage === i + 1}
             onClick={() => {
               setCurrentPage(i + 1);
-              window.scrollTo({ top: 0, behavior: "smooth" }); // 👈 페이지 전환 시 위로 이동
+              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
             {i + 1}

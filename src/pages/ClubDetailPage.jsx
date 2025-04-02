@@ -5,8 +5,8 @@ import { dummyClubs } from "../data/clubData";
 import styled from "styled-components";
 import FeedList from "../components/ClubComponents/FeedList";
 import PhotoFeed from "../components/ClubComponents/PhotoFeed";
+import CalendarSection from "../components/ClubComponents/CalendarSection";
 
-// styled-components 먼저 정의
 const Container = styled.div`
   width: 1200px;
   margin: 0 auto;
@@ -69,7 +69,7 @@ const TabButton = styled.button`
 `;
 
 const TabContent = styled.div`
-  padding: 60px 100px;
+  padding: 10px 10px;
   min-height: 400px; /* 고정 높이로 레이아웃 흔들림 방지 */
 `;
 
@@ -166,12 +166,19 @@ const ClubDetailPage = () => {
 
         {/* {selectedTab === "피드" && <TabNotice>피드 내용 준비 중...</TabNotice>} */}
         {/* ✅ 피드 탭 클릭 시 피드 리스트 렌더링 */}
-        {selectedTab === "피드" && <FeedList posts={club.posts || []} />}
+        {selectedTab === "피드" && (
+          <FeedList posts={club.posts || []} clubId={clubId} />
+        )}
+
         {/* {selectedTab === "포토" && (
           <TabNotice>포토첩 내용 준비 중...</TabNotice>
         )} */}
-        {selectedTab === "포토" && <PhotoFeed posts={club.posts || []} />}
-        {selectedTab === "일정" && <TabNotice>일정 내용 준비 중...</TabNotice>}
+        {selectedTab === "포토" && (
+          <PhotoFeed posts={club.posts || []} clubId={clubId} />
+        )}
+
+        {/* {selectedTab === "일정" && <TabNotice>일정 내용 준비 중...</TabNotice>} */}
+        {selectedTab === "일정" && <CalendarSection />}
       </TabContent>
     </Container>
   );
