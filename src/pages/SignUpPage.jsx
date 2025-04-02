@@ -59,6 +59,7 @@ const SignUpPage = () => {
 
   const [allUserData, setAllUserData] = useState([]);
   const [allUserGroupData, setAllUserGroupData] = useState([]);
+  const [userGroupLength, setUserGroupLength] = useState(0);
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
   const [passwordStrength, setPasswordStrength] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
@@ -76,16 +77,36 @@ const SignUpPage = () => {
     // 회원 정보 불러오기
     fetch(API_USER_URL)
       .then((response) => response.json())
-      .then((data) => setAllUserData(data))
+      .then((data) => {
+        console.log("user 데이터 확인:", data);
+        setAllUserData(data);
+      })
       .catch((error) => console.error("회원 정보 불러오기 오류", error));
   }, []);
 
   useEffect(() => {
     fetch(API_USER_GROUP_URL)
       .then((response) => response.json())
-      .then((data) => setAllUserGroupData(data))
+      .then((data) => {
+        setUserGroupLength(data.length);
+        setUserData({ group_id: data.length + 1 });
+        setAllUserGroupData(data);
+
+        setUserData((prevUserData) => {
+          const updatedUserData = {
+            ...prevUserData,
+            group_id: data.length + 1,
+          };
+          console.log("userData 업데이트될 값:", updatedUserData);
+          return updatedUserData;
+        });
+      })
       .catch((error) => console.error("유저 그룹 정보 불러오기 오류", error));
   }, []);
+
+  useEffect(() => {
+    console.log("userData 변경 확인:", userData);
+  }, [userData]);
 
   //@note - 유저 아이디 가능 여부 확인
   const checkUserIdAvailability = () => {
@@ -139,6 +160,9 @@ const SignUpPage = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const phoneRegex = /^\d{11}$/;
 
+    console.log("allUserData", allUserData);
+    console.log("allUserGroupData", allUserGroupData);
+
     if (!userData.user_id) {
       alert("아이디를 입력하세요.");
       return;
@@ -167,8 +191,6 @@ const SignUpPage = () => {
       alert("아이디 중복 확인이 필요합니다.");
       return;
     }
-
-    setUserData({ ...userData, group_id: allUserGroupData.length + 1 });
 
     console.log(
       "group_id : " +
