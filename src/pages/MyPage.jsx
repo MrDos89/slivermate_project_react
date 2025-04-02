@@ -102,6 +102,14 @@ const dummyUser = {
       hobby: { categoryId: 2, hobbyId: 5 },
       clubName: "건강달리기모임",
     },
+    {
+      id: 11,
+      type: 2,
+      content: "힘내세요! 응원합니다",
+      date: "2025-03-16",
+      hobby: { categoryId: 2, hobbyId: 5 },
+      clubName: "건강달리기모임",
+    },
   ],
 };
 
@@ -188,7 +196,7 @@ const MyPageContainer = styled.div`
   // max-width: 1200px;
   margin: 0 auto;
   width: 1300px;
-  position: relative; 
+  position: relative;
   z-index: 3;
 `;
 
@@ -259,10 +267,6 @@ const StatusItem = styled.div`
 //   margin-top: 40px;
 // `;
 
-
-
-
-
 const PostListWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -283,15 +287,13 @@ const PostDetails = styled.div`
   margin-top: 5px;
 `;
 
-
-// 스크롤 버튼 
+// 스크롤 버튼
 const MenuGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
-  margin-top: 350px; /* 첫 버튼과의 간격을 크게 */
+  margin-top: 200px; /* 첫 버튼과의 간격을 크게 */
 `;
-
 
 const SideMenu = styled.div`
   //position: absolute; //  fixed → absolute
@@ -299,7 +301,7 @@ const SideMenu = styled.div`
   /* top: 0;
   left: -110px; //  MyPageContainer 밖 왼쪽으로 살짝 나가게 */
   top: 120px;
-  left: 390px;
+  left: 210px;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -316,7 +318,7 @@ const MenuButton = styled.button`
   border-radius: 10px;
   font-weight: bold;
   color: #333;
-  
+
   cursor: pointer;
   &:hover {
     background-color: #c9c9c9;
@@ -328,8 +330,6 @@ const ScrollAnchor = styled.div`
   scroll-margin-top: 120px;
 `;
 
-
-
 function MyPage() {
   const user = dummyUser;
   const [startIndex, setStartIndex] = useState(0);
@@ -340,14 +340,13 @@ function MyPage() {
   const VISIBLE_COUNT = 5;
 
   const userInfoRef = useRef(null);
-const postSectionRef = useRef(null);
+  const postSectionRef = useRef(null);
 
-const handleScrollTo = (ref) => {
-  if (ref.current) {
-    ref.current.scrollIntoView({ behavior: "smooth" });
-  }
-};
-  
+  const handleScrollTo = (ref) => {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const handlePrev = () => {
     if (startIndex > 0) setStartIndex(startIndex - 1);
@@ -390,70 +389,71 @@ const handleScrollTo = (ref) => {
 
   return (
     <>
-    <SideMenu>
-      <MenuButton onClick={() => handleScrollTo(userInfoRef)}>유저 정보</MenuButton>
-      <MenuGroup>
-        <MenuButton onClick={() => handleScrollTo(postSectionRef)}>내가 쓴 글</MenuButton>
-      </MenuGroup>
-    </SideMenu>
-    <MyPageContainer>
-    
-    
+      <SideMenu>
+        <MenuButton onClick={() => handleScrollTo(userInfoRef)}>
+          유저 정보
+        </MenuButton>
+        <MenuGroup>
+          <MenuButton onClick={() => handleScrollTo(postSectionRef)}>
+            내가 쓴 글
+          </MenuButton>
+        </MenuGroup>
+      </SideMenu>
+      <MyPageContainer>
+        {/* 1. 유저 정보 */}
+        <ScrollAnchor ref={userInfoRef}>
+          <UserInfoWrapper>
+            <UserProfile>
+              <Thumbnail src={userThumbnail} alt="썸네일" />
+              <Nickname>{user.nickname}</Nickname>
+            </UserProfile>
+            <Buttons>
+              <Button>회원정보</Button>
+              <Button>로그아웃</Button>
+            </Buttons>
+          </UserInfoWrapper>
+        </ScrollAnchor>
 
-      {/* 1. 유저 정보 */}
-      <ScrollAnchor ref={userInfoRef}>
-      <UserInfoWrapper>
-        <UserProfile>
-          <Thumbnail src={userThumbnail} alt="썸네일" />
-          <Nickname>{user.nickname}</Nickname>
-        </UserProfile>
-        <Buttons>
-          <Button>회원정보</Button>
-          <Button>로그아웃</Button>
-        </Buttons>
-      </UserInfoWrapper>
-      </ScrollAnchor>
+        {/* 2. 유저 상태 */}
+        <StatusSection>
+          <StatusItem>
+            ✅ 구독 상태: {user.isSubscribed ? "구독중" : "미구독"}
+          </StatusItem>
+          <StatusItem>📆 구독 시작일: {user.subscriptionDate}</StatusItem>
+          <StatusItem>👥 가입한 동아리: {user.clubCount}개</StatusItem>
+        </StatusSection>
 
-      {/* 2. 유저 상태 */}
-      <StatusSection>
-        <StatusItem>
-          ✅ 구독 상태: {user.isSubscribed ? "구독중" : "미구독"}
-        </StatusItem>
-        <StatusItem>📆 구독 시작일: {user.subscriptionDate}</StatusItem>
-        <StatusItem>👥 가입한 동아리: {user.clubCount}개</StatusItem>
-      </StatusSection>
+        {/* 3. 내가 시청 중인 강의 */}
+        <LectureSection
+          user={user}
+          startIndex={startIndex}
+          handlePrev={handlePrev}
+          handleNext={handleNext}
+          VISIBLE_COUNT={VISIBLE_COUNT}
+        />
 
-      {/* 3. 내가 시청 중인 강의 */}
-      <LectureSection
-  user={user}
-  startIndex={startIndex}
-  handlePrev={handlePrev}
-  handleNext={handleNext}
-  VISIBLE_COUNT={VISIBLE_COUNT}
-/>
+        {/* 4. 내 동아리 */}
+        <ClubSection
+          dummyClubs={dummyClubs}
+          regionMap={regionMap}
+          hobbyMap={hobbyMap}
+        />
 
-      {/* 4. 내 동아리 */}
-      <ClubSection
-  dummyClubs={dummyClubs}
-  regionMap={regionMap}
-  hobbyMap={hobbyMap}
-/>
-
-      {/* 5. 내가 쓴 글 보기 */}
-      <ScrollAnchor ref={postSectionRef}>
-      <PostSection
-  user={user}
-  visiblePosts={visiblePosts}
-  selectedPostType={selectedPostType}
-  postVisibleCount={postVisibleCount}
-  startPostIndex={startPostIndex}
-  handlePostPrev={handlePostPrev}
-  handlePostNext={handlePostNext}
-  handlePostTypeChange={handlePostTypeChange}
-  hobbyMap={hobbyMap}
-/>
-</ScrollAnchor>
-    </MyPageContainer>
+        {/* 5. 내가 쓴 글 보기 */}
+        <ScrollAnchor ref={postSectionRef}>
+          <PostSection
+            user={user}
+            visiblePosts={visiblePosts}
+            selectedPostType={selectedPostType}
+            postVisibleCount={postVisibleCount}
+            startPostIndex={startPostIndex}
+            handlePostPrev={handlePostPrev}
+            handlePostNext={handlePostNext}
+            handlePostTypeChange={handlePostTypeChange}
+            hobbyMap={hobbyMap}
+          />
+        </ScrollAnchor>
+      </MyPageContainer>
     </>
   );
 }

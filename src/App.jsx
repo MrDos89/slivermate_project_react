@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import "./App.css";
 
-
 import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 import PostListPage from "./pages/PostListPage";
@@ -19,6 +18,7 @@ import PostDetailPage from "./pages/PostDetailPage";
 import SignUpPage from "./pages/SignUpPage";
 import MyPage from "./pages/MyPage";
 import ClubPage from "./pages/ClubPage";
+import ClubDetailPage from "./pages/ClubDetailPage";
 
 function App() {
   const [scrollIndex, setScrollIndex] = useState(0); // 상태 분리
@@ -51,6 +51,7 @@ function App() {
 
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/club" element={<ClubPage />} />
+        <Route path="/club/:id" element={<ClubDetailPage />} />
       </Routes>
     </Router>
   );
