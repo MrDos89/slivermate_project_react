@@ -263,8 +263,8 @@ const SignUpPage = () => {
         <h1>파릇</h1>
       </div>
       <h2 className="join-h2">회원가입</h2>
+      <UploadImage />
       <form className="join-form" onSubmit={handleSignup}>
-        <UploadImage />
         <label>이름:</label>
         <input
           type="text"

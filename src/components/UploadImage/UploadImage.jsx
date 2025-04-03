@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
-import { Row, Col, Button, Input, Alert } from "reactstrap";
+import { useState } from "react";
+import { Button, Alert } from "reactstrap";
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
+import Resizer from "react-image-file-resizer";
 
 const UploadImage = () => {
   const ACCESS_KEY = `${import.meta.env.VITE_ACCESS_KEY}`;
@@ -11,21 +12,17 @@ const UploadImage = () => {
 
   const [progress, setProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
 
-  //@note - S3 업로드 설정
   const s3 = new S3Client({
     region: REGION,
     credentials: {
       accessKeyId: ACCESS_KEY,
       secretAccessKey: SECRET_ACCESS_KEY,
     },
-    forcePathStyle: true,
-    computeChecksums: false, // ✅ 체크섬 강제 해제
-    useAccelerateEndpoint: false, // ✅ 가속화 엔드포인트 비활성화
   });
 
-  //@note - 썸네일 파일 업로드
   const handleFileInput = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -36,23 +33,29 @@ const UploadImage = () => {
       return;
     }
 
-    setProgress(0);
-    setSelectedFile(e.target.files[0]);
+    Resizer.imageFileResizer(
+      file,
+      300,
+      300,
+      "JPEG",
+      90,
+      0,
+      (uri) => {
+        setSelectedFile(uri);
+        setPreview(URL.createObjectURL(uri));
+      },
+      "blob"
+    );
   };
 
-  //@note - 썸네일 파일 업로드 기능
   const uploadFile = async (file) => {
     const upload = new Upload({
       client: s3,
       params: {
         Bucket: S3_BUCKET,
         Key: `upload/${file.name}`,
-        Body: file, // Blob 사용
+        Body: file,
       },
-      tags: [], // 태그 추가 가능
-      queueSize: 4, // 병렬 업로드 수
-      partSize: 1024 * 1024 * 5, // 5MB씩 업로드
-      leavePartsOnError: false, // ✅ 업로드 실패 시 자동 정리
     });
 
     upload.on("httpUploadProgress", (progress) => {
@@ -67,7 +70,8 @@ const UploadImage = () => {
       setTimeout(() => {
         setShowAlert(false);
         setSelectedFile(null);
-        setProgress(0); // 완료 후 초기화
+        setPreview(null);
+        setProgress(0);
       }, 3000);
     } catch (err) {
       console.error("S3 업로드 오류:", err);
@@ -75,20 +79,57 @@ const UploadImage = () => {
   };
 
   return (
-    <form>
-      {showAlert ? (
-        <Alert color="primary">업로드 진행률 : {progress}%</Alert>
-      ) : (
-        <Alert color="primary">파일을 선택해 주세요.</Alert>
-      )}
-      <Input color="primary" type="file" onChange={handleFileInput} />
-      {selectedFile ? (
-        <Button color="primary" onClick={() => uploadFile(selectedFile)}>
-          {" "}
+    <div className="text-center">
+      {showAlert && <Alert color="primary">업로드 진행률 : {progress}%</Alert>}
+      <input
+        type="file"
+        accept="image/jpeg"
+        onChange={handleFileInput}
+        hidden
+        id="fileUpload"
+      />
+      <label htmlFor="fileUpload" style={{ cursor: "pointer" }}>
+        {preview ? (
+          <img
+            src={preview}
+            alt="preview"
+            style={{
+              width: "150px",
+              height: "150px",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: "150px",
+              height: "150px",
+              borderRadius: "50%",
+              backgroundColor: "#ddd",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <img
+              src="/placeholder-profile.png"
+              alt="profile-placeholder"
+              style={{ width: "80px", height: "80px" }}
+            />
+          </div>
+        )}
+      </label>
+      {selectedFile && (
+        <Button
+          color="success"
+          onClick={() => uploadFile(selectedFile)}
+          className="mt-2"
+        >
           Upload to S3
         </Button>
-      ) : null}
-    </form>
+      )}
+    </div>
   );
 };
 
