@@ -21,7 +21,7 @@ import MyPage from "./pages/MyPage";
 import ClubPage from "./pages/ClubPage";
 import ClubDetailPage from "./pages/ClubDetailPage";
 import ClubPostDetailPage from "./pages/ClubPostDetailPage";
-import CreateClubTestPage from "./pages/CreateClubTestPage";
+import CreateClubPage from "./pages/CreateClubPage";
 
 function App() {
   const [scrollIndex, setScrollIndex] = useState(0); // 상태 분리
@@ -60,7 +60,7 @@ function App() {
           path="/club/:clubId/post/:postId"
           element={<ClubPostDetailPage />}
         />
-        <Route path="/create-club" element={<CreateClubTestPage />} />
+        <Route path="/create-club" element={<CreateClubPage />} />
       </Routes>
     </Router>
   );
