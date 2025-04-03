@@ -88,6 +88,35 @@ const CalendarWrapper = styled.div`
     color: white;
     font-weight: bold;
   }
+
+  .react-calendar__tile.sunday {
+    color: red;
+    font-weight: bold;
+  }
+
+  .react-calendar__tile.saturday {
+    color: blue;
+    font-weight: bold;
+  }
+
+  .react-calendar__tile.sunday {
+    color: red;
+    font-weight: bold;
+  }
+
+  .react-calendar__tile.saturday {
+    color: blue;
+    font-weight: bold;
+  }
+
+  /* 🔻 비활성 날짜용 스타일 (회색 또는 흐리게) */
+  .react-calendar__tile.sunday-disabled {
+    color: #ccc;
+  }
+
+  .react-calendar__tile.saturday-disabled {
+    color: #ccc;
+  }
 `;
 
 const ScheduleBox = styled.div`
@@ -155,7 +184,8 @@ const Button = styled.button`
 `;
 
 const CalendarSection = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  //   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
   const [schedules, setSchedules] = useState({});
   const [input, setInput] = useState("");
 
@@ -176,28 +206,48 @@ const CalendarSection = () => {
         <Title>📅 동아리 일정 캘린더</Title>
 
         <CalendarWrapper>
-          <Calendar onChange={setSelectedDate} value={selectedDate} />
+          {/* <Calendar onChange={setSelectedDate} value={selectedDate} /> */}
+          <Calendar
+            onClickDay={setSelectedDate}
+            tileClassName={({ date, view, activeStartDate }) => {
+              if (view !== "month") return;
 
-          <ScheduleBox>
-            <DateTitle>{selectedDate.toDateString()} 일정</DateTitle>
-            <ScheduleList>
-              {(schedules[selectedDate.toDateString()] || []).map(
-                (item, idx) => (
-                  <li key={idx}>📌 {item}</li>
-                )
-              )}
-            </ScheduleList>
+              const currentMonth = activeStartDate.getMonth();
+              const tileMonth = date.getMonth();
+              const day = date.getDay(); // 0: 일, 6: 토
 
-            <AddForm onSubmit={handleAdd}>
-              <Input
-                type="text"
-                placeholder="일정을 입력하세요"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-              />
-              <Button type="submit">추가</Button>
-            </AddForm>
-          </ScheduleBox>
+              const isSameMonth = tileMonth === currentMonth;
+
+              if (day === 0) return isSameMonth ? "sunday" : "sunday-disabled";
+              if (day === 6)
+                return isSameMonth ? "saturday" : "saturday-disabled";
+
+              return null;
+            }}
+          />
+
+          {selectedDate && (
+            <ScheduleBox>
+              <DateTitle>{selectedDate.toDateString()} 일정</DateTitle>
+              <ScheduleList>
+                {(schedules[selectedDate.toDateString()] || []).map(
+                  (item, idx) => (
+                    <li key={idx}>📌 {item}</li>
+                  )
+                )}
+              </ScheduleList>
+
+              <AddForm onSubmit={handleAdd}>
+                <Input
+                  type="text"
+                  placeholder="일정을 입력하세요"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                />
+                <Button type="submit">추가</Button>
+              </AddForm>
+            </ScheduleBox>
+          )}
         </CalendarWrapper>
       </Inner>
     </Section>

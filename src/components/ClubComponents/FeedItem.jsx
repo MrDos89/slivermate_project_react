@@ -7,10 +7,10 @@ import { useNavigate } from "react-router-dom";
 const Card = styled.div`
   background-color: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-  padding: 30px; 
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 30px;
   margin-bottom: 40px;
-  max-width: 800px; 
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
 `;
@@ -102,7 +102,7 @@ const SlideButton = styled.button`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.8);
+  background: rgba(255, 255, 255, 0.8);
   border: none;
   font-size: 2rem;
   cursor: pointer;
@@ -119,17 +119,9 @@ const SlideButton = styled.button`
   }
 `;
 
-
-const FeedItem = ({ post }) => {
+const FeedItem = ({ post, clubId }) => {
   const [showFull, setShowFull] = useState(false);
   const MAX_LENGTH = 80;
-
-  const navigate = useNavigate(); 
-
-  const handleClick = () => {
-    navigate(`/post/${post.id}`);
-  };
-
 
   const renderTime = () => {
     const createdAt = new Date(post.createdAt || Date.now());
@@ -145,24 +137,24 @@ const FeedItem = ({ post }) => {
 
   const [currentImage, setCurrentImage] = useState(0);
 
-const nextImage = () => {
-  setCurrentImage((prev) =>
-    prev + 1 < post.images.length ? prev + 1 : 0
-  );
-};
+  const nextImage = () => {
+    setCurrentImage((prev) => (prev + 1 < post.images.length ? prev + 1 : 0));
+  };
 
-const prevImage = () => {
-  setCurrentImage((prev) =>
-    prev - 1 >= 0 ? prev - 1 : post.images.length - 1
-  );
-};
-
+  const prevImage = () => {
+    setCurrentImage((prev) =>
+      prev - 1 >= 0 ? prev - 1 : post.images.length - 1
+    );
+  };
 
   return (
-    <Card onClick={handleClick}>
+    <Card>
       <TopRow>
         <Profile>
-          <ProfileImg src={post.userThumbnail || "/images/defaultUserThumbnail.png"} alt="user" />
+          <ProfileImg
+            src={post.userThumbnail || "/images/defaultUserThumbnail.png"}
+            alt="user"
+          />
           <NameDate>
             <Name>{post.user}</Name>
             <Time>{renderTime()}</Time>
@@ -172,13 +164,15 @@ const prevImage = () => {
       </TopRow>
 
       {post.images?.length > 0 && (
-  <ImageCarousel>
-    <SlideButton onClick={prevImage}>&lt;</SlideButton>
-    <ImageDisplay src={post.images[currentImage].url} alt={`post-image-${currentImage}`} />
-    <SlideButton onClick={nextImage}>&gt;</SlideButton>
-  </ImageCarousel>
-)}
-
+        <ImageCarousel>
+          <SlideButton onClick={prevImage}>&lt;</SlideButton>
+          <ImageDisplay
+            src={post.images[currentImage].url}
+            alt={`post-image-${currentImage}`}
+          />
+          <SlideButton onClick={nextImage}>&gt;</SlideButton>
+        </ImageCarousel>
+      )}
 
       <Content>
         {showFull || post.content.length <= MAX_LENGTH ? (

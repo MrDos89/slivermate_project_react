@@ -6,6 +6,7 @@ import styled from "styled-components";
 import FeedList from "../components/ClubComponents/FeedList";
 import PhotoFeed from "../components/ClubComponents/PhotoFeed";
 import CalendarSection from "../components/ClubComponents/CalendarSection";
+import PostWriteModal from "../components/ClubComponents/PostWriteModal";
 
 const Container = styled.div`
   width: 1200px;
@@ -112,6 +113,29 @@ const TabNotice = styled.div`
   color: #666;
 `;
 
+// 모달
+
+const WriteButton = styled.button`
+  position: fixed;
+  bottom: 80px;
+  right: 200px;
+  width: 90px;
+  height: 90px;
+  background-color: #008552;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background-color: #006f47;
+  }
+`;
+
 // 컴포넌트 본문
 const ClubDetailPage = () => {
   const { id } = useParams();
@@ -119,6 +143,13 @@ const ClubDetailPage = () => {
   const club = dummyClubs.find((c) => c.club_id === clubId);
 
   const [selectedTab, setSelectedTab] = useState("소개");
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달
+
+  const [posts, setPosts] = useState(club.posts || []);
+
+  const handleAddPost = (newPost) => {
+    setPosts((prev) => [newPost, ...prev]);
+  };
 
   if (!club) {
     return <NotFound>해당 동아리를 찾을 수 없습니다.</NotFound>;
@@ -166,9 +197,10 @@ const ClubDetailPage = () => {
 
         {/* {selectedTab === "피드" && <TabNotice>피드 내용 준비 중...</TabNotice>} */}
         {/* ✅ 피드 탭 클릭 시 피드 리스트 렌더링 */}
-        {selectedTab === "피드" && (
+        {/* {selectedTab === "피드" && (
           <FeedList posts={club.posts || []} clubId={clubId} />
-        )}
+        )} */}
+        {selectedTab === "피드" && <FeedList posts={posts} clubId={clubId} />}
 
         {/* {selectedTab === "포토" && (
           <TabNotice>포토첩 내용 준비 중...</TabNotice>
@@ -180,6 +212,20 @@ const ClubDetailPage = () => {
         {/* {selectedTab === "일정" && <TabNotice>일정 내용 준비 중...</TabNotice>} */}
         {selectedTab === "일정" && <CalendarSection />}
       </TabContent>
+
+      {/* ✅ 고정된 [게시글 쓰기] 버튼 */}
+      <WriteButton onClick={() => setIsModalOpen(true)}>
+        게시글 쓰기✏️
+      </WriteButton>
+
+      {/* ✅ 모달 열기 */}
+      {isModalOpen && (
+        <PostWriteModal
+          clubName={club.club_name}
+          closeModal={() => setIsModalOpen(false)}
+          onUploadPost={handleAddPost} // ✅ 요거 추가!
+        />
+      )}
     </Container>
   );
 };

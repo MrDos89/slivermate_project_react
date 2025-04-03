@@ -49,9 +49,9 @@ const FeedList = ({ posts, clubId }) => {
       {currentPosts.map((post) => (
         <div
           key={post.id}
-          onClick={() => navigate(`/club/${clubId}/post/${post.id}`)}
+          onClick={() => navigate(`/club/${clubId}/post/${post.id}`)} // ✅ 문자열 안에 따옴표 필요
         >
-          <FeedItem post={post} />
+          <FeedItem post={post} clubId={clubId} />
         </div>
       ))}
 

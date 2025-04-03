@@ -20,6 +20,7 @@ import LoginGroupPage from "./pages/LoginGroupPage";
 import MyPage from "./pages/MyPage";
 import ClubPage from "./pages/ClubPage";
 import ClubDetailPage from "./pages/ClubDetailPage";
+import ClubPostDetailPage from "./pages/ClubPostDetailPage";
 
 function App() {
   const [scrollIndex, setScrollIndex] = useState(0); // 상태 분리
@@ -54,6 +55,10 @@ function App() {
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/club" element={<ClubPage />} />
         <Route path="/club/:id" element={<ClubDetailPage />} />
+        <Route
+          path="/club/:clubId/post/:postId"
+          element={<ClubPostDetailPage />}
+        />
       </Routes>
     </Router>
   );
