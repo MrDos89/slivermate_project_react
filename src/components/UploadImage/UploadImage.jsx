@@ -14,6 +14,7 @@ const UploadImage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [fileName, setFileName] = useState("");
 
   const s3 = new S3Client({
     region: REGION,
@@ -32,6 +33,8 @@ const UploadImage = () => {
       alert("jpg 파일만 Upload 가능합니다.");
       return;
     }
+
+    setFileName(file.name);
 
     Resizer.imageFileResizer(
       file,
@@ -53,7 +56,7 @@ const UploadImage = () => {
       client: s3,
       params: {
         Bucket: S3_BUCKET,
-        Key: `upload/${file.name}`,
+        Key: `upload/${fileName}`,
         Body: file,
       },
     });
@@ -70,7 +73,6 @@ const UploadImage = () => {
       setTimeout(() => {
         setShowAlert(false);
         setSelectedFile(null);
-        setPreview(null);
         setProgress(0);
       }, 3000);
     } catch (err) {
