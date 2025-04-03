@@ -136,7 +136,7 @@ const UploadImage = ({ onUpload }) => {
           프로필 이미지 업로드
         </Button>
       )}
-      {uploadedUrl && import.meta.env.VITE_DEBUG_MODE && (
+      {uploadedUrl && import.meta.env.VITE_DEBUG_MODE == "true" && (
         <div className="mt-3">
           <p>업로드된 이미지 URL:</p>
           <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
