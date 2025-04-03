@@ -15,6 +15,7 @@ const UploadImage = () => {
   const [preview, setPreview] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [uploadedUrl, setUploadedUrl] = useState("");
 
   const s3 = new S3Client({
     region: REGION,
@@ -34,7 +35,7 @@ const UploadImage = () => {
       return;
     }
 
-    setFileName(file.name);
+    setFileName(`upload/${Date.now()}-${file.name}`);
 
     Resizer.imageFileResizer(
       file,
@@ -56,7 +57,7 @@ const UploadImage = () => {
       client: s3,
       params: {
         Bucket: S3_BUCKET,
-        Key: `upload/profile/${fileName}`,
+        Key: fileName,
         Body: file,
       },
     });
@@ -69,6 +70,8 @@ const UploadImage = () => {
 
     try {
       await upload.done();
+      const fileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/${fileName}`;
+      setUploadedUrl(fileUrl);
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
@@ -131,6 +134,14 @@ const UploadImage = () => {
         >
           프로필 이미지 업로드
         </Button>
+      )}
+      {uploadedUrl && (
+        <div className="mt-3">
+          <p>업로드된 이미지 URL:</p>
+          <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
+            {uploadedUrl}
+          </a>
+        </div>
       )}
     </div>
   );
