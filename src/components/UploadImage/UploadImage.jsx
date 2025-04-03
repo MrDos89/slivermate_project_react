@@ -56,7 +56,7 @@ const UploadImage = () => {
       client: s3,
       params: {
         Bucket: S3_BUCKET,
-        Key: `upload/${fileName}`,
+        Key: `upload/profile/${fileName}`,
         Body: file,
       },
     });
@@ -122,13 +122,14 @@ const UploadImage = () => {
           </div>
         )}
       </label>
+      <br />
       {selectedFile && (
         <Button
           color="success"
           onClick={() => uploadFile(selectedFile)}
           className="mt-2"
         >
-          Upload to S3
+          프로필 이미지 업로드
         </Button>
       )}
     </div>
