@@ -10,6 +10,7 @@ import SectionSix from "./SectionSix.jsx";
 import SectionSeven from "./SectionSeven.jsx";
 import SectionEight from "./SectionEight.jsx";
 import SectionNine from "./SectionNine.jsx";
+import CustomerModal from "./CustomerModal/CustomerModal"; 
 
 
 // const FullPageWrapper = styled.div`
@@ -124,6 +125,8 @@ function FullPageScroll({ scrollIndex, setScrollIndex }) {
     return () => window.removeEventListener("wheel", handleScroll);
   }, [setScrollIndex]);
 
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <FullPageWrapper>
       <NavigationContainer>
@@ -149,9 +152,12 @@ function FullPageScroll({ scrollIndex, setScrollIndex }) {
       </SectionsContainer>
 
       <FixedButtonContainer>
-  <FixedButton onClick={() => alert("고객센터 연결 준비 중입니다.")}>📞</FixedButton>
+  {/* <FixedButton onClick={() => alert("고객센터 연결 준비 중입니다.")}>📞</FixedButton> */}
+  <FixedButton onClick={() => setShowModal(true)}>📞</FixedButton>
   <FixedButton onClick={() => alert("채팅 기능은 추후 추가 예정입니다.")}>💬</FixedButton>
 </FixedButtonContainer>
+
+{showModal && <CustomerModal onClose={() => setShowModal(false)} />}
 
     </FullPageWrapper>
   );
