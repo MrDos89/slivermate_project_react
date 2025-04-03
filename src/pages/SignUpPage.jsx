@@ -155,6 +155,10 @@ const SignUpPage = () => {
     setPinPasswordMatch(userData.pin_password === confirmPinPassword);
   };
 
+  const handleUploadImage = (url) => {
+    setUserData((prevUserData) => ({ ...prevUserData, thumbnail: url }));
+  };
+
   const handleSignup = (e) => {
     e.preventDefault();
     const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/;
@@ -263,7 +267,7 @@ const SignUpPage = () => {
         <h1>파릇</h1>
       </div>
       <h2 className="join-h2">회원가입</h2>
-      <UploadImage />
+      <UploadImage onUpload={handleUploadImage} />
       <form className="join-form" onSubmit={handleSignup}>
         <label>이름:</label>
         <input
@@ -395,7 +399,9 @@ const SignUpPage = () => {
           ))}
         </select>
         <div className="button-group">
-          <button type="submit">가입</button>
+          <button type="submit" disabled={!userData.thumbnail}>
+            가입
+          </button>
           <button type="button" onClick={() => navigate(-1)}>
             취소
           </button>

@@ -4,7 +4,7 @@ import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import Resizer from "react-image-file-resizer";
 
-const UploadImage = () => {
+const UploadImage = ({ onUpload }) => {
   const ACCESS_KEY = `${import.meta.env.VITE_ACCESS_KEY}`;
   const SECRET_ACCESS_KEY = `${import.meta.env.VITE_SECRET_ACCESS_KEY}`;
   const REGION = `${import.meta.env.VITE_AWS_REGION}`;
@@ -35,7 +35,7 @@ const UploadImage = () => {
       return;
     }
 
-    setFileName(`upload/${Date.now()}-${file.name}`);
+    setFileName(`upload/profile/${Date.now()}-${file.name}`);
 
     Resizer.imageFileResizer(
       file,
@@ -72,6 +72,7 @@ const UploadImage = () => {
       await upload.done();
       const fileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/${fileName}`;
       setUploadedUrl(fileUrl);
+      onUpload(fileUrl); // 부모 컴포넌트로 URL 전달
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
@@ -135,7 +136,7 @@ const UploadImage = () => {
           프로필 이미지 업로드
         </Button>
       )}
-      {uploadedUrl && (
+      {uploadedUrl && import.meta.env.VITE_DEBUG_MODE && (
         <div className="mt-3">
           <p>업로드된 이미지 URL:</p>
           <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
