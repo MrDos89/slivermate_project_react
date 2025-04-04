@@ -9,7 +9,7 @@ const ModalWrapper = styled.div`
   /* width: 420px;
   max-height: 650px; */
   width: 510px;
-  max-height: 740px;
+  max-height: 600px;
   background-color: #fff;
   border-radius: 20px;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
@@ -124,17 +124,32 @@ const SendButton = styled.button`
   }
 `;
 
-const CloseButton = styled.button`
-  position: absolute;
-  top: 14px;
-  right: 20px;
-  background: transparent;
+// const CloseButton = styled.button`
+//   position: absolute;
+//   top: 14px;
+//   right: 20px;
+//   background: transparent;
+//   border: none;
+//   font-size: 22px;
+//   color: #999;
+//   cursor: pointer;
+//   &:hover {
+//     color: #2e7d32;
+//   }
+// `;
+
+const BottomCloseButton = styled.button`
+  margin-top: 12px;
+  background-color: #eeeeee;
+  color: #333;
   border: none;
-  font-size: 22px;
-  color: #999;
+  padding: 12px 16px;
+  font-size: 17px;
+  font-weight: 500;
+  border-radius: 12px;
   cursor: pointer;
   &:hover {
-    color: #2e7d32;
+    background-color: rgb(159, 221, 151);
   }
 `;
 
@@ -172,10 +187,7 @@ A. 로그인 후 마이페이지 > 내 정보 수정에서 변경이 가능합�
 Q. 알림이 너무 많이 와요.
 A. 마이페이지 > 알림 설정에서 푸시, 이메일, 문자 수신 여부를 자유롭게 조절하실 수 있습니다.`,
 
-  "상담사 연결": `🧑‍💼 상담사 연결 중...
-
-고객님의 문의를 보다 정확하게 파악하고 도움을 드리기 위해 상담사 연결을 준비 중입니다.
-잠시만 기다려 주세요. 곧 담당자가 응답드릴 예정입니다. 🙇‍♀️`,
+  "상담사 연결": `🧑‍💼 상담사 연결 중...\n운영 시간은 평일 오전 9시 ~ 오후 6시입니다.\n주말 및 공휴일은 쉽니다.\n문의 내용을 입력해 주세요.`,
 };
 
 const emojiMap = {
@@ -196,6 +208,7 @@ function CustomerModal({ onClose }) {
       type: "buttons",
     },
   ]);
+  const [isConsulting, setIsConsulting] = useState(false);
   const chatRef = useRef(null);
 
   useEffect(() => {
@@ -204,13 +217,50 @@ function CustomerModal({ onClose }) {
     }
   }, [messages]);
 
+  const handleSend = () => {
+    if (userInput.trim() === "") return;
+
+    const newMessages = [{ type: "user", text: userInput }];
+
+    if (isConsulting) {
+      newMessages.push(
+        {
+          type: "bot",
+          text: "문의가 접수되었습니다. 순차적으로 답변이 진행될 예정입니다.",
+        },
+        {
+          type: "bot",
+          text: "처음 질문으로 돌아가시겠습니까?",
+        },
+        {
+          type: "confirm",
+        }
+      );
+      setIsConsulting(false); // 상담사 연결 상태 초기화
+    }
+
+    setMessages((prev) => [...prev, ...newMessages]);
+    setUserInput("");
+  };
+
+  // ✅ 여기 바로 밑에 붙여 넣으세요!
   const handleSelect = (label) => {
+    if (label === "상담사 연결") {
+      setIsConsulting(true);
+      setMessages((prev) => [
+        ...prev,
+        { type: "user", text: label },
+        { type: "bot", text: responseMap[label] },
+      ]);
+      return;
+    }
+
     setMessages((prev) => [
       ...prev,
       { type: "user", text: label },
       { type: "bot", text: responseMap[label] },
       { type: "bot", text: "처음 질문으로 돌아가시겠습니까?" },
-      { type: "confirm" }, // ✅ 네 / 아니요 버튼 추가
+      { type: "confirm" },
     ]);
   };
 
@@ -230,15 +280,9 @@ function CustomerModal({ onClose }) {
     }
   };
 
-  const handleSend = () => {
-    if (userInput.trim() === "") return;
-    setMessages((prev) => [...prev, { type: "user", text: userInput }]);
-    setUserInput("");
-  };
-
   return (
     <ModalWrapper>
-      <CloseButton onClick={onClose}>✖</CloseButton>
+      {/* <CloseButton onClick={onClose}>✖</CloseButton> */}
 
       <ChatBox ref={chatRef}>
         {messages.map((msg, idx) => {
@@ -284,6 +328,7 @@ function CustomerModal({ onClose }) {
         />
         <SendButton onClick={handleSend}>보내기</SendButton>
       </InputContainer>
+      <BottomCloseButton onClick={onClose}>닫기</BottomCloseButton>
     </ModalWrapper>
   );
 }

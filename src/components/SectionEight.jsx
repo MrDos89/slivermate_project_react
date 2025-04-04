@@ -34,7 +34,7 @@ const SectionEight = () => {
   return (
     <SectionWrapper>
       <MakeClubButton onClick={() => navigate("/create-club")}>
-        모임 만들기
+        나무 심기
       </MakeClubButton>
     </SectionWrapper>
   );

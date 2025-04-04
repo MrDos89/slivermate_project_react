@@ -1,5 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useState } from "react";
+import CustomerModal from "./CustomerModal/CustomerModal";
 
 const HeaderContainer = styled.header`
   width: 100%;
@@ -93,31 +95,71 @@ const Button = styled(Link)`
   }
 `;
 
+// 고객센터
+const PhoneButton = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f8f9fa; /* 헤더 배경색 */
+  border: none;
+  color: #333; /* 아이콘 기본 색 */
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  outline: none;
+
+  &:hover {
+    background-color: rgb(208, 243, 200);
+    color: white;
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
+
 function Header({ setScrollIndex }) {
-  const navigate = useNavigate(); // 추가
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false); //  모달 상태
 
   const handleNavigateToScroll = (index) => {
     navigate(`/?scrollTo=${index}`);
   };
 
+  // const handlePhoneClick = () => {
+  //   alert("고객센터 연결 준비 중입니다.");
+  // };
+
   return (
-    <HeaderContainer>
-      {/* <Logo to="/">파릇</Logo> */}
-      {/* <Logo onClick={() => setScrollIndex(0)}>파릇</Logo> */}
-      <Logo onClick={() => handleNavigateToScroll(0)}>파릇</Logo>
-      <Nav>
-        <NavItem onClick={() => handleNavigateToScroll(1)}>파릇 소개</NavItem>
-        <NavItem onClick={() => handleNavigateToScroll(3)}>강의실</NavItem>
-        <NavItem onClick={() => handleNavigateToScroll(5)}>모임</NavItem>
-        <NavItem onClick={() => handleNavigateToScroll(8)}>자유게시판</NavItem>
-        <NavItem onClick={() => handleNavigateToScroll(8)}>시니어칼럼</NavItem>
-        <NavItem onClick={() => navigate("/mypage")}>마이페이지</NavItem>
-      </Nav>
-      <AuthButtons>
-        <Button to="/login">로그인</Button>
-        <Button to="/signup">회원가입</Button>
-      </AuthButtons>
-    </HeaderContainer>
+    <>
+      <HeaderContainer>
+        {/* <Logo to="/">파릇</Logo> */}
+        {/* <Logo onClick={() => setScrollIndex(0)}>파릇</Logo> */}
+        <Logo onClick={() => handleNavigateToScroll(0)}>파릇</Logo>
+        <Nav>
+          <NavItem onClick={() => handleNavigateToScroll(1)}>파릇 소개</NavItem>
+          <NavItem onClick={() => handleNavigateToScroll(3)}>강의실</NavItem>
+          <NavItem onClick={() => handleNavigateToScroll(5)}>모임</NavItem>
+          <NavItem onClick={() => handleNavigateToScroll(8)}>
+            자유게시판
+          </NavItem>
+          <NavItem onClick={() => handleNavigateToScroll(8)}>
+            시니어칼럼
+          </NavItem>
+          <NavItem onClick={() => navigate("/mypage")}>마이페이지</NavItem>
+        </Nav>
+        <AuthButtons>
+          <PhoneButton onClick={() => setShowModal(true)}>📞</PhoneButton>
+          <Button to="/login">로그인</Button>
+          <Button to="/signup">회원가입</Button>
+        </AuthButtons>
+      </HeaderContainer>
+      {/* ✅ 모달 렌더링 */}
+      {showModal && <CustomerModal onClose={() => setShowModal(false)} />}
+    </>
   );
 }
 
