@@ -22,6 +22,7 @@ import ClubPage from "./pages/ClubPage";
 import ClubDetailPage from "./pages/ClubDetailPage";
 import ClubPostDetailPage from "./pages/ClubPostDetailPage";
 import CreateClubPage from "./pages/CreateClubPage";
+import ChatTestPage from "./pages/ChatTestPage";
 
 function App() {
   const [scrollIndex, setScrollIndex] = useState(0); // 상태 분리
@@ -61,6 +62,7 @@ function App() {
           element={<ClubPostDetailPage />}
         />
         <Route path="/create-club" element={<CreateClubPage />} />
+        <Route path="/chat" element={<ChatTestPage />} />
       </Routes>
     </Router>
   );

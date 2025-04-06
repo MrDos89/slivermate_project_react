@@ -256,12 +256,32 @@ function ClubScheduleModal({ date, onClose, onAdd }) {
               onChange={(e) => setLocation(e.target.value)}
             />
 
-            <Label>회비</Label>
-            <Input
-              placeholder="예: 5,000원"
-              value={fee ? `${fee}원` : ""}
-              onChange={handleFeeChange}
-            />
+<Label>회비</Label>
+<div style={{ position: "relative", width: "80%" }}> {/* ✅ 입력칸 너비 조정 */}
+  <Input
+    value={fee}
+    onChange={handleFeeChange}
+    style={{
+      paddingRight: "36px",     // 단위 텍스트용 오른쪽 여백
+      width: "100%",            // 부모(div)의 80% 기준
+      boxSizing: "border-box",  // 패딩 포함
+    }}
+  />
+  <span
+    style={{
+      position: "absolute",
+      right: "12px",
+      top: "50%",
+      transform: "translateY(-50%)",
+      fontSize: "15px",
+      color: "#666",
+    }}
+  >
+    원
+  </span>
+</div>
+
+
           </>
         )}
 

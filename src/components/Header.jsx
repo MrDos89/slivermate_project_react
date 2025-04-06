@@ -150,6 +150,7 @@ function Header({ setScrollIndex }) {
             시니어칼럼
           </NavItem>
           <NavItem onClick={() => navigate("/mypage")}>마이페이지</NavItem>
+          <NavItem onClick={() => navigate("/chat")}>채팅</NavItem>
         </Nav>
         <AuthButtons>
           <PhoneButton onClick={() => setShowModal(true)}>📞</PhoneButton>
