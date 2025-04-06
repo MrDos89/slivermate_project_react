@@ -1,6 +1,157 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import UploadImage from "../components/UploadImage/UploadImage";
+import styled, { createGlobalStyle } from "styled-components";
+import skan01 from "../images/skan01.mp4";
+import skan04 from "../images/skan04.mp4";
+import skan09 from "../images/skan09.mp4";
+
+
+// -----------------------------------------------------
+const GlobalStyles = createGlobalStyle`
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* ✅ 브라우저 스크롤 제거 */
+    background-color: #d8e8d8;
+    font-family: 'Segoe UI', sans-serif;
+  }
+`;
+
+// 브라우저 전체를 감싸는 배경
+const OuterWrapper = styled.div`
+  position: fixed; /* ✅ 브라우저 꽉 채움 + 스크롤 제거 확실 */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #d8e8d8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+// 회원가입 박스를 감싸는 컨테이너
+const BoxContainer = styled.div`
+  width: 1200px;
+  height: 700px;
+  display: flex;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: 80px;;
+`;
+
+// 왼쪽 이미지 섹션
+const ImageSection = styled.div`
+  width: 50%;
+  // background-image: url("https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3); /* 어둡게 오버레이 */
+  }
+
+  .quote {
+    position: relative;
+    z-index: 1;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 500;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .quote-author {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+`;
+
+// 오른쪽 폼 섹션
+const FormSection = styled.div`
+  width: 50%;
+  background: white;
+  //background: #d8e8d8;
+  padding: 30px 30px; 
+  overflow-y: auto;
+
+  /* ✅ 스크롤바 커스터마이징 */
+  &::-webkit-scrollbar {
+    width: 8px;
+    background-color:#d8e8d8;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2); 
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .join-container {
+    max-width: 100%;
+  }
+
+  form input,
+  form select,
+  form button {
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+
+  form button {
+    background-color: #0ea144;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+  }
+
+  form button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+`;
+// ----------------------------------------------------
+
+
+
 
 const allRegions = [
   [1, "서울특별시"],
@@ -31,6 +182,32 @@ const userType = [
 ];
 
 const SignUpPage = () => {
+  const videoList = [skan01, skan04, skan09];
+
+const getRandomVideo = (exclude) => {
+  let filtered = videoList.filter((v) => v !== exclude);
+  return filtered[Math.floor(Math.random() * filtered.length)];
+};
+
+const [videoSrc, setVideoSrc] = useState(null);
+
+// 초기 랜덤 설정 + 시간에 따른 변경
+useEffect(() => {
+  const random = videoList[Math.floor(Math.random() * videoList.length)];
+  setVideoSrc(random);
+
+  const interval = setInterval(() => {
+    setVideoSrc((prev) => getRandomVideo(prev));
+  }, 10000); // 10초마다 변경
+
+  return () => clearInterval(interval);
+}, []);
+
+const handleVideoClick = () => {
+  setVideoSrc((prev) => getRandomVideo(prev));
+};
+
+
   const API_USER_URL = `http://54.180.127.164:18090/api/user`;
   const API_USER_GROUP_URL = `http://54.180.127.164:18090/api/usergroup`;
 
@@ -258,6 +435,37 @@ const SignUpPage = () => {
   };
 
   return (
+    <>
+     <GlobalStyles />
+    <OuterWrapper>
+      <BoxContainer>
+      <ImageSection>
+  {videoSrc && (
+    <video
+      src={videoSrc}
+      autoPlay
+      muted
+      loop
+      onClick={handleVideoClick}
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        zIndex: 0,
+        cursor: "pointer",
+      }}
+    />
+  )}
+  <div className="quote">
+    “Paradise isn't a place. <br /> It's a feeling”
+    <div className="quote-author">– L. Boyer</div>
+  </div>
+</ImageSection>
+        <FormSection>
+
     <div className="join-container">
       <button onClick={onBack} className="join-back-button">
         {/* <MdOutlineBackspace /> */}
@@ -408,6 +616,10 @@ const SignUpPage = () => {
         </div>
       </form>
     </div>
+    </FormSection>
+      </BoxContainer>
+    </OuterWrapper>
+    </>
   );
 };
 

@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useState } from "react";
 import CustomerModal from "./CustomerModal/CustomerModal";
+import NotificationModal from "./NotificationModal/NotificationModal";
+
 
 const HeaderContainer = styled.header`
   width: 100%;
@@ -124,6 +126,7 @@ const PhoneButton = styled.button`
 function Header({ setScrollIndex }) {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false); //  모달 상태
+  const [showNotification, setShowNotification] = useState(false);
 
   const handleNavigateToScroll = (index) => {
     navigate(`/?scrollTo=${index}`);
@@ -154,12 +157,14 @@ function Header({ setScrollIndex }) {
         </Nav>
         <AuthButtons>
           <PhoneButton onClick={() => setShowModal(true)}>📞</PhoneButton>
+          <PhoneButton onClick={() => setShowNotification(true)}>🔔</PhoneButton>
           <Button to="/login">로그인</Button>
           <Button to="/signup">회원가입</Button>
         </AuthButtons>
       </HeaderContainer>
       {/* ✅ 모달 렌더링 */}
       {showModal && <CustomerModal onClose={() => setShowModal(false)} />}
+      {showNotification && <NotificationModal onClose={() => setShowNotification(false)} />}
     </>
   );
 }
