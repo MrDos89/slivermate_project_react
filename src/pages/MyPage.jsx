@@ -190,7 +190,7 @@ const dummyClubs = [
 
 const MyPageContainer = styled.div`
   // padding-top: px;
-  padding: 60px 40px 40px 40px;
+  padding: 70px 40px 40px 40px;
   background-color: #f9f9f9;
   min-height: 100vh;
   // max-width: 1200px;

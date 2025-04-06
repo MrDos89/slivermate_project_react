@@ -7,10 +7,11 @@ import FeedList from "../components/FreeBoardComponents/FeedList";
 
 const Wrapper = styled.div`
   width: 1200px;
-  // padding: 60px;
+  padding: 60px;
   padding: 165px 60px 60px;
   text-align: center;
   font-size: 1.8rem;
+  margin-top: 10px;
 `;
 
 const DropdownContainer = styled.div`

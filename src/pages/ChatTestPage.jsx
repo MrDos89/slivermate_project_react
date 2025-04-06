@@ -14,7 +14,7 @@ const GlobalStyle = createGlobalStyle`
 
 const ChatContainer = styled.div`
   position: absolute;
-  top: 60px;
+  top: 70px;
   left: 0;
   right: 0;
   bottom: 0;

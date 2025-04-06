@@ -211,6 +211,15 @@ const getRandomVideo = () =>
 
 const [currentVideo, setCurrentVideo] = useState(getRandomVideo());
 
+const handleChangeVideo = () => {
+    let newVideo;
+    do {
+      newVideo = getRandomVideo();
+    } while (newVideo === currentVideo);
+    setCurrentVideo(newVideo);
+  };
+  
+
 useEffect(() => {
   const timer = setInterval(() => {
     setCurrentVideo(getRandomVideo());
@@ -448,7 +457,8 @@ useEffect(() => {
   <BackgroundVideo autoPlay muted loop key={currentVideo}>
     <source src={currentVideo} type="video/mp4" />
   </BackgroundVideo>
-  <Overlay />
+  <Overlay onClick={handleChangeVideo} />
+
 
   <CenteredForm>
   <StyledFormWrapper>

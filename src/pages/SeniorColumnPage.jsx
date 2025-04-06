@@ -24,7 +24,7 @@ background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 60px;
+  margin-top: 70px;
 `;
 
 const StyledPage = styled.div`

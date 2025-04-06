@@ -3,7 +3,8 @@ import styled from "styled-components";
 
 const DropdownWrapper = styled.div`
   position: relative;
-  z-index: 51;
+  z-index: 30;
+  margin-top: 10px;
 `;
 
 const DropdownButton = styled.button`

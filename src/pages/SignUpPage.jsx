@@ -21,17 +21,45 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 // 브라우저 전체를 감싸는 배경
+// const OuterWrapper = styled.div`
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100vw;
+//   height: 100vh;
+
+//   /* ✅ 대각선 방향 반대 + 위쪽 하얀색 넓게 */
+//   background: linear-gradient(
+//     315deg,       /* ↙ 방향 */
+//     white 65%,    /* 65%까지 흰색 */
+//     #d8e8d8 65%   /* 나머지 초록 */
+//   );
+
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
+
 const OuterWrapper = styled.div`
-  position: fixed; /* ✅ 브라우저 꽉 채움 + 스크롤 제거 확실 */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #d8e8d8;
+
+  /* ↘ 방향, 50% 기준으로 정확히 반반 */
+  background: linear-gradient(
+    155deg,
+    white 50%,     /* 위쪽 절반 */
+    #d8e8d8 50%     /* 아래쪽 절반 */
+  );
+
   display: flex;
   justify-content: center;
   align-items: center;
 `;
+
+
 
 // 회원가입 박스를 감싸는 컨테이너
 const BoxContainer = styled.div`
