@@ -4,7 +4,6 @@ import { useState } from "react";
 import CustomerModal from "./CustomerModal/CustomerModal";
 import NotificationModal from "./NotificationModal/NotificationModal";
 
-
 const HeaderContainer = styled.header`
   width: 100%;
   height: 70px;
@@ -37,7 +36,7 @@ const Logo = styled.div`
   padding-top: 12px;
 
   &:hover {
-    color: rgb(39, 233, 0); 
+    color: rgb(39, 233, 0);
     transform: scale(1.05);
   }
 `;
@@ -178,8 +177,6 @@ const NavItem = styled.span`
   }
 `;
 
-
-
 const AuthButtons = styled.div`
   display: flex;
   gap: 10px;
@@ -197,32 +194,24 @@ const Button = styled(Link)`
   font-weight: 600;
   font-size: 15px;
   text-decoration: none;
-  box-shadow:
-    0 4px 6px rgba(70, 190, 120, 0.2),
+  box-shadow: 0 4px 6px rgba(70, 190, 120, 0.2),
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-  transition:
-    all 0.3s ease,
-    box-shadow 0.3s ease,
-    transform 0.2s ease;
+  transition: all 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 
   &:hover {
     background: linear-gradient(145deg, #3cb66f, #4fd18b);
     color: #ffffff;
     transform: translateY(-2px);
-    box-shadow:
-      0 6px 12px rgba(70, 190, 120, 0.3),
+    box-shadow: 0 6px 12px rgba(70, 190, 120, 0.3),
       0 0 6px rgba(70, 190, 120, 0.4);
   }
 
   &:active {
     transform: translateY(0);
-    box-shadow:
-      0 2px 4px rgba(70, 190, 120, 0.2),
+    box-shadow: 0 2px 4px rgba(70, 190, 120, 0.2),
       inset 0 1px 3px rgba(0, 0, 0, 0.2);
   }
 `;
-
-
 
 // 고객센터
 const PhoneButton = styled.button`
@@ -270,28 +259,63 @@ function Header({ setScrollIndex }) {
         {/* <Logo onClick={() => setScrollIndex(0)}>파릇</Logo> */}
         <Logo onClick={() => handleNavigateToScroll(0)}>파릇</Logo>
         <Nav>
-          <NavItem $leafIcon="https://cdn-icons-png.flaticon.com/512/8809/8809609.png" onClick={() => handleNavigateToScroll(1)}>파릇 소개</NavItem>
-          <NavItem $leafIcon="https://cdn-icons-png.flaticon.com/512/8611/8611162.png" onClick={() => handleNavigateToScroll(3)}>강의실</NavItem>
-          <NavItem $leafIcon="https://cdn-icons-png.flaticon.com/512/7105/7105091.png" onClick={() => handleNavigateToScroll(5)}>모임</NavItem>
-          <NavItem $leafIcon="https://cdn-icons-png.flaticon.com/512/3426/3426179.png" onClick={() => handleNavigateToScroll(8)}>
-            자유게시판
+          <NavItem
+            $leafIcon="https://cdn-icons-png.flaticon.com/512/8809/8809609.png"
+            onClick={() => handleNavigateToScroll(1)}
+          >
+            파릇 소개
           </NavItem>
-          <NavItem $leafIcon="https://cdn-icons-png.flaticon.com/512/595/595533.png" onClick={() => handleNavigateToScroll(8)}>
+          <NavItem
+            $leafIcon="https://cdn-icons-png.flaticon.com/512/8611/8611162.png"
+            onClick={() => handleNavigateToScroll(3)}
+          >
+            강의실
+          </NavItem>
+          <NavItem
+            $leafIcon="https://cdn-icons-png.flaticon.com/512/7105/7105091.png"
+            onClick={() => handleNavigateToScroll(5)}
+          >
+            모임
+          </NavItem>
+          <NavItem
+            $leafIcon="https://cdn-icons-png.flaticon.com/512/3426/3426179.png"
+            onClick={() => handleNavigateToScroll(8)}
+          >
+            커뮤니티
+          </NavItem>
+          <NavItem
+            $leafIcon="https://cdn-icons-png.flaticon.com/512/595/595533.png"
+            onClick={() => handleNavigateToScroll(8)}
+          >
             시니어칼럼
           </NavItem>
-          <NavItem $leafIcon="https://cdn-icons-png.flaticon.com/512/10551/10551160.png" onClick={() => navigate("/mypage")}>마이페이지</NavItem>
-          <NavItem $leafIcon="https://cdn-icons-png.flaticon.com/512/1041/1041916.png" onClick={() => navigate("/chat")}>채팅</NavItem>
+          <NavItem
+            $leafIcon="https://cdn-icons-png.flaticon.com/512/10551/10551160.png"
+            onClick={() => navigate("/mypage")}
+          >
+            마이페이지
+          </NavItem>
+          <NavItem
+            $leafIcon="https://cdn-icons-png.flaticon.com/512/1041/1041916.png"
+            onClick={() => navigate("/chat")}
+          >
+            채팅
+          </NavItem>
         </Nav>
         <AuthButtons>
           <PhoneButton onClick={() => setShowModal(true)}>📞</PhoneButton>
-          <PhoneButton onClick={() => setShowNotification(true)}>🔔</PhoneButton>
+          <PhoneButton onClick={() => setShowNotification(true)}>
+            🔔
+          </PhoneButton>
           <Button to="/login">로그인</Button>
           <Button to="/signup">회원가입</Button>
         </AuthButtons>
       </HeaderContainer>
       {/* ✅ 모달 렌더링 */}
       {showModal && <CustomerModal onClose={() => setShowModal(false)} />}
-      {showNotification && <NotificationModal onClose={() => setShowNotification(false)} />}
+      {showNotification && (
+        <NotificationModal onClose={() => setShowNotification(false)} />
+      )}
     </>
   );
 }

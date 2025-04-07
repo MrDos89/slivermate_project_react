@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { motion, useAnimation, useInView } from "framer-motion";
+// import backgroundImage from "../images/qrud.jpg";
 
 // 더미 데이터
 const reviews = [
@@ -39,6 +40,8 @@ const SectionWrapper = styled.div`
   width: 100vw;
   height: 100vh;
   background: rgb(255, 255, 255);
+  // background: url($ {backgroundImage}) no-repeat center center;
+  // background-size: cover;
   position: relative;
   display: flex;
   justify-content: center;

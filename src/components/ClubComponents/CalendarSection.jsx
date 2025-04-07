@@ -92,10 +92,9 @@ const CalendarWrapper = styled.div`
     color: white;
     font-weight: bold; */
     background: none !important;
-  color: inherit;
-  font-weight: inherit;
-}
-
+    color: inherit;
+    font-weight: inherit;
+  }
 
   .react-calendar__tile.sunday {
     color: red;
@@ -127,30 +126,26 @@ const CalendarWrapper = styled.div`
   }
 
   .meeting-day {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  z-index: 1; /* 텍스트가 위로 */
-}
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    z-index: 1; /* 텍스트가 위로 */
+  }
 
-.meeting-day::before {
-  content: '';
-  position: absolute;
-  width: 58px;   /* ✅ 원 크기 여기서 조절 */
-  height: 58px;
-  background-color: #aad5b7;
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: -1;  /* 원이 아래 깔리도록 */
-}
-
-
-
-
+  .meeting-day::before {
+    content: "";
+    position: absolute;
+    width: 58px; /* ✅ 원 크기 여기서 조절 */
+    height: 58px;
+    background-color: #aad5b7;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1; /* 원이 아래 깔리도록 */
+  }
 `;
 
 const ScheduleBox = styled.div`
@@ -181,7 +176,6 @@ const ScheduleList = styled.ul`
     border-bottom: 1px solid #eee;
   }
 `;
-
 
 // 최신
 const NoticeContainerWrapper = styled.div`
@@ -248,7 +242,6 @@ const PastButton = styled.button`
   }
 `;
 
-
 // 일정확인버튼
 const ViewDetailButton = styled.button`
   padding: 10px 20px;
@@ -272,7 +265,6 @@ const ViewButtonWrapper = styled.div`
   margin-top: 24px;
 `;
 
-
 const CalendarSection = () => {
   //   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -285,7 +277,7 @@ const CalendarSection = () => {
   const [showPastModal, setShowPastModal] = useState(false);
 
   const [detailModalOpen, setDetailModalOpen] = useState(false);
-const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
 
   // const handleAdd = (e) => {
   //   e.preventDefault();
@@ -331,57 +323,59 @@ const [selectedSchedule, setSelectedSchedule] = useState(null);
   }, []);
 
   const handleAddSchedule = (newItem) => {
-  //   const key = selectedDate.toDateString();
-  //   const scheduleWithId = {
-  //     id: Date.now(), // 고유 ID 생성
-  //     ...newItem,
-  //   };
+    //   const key = selectedDate.toDateString();
+    //   const scheduleWithId = {
+    //     id: Date.now(), // 고유 ID 생성
+    //     ...newItem,
+    //   };
 
-  //   const updated = {
-  //     ...schedules,
-  //     [key]: [...(schedules[key] || []), scheduleWithId],
-  //   };
-  //   setSchedules(updated);
-  //   setSelectedDate(new Date(selectedDate));
-  // };
-  const key = selectedDate.toDateString();
-  const scheduleWithId = {
-    id: Date.now(),
-    ...newItem,
-  };
+    //   const updated = {
+    //     ...schedules,
+    //     [key]: [...(schedules[key] || []), scheduleWithId],
+    //   };
+    //   setSchedules(updated);
+    //   setSelectedDate(new Date(selectedDate));
+    // };
+    const key = selectedDate.toDateString();
+    const scheduleWithId = {
+      id: Date.now(),
+      ...newItem,
+    };
 
-  if (newItem.type === "공지") {
-    setSchedules((prev) => {
-      const merged = Object.entries(prev)
-        .filter(([key]) => key !== "__공지__")
-        .flatMap(([dateKey, list]) =>
-          list.map((item) => ({ ...item, dateKey }))
-        )
-        .concat({ ...scheduleWithId, dateKey: key });
+    if (newItem.type === "공지") {
+      setSchedules((prev) => {
+        const merged = Object.entries(prev)
+          .filter(([key]) => key !== "__공지__")
+          .flatMap(([dateKey, list]) =>
+            list.map((item) => ({ ...item, dateKey }))
+          )
+          .concat({ ...scheduleWithId, dateKey: key });
 
-      const noticesOnly = merged
-        .filter((item) => item.type === "공지")
-        .sort((a, b) => b.id - a.id);
+        const noticesOnly = merged
+          .filter((item) => item.type === "공지")
+          .sort((a, b) => b.id - a.id);
 
-      return { ...prev, __공지__: noticesOnly };
-    });
-  } else {
-    // ✅ 모임 중복 확인
-    const alreadyExists = schedules[key]?.some((item) => item.type === "모임");
+        return { ...prev, __공지__: noticesOnly };
+      });
+    } else {
+      // ✅ 모임 중복 확인
+      const alreadyExists = schedules[key]?.some(
+        (item) => item.type === "모임"
+      );
 
-    if (alreadyExists) {
-      alert("이미 이 날짜에 모임이 존재합니다.");
-      return;
+      if (alreadyExists) {
+        alert("이미 이 날짜에 모임이 존재합니다.");
+        return;
+      }
+
+      setSchedules((prev) => ({
+        ...prev,
+        [key]: [...(prev[key] || []), scheduleWithId],
+      }));
     }
 
-    setSchedules((prev) => ({
-      ...prev,
-      [key]: [...(prev[key] || []), scheduleWithId],
-    }));
-  }
-
-  setSelectedDate(new Date(selectedDate));
-};
+    setSelectedDate(new Date(selectedDate));
+  };
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
@@ -393,71 +387,67 @@ const [selectedSchedule, setSelectedSchedule] = useState(null);
         {/* <Title>📅 동아리 일정 캘린더</Title> */}
 
         {(() => {
-  const allNotices = (() => {
-    const dummyNotices = Object.entries(schedules)
-      .filter(([key]) => key !== "__공지__")
-      .flatMap(([dateKey, items]) =>
-        items
-          .filter((item) => item.type === "공지")
-          .map((item) => ({ ...item, dateKey }))
-      );
-  
-    const addedNotices = schedules["__공지__"] || [];
-  
-    return [...addedNotices, ...dummyNotices].sort((a, b) => b.id - a.id);
-  })();
-  
+          const allNotices = (() => {
+            const dummyNotices = Object.entries(schedules)
+              .filter(([key]) => key !== "__공지__")
+              .flatMap(([dateKey, items]) =>
+                items
+                  .filter((item) => item.type === "공지")
+                  .map((item) => ({ ...item, dateKey }))
+              );
 
-  if (allNotices.length === 0) return null;
+            const addedNotices = schedules["__공지__"] || [];
 
-  return (
-    <NoticeContainerWrapper>
-  <NoticeContainer>
-    <NoticeHeader>📢 최신 공지</NoticeHeader>
-    {allNotices.slice(0, 3).map((notice) => (
-      <NoticeItemRow key={notice.id}>
-        <NoticeTitle>
-          📢 <span>{notice.title}</span>
-        </NoticeTitle>
-        <NoticeDate>{notice.dateKey}</NoticeDate>
-      </NoticeItemRow>
-    ))}
-    <PastButtonWrapper>
-      <PastButton onClick={() => setShowPastModal(true)}>
-        지난 공지 보기
-      </PastButton>
-    </PastButtonWrapper>
-  </NoticeContainer>
-</NoticeContainerWrapper>
+            return [...addedNotices, ...dummyNotices].sort(
+              (a, b) => b.id - a.id
+            );
+          })();
 
-  );
-})()}
+          if (allNotices.length === 0) return null;
 
+          return (
+            <NoticeContainerWrapper>
+              <NoticeContainer>
+                <NoticeHeader>📢 최신 공지</NoticeHeader>
+                {allNotices.slice(0, 3).map((notice) => (
+                  <NoticeItemRow key={notice.id}>
+                    <NoticeTitle>
+                      📢 <span>{notice.title}</span>
+                    </NoticeTitle>
+                    <NoticeDate>{notice.dateKey}</NoticeDate>
+                  </NoticeItemRow>
+                ))}
+                <PastButtonWrapper>
+                  <PastButton onClick={() => setShowPastModal(true)}>
+                    지난 공지 보기
+                  </PastButton>
+                </PastButtonWrapper>
+              </NoticeContainer>
+            </NoticeContainerWrapper>
+          );
+        })()}
 
         <CalendarWrapper>
           {/* <Calendar onChange={setSelectedDate} value={selectedDate} /> */}
           <Calendar
-  onClickDay={handleDateClick}
-  tileClassName={({ date, view }) => {
-    if (view !== "month") return;
+            onClickDay={handleDateClick}
+            tileClassName={({ date, view }) => {
+              if (view !== "month") return;
 
-    const key = date.toDateString();
-    const dayEvents = schedules[key];
+              const key = date.toDateString();
+              const dayEvents = schedules[key];
 
-    if (dayEvents?.some((item) => item.type === "모임")) {
-      return "meeting-day";
-    }
+              if (dayEvents?.some((item) => item.type === "모임")) {
+                return "meeting-day";
+              }
 
-    const day = date.getDay();
-    if (day === 0) return "sunday";
-    if (day === 6) return "saturday";
+              const day = date.getDay();
+              if (day === 0) return "sunday";
+              if (day === 6) return "saturday";
 
-    return null;
-  }}
-/>
-
-           
-           
+              return null;
+            }}
+          />
 
           {modalOpen && (
             <ClubScheduleModal
@@ -467,50 +457,51 @@ const [selectedSchedule, setSelectedSchedule] = useState(null);
             />
           )}
 
-{selectedDate && (
-  <ScheduleBox>
-    <DateTitle>{selectedDate.toDateString()} 일정</DateTitle>
-    {(schedules[selectedDate.toDateString()] || []).length === 0 ? (
-      <p style={{ fontSize: "16px", color: "#666" }}>일정이 없습니다.</p>
-    ) : (
-      <ViewButtonWrapper>
-  <ViewDetailButton
-  onClick={() => {
-    const schedule = schedules[selectedDate.toDateString()]?.find(
-      (item) => item.type === "모임"
-    );
-    if (schedule) {
-      setSelectedSchedule(schedule);
-      setDetailModalOpen(true);
-    }
-  }}
->
-  일정 보기
-</ViewDetailButton>
+          {selectedDate && (
+            <ScheduleBox>
+              <DateTitle>{selectedDate.toDateString()} 일정</DateTitle>
+              {(schedules[selectedDate.toDateString()] || []).length === 0 ? (
+                <p style={{ fontSize: "16px", color: "#666" }}>
+                  일정이 없습니다.
+                </p>
+              ) : (
+                <ViewButtonWrapper>
+                  <ViewDetailButton
+                    onClick={() => {
+                      const schedule = schedules[
+                        selectedDate.toDateString()
+                      ]?.find((item) => item.type === "모임");
+                      if (schedule) {
+                        setSelectedSchedule(schedule);
+                        setDetailModalOpen(true);
+                      }
+                    }}
+                  >
+                    일정 보기
+                  </ViewDetailButton>
+                </ViewButtonWrapper>
+              )}
+              <div style={{ textAlign: "right", marginTop: "20px" }}>
+                <button
+                  onClick={() => setModalOpen(true)}
+                  style={{
+                    padding: "10px 16px",
+                    backgroundColor: "#eee",
+                    borderRadius: "8px",
+                  }}
+                >
+                  일정 추가하기
+                </button>
+              </div>
+            </ScheduleBox>
+          )}
 
-</ViewButtonWrapper>
-    )}
-    <div style={{ textAlign: "right", marginTop: "20px" }}>
-      <button
-        onClick={() => setModalOpen(true)}
-        style={{
-          padding: "10px 16px",
-          backgroundColor: "#eee",
-          borderRadius: "8px",
-        }}
-      >
-        일정 추가하기
-      </button>
-    </div>
-  </ScheduleBox>
-)}
-
-{detailModalOpen && selectedSchedule && (
-  <ScheduleDetailModal
-    schedule={selectedSchedule}
-    onClose={() => setDetailModalOpen(false)}
-  />
-)}
+          {detailModalOpen && selectedSchedule && (
+            <ScheduleDetailModal
+              schedule={selectedSchedule}
+              onClose={() => setDetailModalOpen(false)}
+            />
+          )}
 
           {/* <AddForm onSubmit={handleAdd}>
                 <Input

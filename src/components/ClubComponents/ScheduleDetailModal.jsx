@@ -1,6 +1,28 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+`;
+
+const EditButton = styled.button`
+  background-color: #e6f0ff;
+  color: #0051a3;
+  border: 1px solid #a6c9ff;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #d0e3ff;
+  }
+`;
+
 const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -30,6 +52,7 @@ const Title = styled.h3`
   color: #00734f;
   margin-bottom: 24px;
   text-align: center;
+  flex: 1;
 `;
 
 const InfoLine = styled.div`
@@ -110,9 +133,29 @@ const Button = styled.button`
   }
 `;
 
+const ContentTextarea = styled.textarea`
+  width: 100%;
+  font-size: 17px;
+  color: #555;
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 32px;
+  line-height: 1.6;
+  resize: none;
+  border: 1px solid #ccc;
+`;
+
 const ScheduleDetailModal = ({ schedule, onClose }) => {
   const [attendCount, setAttendCount] = useState(0);
   const [hasAttended, setHasAttended] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState(schedule.content);
+
+  const [editedTitle, setEditedTitle] = useState(schedule.title);
+  const [editedTime, setEditedTime] = useState(schedule.time);
+  const [editedLocation, setEditedLocation] = useState(schedule.location);
+  const [editedFee, setEditedFee] = useState(schedule.fee);
 
   const toggleAttendance = () => {
     if (hasAttended) {
@@ -123,28 +166,107 @@ const ScheduleDetailModal = ({ schedule, onClose }) => {
     setHasAttended((prev) => !prev);
   };
 
+  const handleContentChange = (e) => {
+    setEditedContent(e.target.value);
+  };
+
+  const handleEditToggle = () => {
+    setIsEditing((prev) => !prev);
+  };
+
   return (
     <Overlay>
       <ModalBox>
-        <Title>🧑‍🤝‍🧑 {schedule.title}</Title>
+        <Header>
+          {isEditing ? (
+            <input
+              type="text"
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              placeholder="제목"
+              style={{
+                fontSize: "24px",
+                fontWeight: "bold",
+                textAlign: "center",
+                padding: "8px 12px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                width: "100%",
+                marginBottom: "16px",
+                flex: 1,
+              }}
+            />
+          ) : (
+            <Title>{`🧑‍🤝‍🧑 ${editedTitle}`}</Title>
+          )}
+          <EditButton onClick={handleEditToggle}>
+            {isEditing ? "수정 완료" : "수정"}
+          </EditButton>
+        </Header>
 
-        <InfoLine>
+        {/* <InfoLine>
           <span>🕒 {schedule.time}</span>
           <span>📍 {schedule.location || "미정"}</span>
         </InfoLine>
         <InfoLine>
           <span>💸 {schedule.fee || "없음"}</span>
-        </InfoLine>
+        </InfoLine> */}
+
+        {isEditing ? (
+          <>
+            <InfoLine>
+              <input
+                type="text"
+                value={editedTime}
+                onChange={(e) => setEditedTime(e.target.value)}
+                placeholder="시간"
+              />
+              <input
+                type="text"
+                value={editedLocation}
+                onChange={(e) => setEditedLocation(e.target.value)}
+                placeholder="장소"
+              />
+            </InfoLine>
+            <InfoLine>
+              <input
+                type="text"
+                value={editedFee}
+                onChange={(e) => setEditedFee(e.target.value)}
+                placeholder="회비"
+              />
+            </InfoLine>
+          </>
+        ) : (
+          <>
+            <InfoLine>
+              <span>🕒 {editedTime}</span>
+              <span>📍 {editedLocation || "미정"}</span>
+            </InfoLine>
+            <InfoLine>
+              <span>💸 {editedFee || "없음"}</span>
+            </InfoLine>
+          </>
+        )}
 
         <AttendanceInfo>🙋‍♂️ 현재 참석 인원: {attendCount}명</AttendanceInfo>
 
-        <ContentText>{schedule.content}</ContentText>
+        {isEditing ? (
+          <ContentTextarea
+            value={editedContent}
+            onChange={handleContentChange}
+            rows={6}
+          />
+        ) : (
+          <ContentText>{editedContent}</ContentText>
+        )}
 
         <ButtonGroup>
           <Button className="attend" onClick={toggleAttendance}>
             {hasAttended ? "참석 취소" : "참석"}
           </Button>
           <Button className="absent">불참</Button>
+
           <Button className="close" onClick={onClose}>
             닫기
           </Button>
