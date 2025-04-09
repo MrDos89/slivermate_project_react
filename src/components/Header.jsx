@@ -179,46 +179,102 @@ const NavItem = styled.span`
 
 const AuthButtons = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 3px;
   flex: 1;
   justify-content: flex-end;
   padding-right: 60px;
 `;
 
-const Button = styled(Link)`
-  padding: 10px 20px;
-  border: 2px solid #46be78;
-  border-radius: 25px;
-  background: linear-gradient(145deg, #4fd18b, #3cb66f);
-  color: white;
-  font-weight: 600;
-  font-size: 15px;
-  text-decoration: none;
-  box-shadow: 0 4px 6px rgba(70, 190, 120, 0.2),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-  transition: all 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+// const Button = styled(Link)`
+//   position: relative;
+//   display: block;
+//   text-align: center;
+//   cursor: pointer;
+//   text-transform: uppercase;
+//   outline: none;
+//   overflow: hidden;
+//   border: none;
+//   font-weight: 700;
+//   font-size: 15px;
+//   padding: 14px 45px;
+//   margin: 0 auto;
+//   background-color: #f8f9fa;
+//   color: #333;
+//   // box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+//   transition: all 0.3s ease;
 
-  &:hover {
-    background: linear-gradient(145deg, #3cb66f, #4fd18b);
-    color: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(70, 190, 120, 0.3),
-      0 0 6px rgba(70, 190, 120, 0.4);
+//   span {
+//     position: relative;
+//     z-index: 1;
+//   }
+
+//   &::after {
+//     content: "";
+//     position: absolute;
+//     left: 0;
+//     top: 0;
+//     height: 500%;
+//     width: 140%;
+//     background: #46be78;
+//     transition: all 0.5s ease-in-out;
+//     transform: translateX(-99%) translateY(-6%) rotate(45deg);
+//     z-index: 0;
+//   }
+
+//   &:hover::after {
+//     transform: translateX(-9%) translateY(-25%) rotate(45deg);
+//   }
+
+//   &:hover {
+//     color: white;
+//   }
+// `;
+
+// 고객센터
+
+const SvgButtonWrapper = styled(Link)`
+  position: relative;
+  width: 150px;
+  height: 40px;
+  display: inline-block;
+  text-decoration: none;
+
+  svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    stroke-width: 3px;
+    fill: transparent;
+    stroke: #06d6a0;
+    stroke-dasharray: 70 300;
+    stroke-dashoffset: -220;
+    transition: 1s all ease;
   }
 
-  &:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(70, 190, 120, 0.2),
-      inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  &:hover svg {
+    stroke: #06d6a0;
+    stroke-width: 3px;
+    stroke-dasharray: 50 0;
+    stroke-dashoffset: 0;
+  }
+
+  span {
+    position: relative;
+    color: #06d6a0;
+    font-weight: 400;
+    font-size: 16px;
+    text-align: center;
+    line-height: 40px;
+    z-index: 1;
+    display: block;
   }
 `;
 
-// 고객센터
 const PhoneButton = styled.button`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #f8f9fa; /* 헤더 배경색 */
+  background-color: #f8f9fa;
   border: none;
   color: #333; /* 아이콘 기본 색 */
   font-size: 25px;
@@ -279,6 +335,13 @@ function Header({ setScrollIndex }) {
           </NavItem>
           <NavItem
             $leafIcon="https://cdn-icons-png.flaticon.com/512/3426/3426179.png"
+            onClick={() => handleNavigateToScroll(7)} // ✅ 모임 만들기 스크롤 위치
+          >
+            모임 만들기
+          </NavItem>
+
+          <NavItem
+            $leafIcon="https://cdn-icons-png.flaticon.com/512/3426/3426179.png"
             onClick={() => handleNavigateToScroll(8)}
           >
             커뮤니티
@@ -307,8 +370,26 @@ function Header({ setScrollIndex }) {
           <PhoneButton onClick={() => setShowNotification(true)}>
             🔔
           </PhoneButton>
-          <Button to="/login">로그인</Button>
-          <Button to="/signup">회원가입</Button>
+          {/* <Button to="/login">
+            <span>로그인</span>
+          </Button>
+          <Button to="/signup">
+            <span>회원가입</span>
+          </Button> */}
+          <SvgButtonWrapper to="/login">
+            <svg height="40" width="150">
+              <rect id="shape" height="40" width="150" />
+            </svg>
+            <span>로그인</span>
+          </SvgButtonWrapper>
+
+          {/* 회원가입 버튼 */}
+          <SvgButtonWrapper to="/signup">
+            <svg height="40" width="150">
+              <rect id="shape" height="40" width="150" />
+            </svg>
+            <span>회원가입</span>
+          </SvgButtonWrapper>
         </AuthButtons>
       </HeaderContainer>
       {/* ✅ 모달 렌더링 */}

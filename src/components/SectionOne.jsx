@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes, css } from "styled-components";
 import backgroundImg from "../images/back8.png";
+import FireworksCanvas from "./FireworksCanvas";
 
 // ✅ "책 펼치듯" 등장 애니메이션
 const bookOpen = keyframes`
@@ -80,6 +81,7 @@ const SectionOne = () => {
 
   return (
     <SectionWrapper ref={sectionRef}>
+      <FireworksCanvas />
       <AnimatedText visible={visible}>시니어의 인생</AnimatedText>
       <AnimatedText visible={visible}>이제부터 시작이다</AnimatedText>
     </SectionWrapper>

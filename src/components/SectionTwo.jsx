@@ -17,57 +17,90 @@ const SectionWrapper = styled.div`
 const Sun = styled(motion.div)`
   position: absolute;
   bottom: -180px;
-  width: 700px;
-  height: 350px;
+  width: 1200px;
+  height: 650px;
   background-color: #fff44f;
-  border-radius: 350px 350px 0 0;
+  border-radius: 100vw 100vw 0 0;
   z-index: 1;
 `;
 
 const Sprout = styled(motion.div)`
   position: absolute;
   bottom: 60px;
-  width: 100px;
-  height: 150px;
+  width: 195px;
+  height: 540px;
   background: transparent;
-  z-index: 2;
+  z-index: 10;
 
   /* 줄기 */
   &::after {
     content: "";
     position: absolute;
     bottom: 0;
-    left: 45%;
-    width: 10px;
-    height: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 500px;
     background: #6db56c;
     border-radius: 5px;
   }
 
-  /* 왼쪽 잎 */
+  /* 왼쪽 반원 */
   &::before {
     content: "";
     position: absolute;
-    top: -20px;
-    left: -40px;
-    width: 70px;
-    height: 70px;
-    background: radial-gradient(circle at center, #6db56c 60%, transparent 61%);
-    clip-path: ellipse(50% 40% at 50% 50%);
-    transform: rotate(-20deg);
+    top: -35px;
+    left: 50%;
+    transform: translateX(
+      -150%
+    ); /* 왼쪽 반원의 넓은 면을 정확히 맞추기 위해 -150%로 조정 */
+    width: 200px;
+    height: 100px;
+    background: #6db56c;
+    border-radius: 100px 100px 0 0;
   }
 
-  /* 오른쪽 잎 */
+  /* 오른쪽 반원 */
   & .leaf-right {
-    position: absolute;
-    top: -20px;
-    left: 40px;
-    width: 70px;
-    height: 70px;
-    background: radial-gradient(circle at center, #6db56c 60%, transparent 61%);
-    clip-path: ellipse(50% 40% at 50% 50%);
-    transform: rotate(20deg);
     content: "";
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(
+      50%
+    ); /* 오른쪽 반원의 넓은 면을 정확히 맞추기 위해 50%로 조정 */
+    width: 200px;
+    height: 100px;
+    background: #6db56c;
+    border-radius: 100px 100px 0 0;
+  }
+
+  /* 대칭된 왼쪽 반원 */
+  & .leaf-left-mirror {
+    content: "";
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 100px;
+    background: #6db56c;
+    border-radius: 100px 100px 0 0;
+    transform: rotate(180deg);
+  }
+
+  /* 대칭된 오른쪽 반원 */
+  & .leaf-right-mirror {
+    content: "";
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(50%);
+    width: 200px;
+    height: 100px;
+    background: #6db56c;
+    border-radius: 100px 100px 0 0;
+    transform: rotate(180deg);
   }
 `;
 
@@ -90,18 +123,20 @@ const Title = styled(motion.h1)`
 
 const Description = styled(motion.p)`
   position: absolute;
-  bottom: 20%;
+  bottom: 38%;
   font-size: 1.2rem;
   color: #333;
-  width: 200px;
+  width: 410px;
   opacity: 0;
 
   &.left {
-    left: 10%;
+    left: 7%;
+    bottom: 40%;
   }
 
   &.right {
     right: 10%;
+    bottom: 40%;
   }
 `;
 
@@ -111,12 +146,12 @@ const SectionTwo = () => {
 
   const sunControls = useAnimation();
   const sproutControls = useAnimation();
+  const textControls = useAnimation();
 
   const [textVisible, setTextVisible] = useState(false);
 
   useEffect(() => {
     if (isInView) {
-      // ✅ 배경 요소는 매번 다시 실행
       sunControls.start({ y: 0, transition: { duration: 1.2 } });
       sproutControls.start({
         scaleY: 1,
@@ -124,14 +159,19 @@ const SectionTwo = () => {
         transition: { delay: 1, duration: 1 },
       });
 
-      // ✅ 텍스트는 한 번만 실행
+      textControls.start({
+        y: 0,
+        opacity: 1,
+        transition: { duration: 1.2 },
+      });
+
       if (!textVisible) {
         setTextVisible(true);
       }
     } else {
-      // 배경 초기화
       sunControls.set({ y: 300 });
       sproutControls.set({ scaleY: 0.2, opacity: 0 });
+      textControls.set({ y: 100, opacity: 0 });
     }
   }, [isInView]);
 
@@ -140,6 +180,8 @@ const SectionTwo = () => {
       <Sun initial={{ y: 300 }} animate={sunControls} />
       <Sprout initial={{ scaleY: 0.2, opacity: 0 }} animate={sproutControls}>
         <div className="leaf-right" />
+        <div className="leaf-left-mirror" /> {/* 추가된 반원 */}
+        <div className="leaf-right-mirror" /> {/* 추가된 반원 */}
       </Sprout>
 
       {/* 텍스트 애니메이션은 첫 등장 시에만 */}
@@ -152,16 +194,14 @@ const SectionTwo = () => {
         파릇이란?
       </Title> */}
       <motion.h1
-        variants={textVariants}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: 1.5, duration: 1 }}
+        initial={{ y: 100, opacity: 0 }}
+        animate={textControls}
         style={{
           fontSize: "2.8rem",
           fontWeight: "bold",
-          zIndex: 9999,
-          marginBottom: "20px",
-          position: "relative",
+          position: "absolute",
+          bottom: "610px",
+          zIndex: 5,
           color: "#000",
         }}
       >
@@ -172,17 +212,25 @@ const SectionTwo = () => {
         className="left"
         initial={{ y: 30, opacity: 0 }}
         animate={textVisible ? { y: 0, opacity: 1 } : {}}
-        transition={{ delay: 1.8, duration: 1 }}
+        transition={{ delay: 1.2, duration: 1 }}
       >
-        (설명)
+        시니어를 위한 맞춤형 강의와
+        <br />
+        취미 매칭 서비스를 제공하는 파릇
       </Description>
       <Description
         className="right"
         initial={{ y: 30, opacity: 0 }}
         animate={textVisible ? { y: 0, opacity: 1 } : {}}
-        transition={{ delay: 1.8, duration: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
       >
-        (설명)
+        단순한 취미를 넘어,
+        <br />
+        사회적 연결과 활력을 찾는 공간.
+        <br />
+        파릇은 여러분의
+        <br />
+        제2의 인생을 응원합니다.
       </Description>
     </SectionWrapper>
   );

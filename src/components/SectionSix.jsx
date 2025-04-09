@@ -4,7 +4,7 @@ import styled from "styled-components";
 import image1 from "../images/cnlal.jpg";
 import image2 from "../images/cnlal2.jpg";
 import image3 from "../images/cnlal3.jpg";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 // 섹션 전체 컨테이너
 const SectionWrapper = styled.div`
@@ -68,21 +68,95 @@ const AnimatedText = styled(motion.div)`
   margin-bottom: 10px;
 `;
 
-const ViewMoreButton = styled.button`
+const ViewMoreButton = styled(motion.button)`
   margin-top: 30px;
   padding: 12px 24px;
-  background-color: #000000;
+  background-color: transparent;
   color: white;
   border: none;
-  border-radius: 8px;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 25px;
   cursor: pointer;
   z-index: 10;
+  position: relative;
+  overflow: visible;
 
-  &:hover {
-    background-color: #ffffff;
-    color: #000000;
+  &::before,
+  &::after,
+  span::before,
+  span::after {
+    content: "";
+    position: absolute;
+    width: 0.5em;
+    height: 0.5em;
+    transform: rotate(45deg);
+    opacity: 0;
+  }
+
+  &::before,
+  span::before {
+    top: calc(50% - 0.3em);
+    left: -0.25em;
+    border-right: 0.15em solid rgba(255, 255, 255, 0.4);
+    border-top: 0.15em solid rgba(255, 255, 255, 0.4);
+  }
+
+  &::after,
+  span::after {
+    bottom: calc(50% - 0.35em);
+    right: -0.25em;
+    border-left: 0.15em solid rgba(255, 255, 255, 0.4);
+    border-bottom: 0.15em solid rgba(255, 255, 255, 0.4);
+  }
+
+  &::before {
+    animation: arrowInFromLeft 1.6s ease-in-out infinite;
+    animation-delay: 0s;
+  }
+
+  &::after {
+    animation: arrowInFromRight 1.6s ease-in-out infinite;
+    animation-delay: 0.4s;
+  }
+
+  span::before {
+    animation: arrowInFromLeft 1.6s ease-in-out infinite;
+    animation-delay: 0.8s;
+  }
+
+  span::after {
+    animation: arrowInFromRight 1.6s ease-in-out infinite;
+    animation-delay: 1.2s;
+  }
+
+  @keyframes arrowInFromLeft {
+    0% {
+      transform: translateX(-1em) rotate(45deg);
+      opacity: 0;
+    }
+    50% {
+      transform: translateX(0) rotate(45deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(0) rotate(45deg);
+      opacity: 0;
+    }
+  }
+
+  @keyframes arrowInFromRight {
+    0% {
+      transform: translateX(1em) rotate(45deg);
+      opacity: 0;
+    }
+    50% {
+      transform: translateX(0) rotate(45deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(0) rotate(45deg);
+      opacity: 0;
+    }
   }
 `;
 
@@ -105,13 +179,13 @@ const SectionSix = () => {
       text1Controls.start({
         x: 0,
         opacity: 1,
-        transition: { delay: 1.1, duration: 0.6 },
+        transition: { delay: 0.7, duration: 0.6, ease: "easeOut" },
       });
 
       text2Controls.start({
         x: 0,
         opacity: 1,
-        transition: { delay: 2.0, duration: 0.6 },
+        transition: { delay: 0.9, duration: 0.6, ease: "easeOut" },
       });
     } else {
       controls.set({ clipPath: "circle(10% at 50% 50%)" });
@@ -140,8 +214,12 @@ const SectionSix = () => {
         <AnimatedText initial={{ x: -200, opacity: 0 }} animate={text2Controls}>
           세상은 넓고 취미는 많다!
         </AnimatedText>
-        <ViewMoreButton onClick={() => navigate("/club")}>
-          자세히 보기
+        <ViewMoreButton
+          initial={{ x: -200, opacity: 0 }} // ✅ 세상은 넓고~ 텍스트랑 함께 등장
+          animate={text2Controls}
+          onClick={() => navigate("/club")}
+        >
+          <span>자세히 보기</span>
         </ViewMoreButton>
       </TextContainer>
     </SectionWrapper>

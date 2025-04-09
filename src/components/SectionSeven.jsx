@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { motion, useAnimation, useInView } from "framer-motion";
 // import backgroundImage from "../images/qrud.jpg";
+import backgroundVideo from "../images/cnlal.mp4";
 
 // 더미 데이터
 const reviews = [
@@ -34,6 +35,17 @@ const reviews = [
       "파릇이 인생의 제2막을 파릇하게 열어줬습니다. 제가 이렇게 취미에 욕심 많은 사람인 줄 처음 알았네요",
   },
 ];
+
+const BackgroundVideo = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+`;
 
 // 스타일
 const SectionWrapper = styled.div`
@@ -123,6 +135,8 @@ const SectionSeven = () => {
 
   return (
     <SectionWrapper ref={ref}>
+      <BackgroundVideo src={backgroundVideo} autoPlay muted loop playsInline />
+
       <FeedContainer>
         {reviews.map((item, idx) => (
           <Card

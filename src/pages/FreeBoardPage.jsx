@@ -33,6 +33,8 @@ const FixedPostBar = styled.div`
 `;
 
 const FreeBoardPage = () => {
+  const API_POST_URL = `http://54.180.127.164:18090/api/post`;
+
   const regionId = [
     { id: -1, name: "전체" },
     { id: 1, name: "서울특별시" },
@@ -77,6 +79,34 @@ const FreeBoardPage = () => {
     ...indoorHobbies,
     ...outdoorHobbies,
   ];
+
+  // 포스트 처리
+  const handlePost = async () => {
+    // e.preventDefault();
+
+    try {
+      const response = await fetch(API_POST_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // ✅ 세션 유지
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      console.log("data", data);
+
+      navigate("/grouplogin", { state: { group_id: data.group_id } });
+
+      if (!response.ok) {
+        throw new Error("로그인 실패");
+      }
+    } catch (error) {
+      console.error("로그인 오류", error);
+      setError("서버 오류가 발생했습니다.");
+    }
+  };
 
   // const [selectedRegion, setSelectedRegion] = useState({ id: null, name: "지역 선택" });
   // const [selectedHobby, setSelectedHobby] = useState({ id: null, name: "카테고리 선택" });

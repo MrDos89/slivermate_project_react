@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import feedImage from "../images/feed.jpg";
 
 const Container = styled.div`
   width: 100vw;
@@ -92,7 +93,7 @@ const SectionNine = () => {
         onMouseLeave={() => setHoverLeft(false)}
         onClick={() => navigate("/freeboard")}
         style={{
-          backgroundImage: `url('https://watermark.lovepik.com/photo/20211130/large/lovepik-medium-aged-and-old-people-gathering-picture_501208545.jpg')`,
+          backgroundImage: `url(${feedImage})`,
         }}
       >
         <Overlay show={hoverRight} bgColor="rgba(128, 128, 128, 0.95)">

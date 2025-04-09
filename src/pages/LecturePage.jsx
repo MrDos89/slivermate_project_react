@@ -4,9 +4,6 @@ import { FaLeaf } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { lectureDummy } from "../data/lectureDummy";
 
-
-
-
 const CATEGORY_MAP = {
   실내: [
     "전체",
@@ -44,7 +41,8 @@ const SORT_OPTIONS = ["가격순", "추천순", "최신순", "좋아요순"];
 //   padding-top: 60px;
 // `;
 
-{/* 
+{
+  /* 
 const FixedTop = styled.div`
   flex-shrink: 0;
   padding: 20px;
@@ -59,7 +57,8 @@ const Inner = styled.div`
   margin: 0 auto;
   /* padding: 0 20px; // 좌우 여백 살짝 
 `;
-*/}
+*/
+}
 
 const FixedTop = styled.div`
   flex-shrink: 0;
@@ -70,8 +69,10 @@ const FixedTop = styled.div`
 `;
 
 const Inner = styled.div`
-  width: 100vw;  // ← 브라우저 기준으로 설정
+  width: 100vw; // ← 브라우저 기준으로 설정
   padding: 20px; // ← 여기서 여백 조정
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 const Container = styled.div`
@@ -81,8 +82,6 @@ const Container = styled.div`
   overflow: hidden;
   padding-top: 60px;
 `;
-
-
 
 const ScrollableContent = styled.div`
   flex-grow: 1;
@@ -151,8 +150,8 @@ const CenteredBlock = styled.div`
 `;
 
 const CategoryWrapper = styled.div`
-width: 100%;
-max-width: 1200px;
+  width: 100%;
+  max-width: 1200px;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
@@ -172,7 +171,6 @@ const SubCategoryRow = styled.div`
   margin-top: 10px;
   gap: 10px;
   align-items: center;
-  
 `;
 
 const CategoryButton = styled.button`
@@ -191,12 +189,11 @@ const CategoryButton = styled.button`
   }
 `;
 
-
 const SortDropdown = styled.select`
   margin-top: 20px;
   padding: 8px 12px;
   display: block; /*  block 요소로 */
-  margin-left: 0;  
+  margin-left: 0;
 `;
 
 const CardGrid = styled.div`
@@ -251,7 +248,7 @@ const LecturePage = () => {
           : lesson.lesson_category === 2;
       const subMatch =
         subCategory === "전체" || lesson.lesson_sub_category === subCategory;
-        const searchMatch =
+      const searchMatch =
         lesson.lesson_name.includes(searchTerm) ||
         lesson.lesson_sub_category.includes(searchTerm);
       return categoryMatch && subMatch && searchMatch;
@@ -274,68 +271,66 @@ const LecturePage = () => {
   return (
     <Container>
       <FixedTop>
-      <Inner>
-      <SearchBarWrapper
-  onSubmit={(e) => {
-    e.preventDefault();
-    // 검색 실행 로직 (현재 상태 그대로 유지하므로 자동 실행됨)
-  }}
->
-  <SearchBar
-    placeholder="검색어를 입력하세요"
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-  />
-  <SearchButton type="submit">
-    <FaLeaf />
-  </SearchButton>
-</SearchBarWrapper>
-        <CategoryWrapper>
-          {Object.entries(CATEGORY_MAP).map(([group, buttons]) => (
-            <SubCategoryRow key={group}>
-              <CategoryTitle style={{ marginTop: 0 }}>{group}</CategoryTitle>
-              {buttons.map((btn) => {
-  const isActive =
-    mainCategory === group &&
-    (subCategory === btn || (btn === "전체" && subCategory === "전체"));
-  const isTotal = btn === "전체";
+        <Inner>
+          <SearchBarWrapper
+            onSubmit={(e) => {
+              e.preventDefault();
+              // 검색 실행 로직 (현재 상태 그대로 유지하므로 자동 실행됨)
+            }}
+          >
+            <SearchBar
+              placeholder="검색어를 입력하세요"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <SearchButton type="submit">
+              <FaLeaf />
+            </SearchButton>
+          </SearchBarWrapper>
+          <CategoryWrapper>
+            {Object.entries(CATEGORY_MAP).map(([group, buttons]) => (
+              <SubCategoryRow key={group}>
+                <CategoryTitle style={{ marginTop: 0 }}>{group}</CategoryTitle>
+                {buttons.map((btn) => {
+                  const isActive =
+                    mainCategory === group &&
+                    (subCategory === btn ||
+                      (btn === "전체" && subCategory === "전체"));
+                  const isTotal = btn === "전체";
 
-  return (
-    <CategoryButton
-      key={btn}
-      $active={isActive}
-      $isTotal={isTotal} // ✅ 추가!
-      onClick={() => {
-        setMainCategory(group);
-        setSubCategory(btn);
-      }}
-    >
-      {btn}
-    </CategoryButton>
-  );
-})}
-
-
-            </SubCategoryRow>
-          ))}
-        </CategoryWrapper>
+                  return (
+                    <CategoryButton
+                      key={btn}
+                      $active={isActive}
+                      $isTotal={isTotal} // ✅ 추가!
+                      onClick={() => {
+                        setMainCategory(group);
+                        setSubCategory(btn);
+                      }}
+                    >
+                      {btn}
+                    </CategoryButton>
+                  );
+                })}
+              </SubCategoryRow>
+            ))}
+          </CategoryWrapper>
         </Inner>
       </FixedTop>
 
       <ScrollableContent>
-      
-  <div style={{ textAlign: "left" }}>
-    <SortDropdown
-      value={sortBy}
-      onChange={(e) => setSortBy(e.target.value)}
-    >
-      {SORT_OPTIONS.map((opt) => (
-        <option key={opt} value={opt}>
-          {opt}
-        </option>
-      ))}
-    </SortDropdown>
-  </div>
+        <div style={{ textAlign: "left" }}>
+          <SortDropdown
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            {SORT_OPTIONS.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </SortDropdown>
+        </div>
 
         {/* <CardGrid>
           {filtered.map((lesson) => (
@@ -348,20 +343,19 @@ const LecturePage = () => {
           ))}
         </CardGrid> */}
         <CardGrid>
-  {filtered.map((lesson) => (
-    <Card
-      key={lesson.lesson_id}
-      onClick={() => navigate(`/lecture/${lesson.lesson_id}`)}
-      style={{ cursor: "pointer" }}
-    >
-      <Thumb src={lesson.lesson_thumbnail} />
-      <Title>{lesson.lesson_name}</Title>
-      <Author>{lesson.user_name}</Author>
-      <Desc>{lesson.lesson_desc}</Desc>
-    </Card>
-  ))}
-</CardGrid>
-
+          {filtered.map((lesson) => (
+            <Card
+              key={lesson.lesson_id}
+              onClick={() => navigate(`/lecture/${lesson.lesson_id}`)}
+              style={{ cursor: "pointer" }}
+            >
+              <Thumb src={lesson.lesson_thumbnail} />
+              <Title>{lesson.lesson_name}</Title>
+              <Author>{lesson.user_name}</Author>
+              <Desc>{lesson.lesson_desc}</Desc>
+            </Card>
+          ))}
+        </CardGrid>
       </ScrollableContent>
     </Container>
   );

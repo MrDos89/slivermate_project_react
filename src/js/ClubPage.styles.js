@@ -17,6 +17,8 @@ export const FixedTop = styled.div`
 export const Inner = styled.div`
   width: 100vw;
   padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 export const SearchBarWrapper = styled.form`

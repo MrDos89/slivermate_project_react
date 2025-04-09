@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import image1 from "../images/rkdtk.png";
 import image2 from "../images/gkrtod.png";
 import image3 from "../images/clsrn.png";
@@ -11,6 +11,12 @@ import thumb4 from "../images/thumb4.png";
 import thumb5 from "../images/thumb5.png";
 
 const thumbnailImages = [thumb1, thumb2, thumb3, thumb4, thumb5];
+
+const LOOP_COUNT = 3; // 반복 횟수
+const repeatedThumbnails = Array.from(
+  { length: LOOP_COUNT },
+  () => thumbnailImages
+).flat();
 
 const images = [image1, image2, image3];
 const texts = ["믿고보는 파릇 강사", "월결제로 무한 강의", "배움을 공유"];
@@ -51,6 +57,7 @@ const RightWrapper = styled.div`
   width: 700px;
   text-align: right;
   padding-right: 230px;
+  margin-top: 50px;
 `;
 
 const MainText = styled.h1`
@@ -84,6 +91,17 @@ const ImageBox = styled.img`
   border-radius: 12px;
 `;
 
+const ImageText = styled.div`
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+  font-size: 40px;
+  color: #222;
+  font-weight: bold;
+  white-space: nowrap; // 줄바꿈 방지
+  margin-left: 395px;
+`;
+
 const CircleWrapper = styled.div`
   width: 600px;
   height: 600px;
@@ -94,6 +112,7 @@ const CircleWrapper = styled.div`
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  margin-top: -40px;
 `;
 
 const TextBox = styled.div`
@@ -108,7 +127,7 @@ const ThumbnailSlider = styled.div`
   width: 100%;
   overflow-x: hidden;
   position: relative;
-  margin-top: 110px;
+  margin-top: 70px;
 `;
 
 const SliderTrack = styled.div`
@@ -134,7 +153,7 @@ const ArrowButton = styled.button`
   width: 32px;
   height: 32px;
 
-  color: #66bb6a;                       // 연초록
+  color: #66bb6a; // 연초록
   border-radius: 50%;
   font-size: 1.2rem;
   cursor: pointer;
@@ -142,13 +161,16 @@ const ArrowButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(4px);          // 부드러운 유리 느낌
+  backdrop-filter: blur(4px); // 부드러운 유리 느낌
   transition: all 0.2s ease;
-
-
 `;
 
-
+const CenteredButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: -17px;
+`;
 
 const Button = styled.button`
   padding: 10px 20px;
@@ -162,6 +184,71 @@ const Button = styled.button`
 
   &:hover {
     background-color: #28a745;
+  }
+`;
+
+const StyledLink = styled(Link)`
+  display: inline-block;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 25px;
+  position: relative;
+  margin-top: 70px;
+  perspective: 1000px;
+`;
+
+const FlipSpan = styled.span`
+  position: relative;
+  padding: 15px;
+  display: inline-block;
+  width: 80px;
+  height: 30px;
+  line-height: 50px; // 텍스트 수직 중앙 정렬
+  text-align: center; // 텍스트 수평 중앙 정렬
+  transition: 0.5s;
+  color: ${(props) => (props.red ? "#fff" : "#3e8560")}; // 기본 텍스트 색상
+  background: ${(props) => (props.red ? "#3e8560" : "#fff")}; // 기본 배경색
+  margin-right: 2px;
+
+  &:before,
+  &:after {
+    content: attr(data-attr);
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 15px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: 0.5s;
+    backface-visibility: hidden;
+    line-height: 50px;
+  }
+
+  &:before {
+    color: ${(props) => (props.red ? "#3e8560" : "#fff")}; // 반전된 텍스트 색상
+    background: ${(props) => (props.red ? "#fff" : "#3e8560")}; // 반전된 배경색
+    transform-origin: ${(props) => (props.red ? "bottom" : "top")};
+    transform: rotateX(90deg)
+      translateY(${(props) => (props.red ? "50%" : "-50%")});
+    z-index: 1;
+  }
+
+  &:after {
+    color: ${(props) => (props.red ? "#fff" : "#3e8560")}; // 기본 텍스트 색상
+    background: ${(props) => (props.red ? "#3e8560" : "#fff")}; // 기본 배경색
+    transform-origin: ${(props) => (props.red ? "top" : "bottom")};
+    transform: rotateX(0deg) translateY(0%);
+    z-index: 2;
+  }
+
+  ${StyledLink}:hover &::before {
+    transform: rotateX(0deg) translateY(0%);
+  }
+
+  ${StyledLink}:hover &::after {
+    transform: rotateX(90deg)
+      translateY(${(props) => (props.red ? "-50%" : "50%")});
   }
 `;
 
@@ -192,12 +279,15 @@ const SectionFour = () => {
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const handlePrev = () => {
-    setCurrentSlide((prev) => Math.max(prev - 1, 0));
+  const handleNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % repeatedThumbnails.length);
   };
 
-  const handleNext = () => {
-    setCurrentSlide((prev) => Math.min(prev + 1, maxSlide));
+  const handlePrev = () => {
+    setCurrentSlide(
+      (prev) =>
+        (prev - 1 + repeatedThumbnails.length) % repeatedThumbnails.length
+    );
   };
 
   // useEffect(() => {
@@ -217,7 +307,7 @@ const SectionFour = () => {
               <ImageBox key={idx} src={img} position={getPosition(idx)} />
             ))}
           </ImageContainer>
-          <TextBox>{texts[activeIndex]}</TextBox>
+          <ImageText>{texts[activeIndex]}</ImageText>
         </CircleWrapper>
       </LeftWrapper>
       <RightWrapper>
@@ -232,12 +322,12 @@ const SectionFour = () => {
             ❮
           </ArrowButton>
           <SliderTrack
-            totalWidth={thumbnailImages.length * THUMB_TOTAL}
+            totalWidth={repeatedThumbnails.length * THUMB_TOTAL}
             style={{
               transform: `translateX(-${currentSlide * THUMB_TOTAL}px)`,
             }}
           >
-            {thumbnailImages.map((thumb, idx) => (
+            {repeatedThumbnails.map((thumb, idx) => (
               <Thumbnail key={idx} src={thumb} alt={`썸네일 ${idx + 1}`} />
             ))}
           </SliderTrack>
@@ -245,7 +335,14 @@ const SectionFour = () => {
             ❯
           </ArrowButton>
         </ThumbnailSlider>
-        <Button onClick={() => navigate("/lecture")}>자세히 보기</Button>
+        <CenteredButtonWrapper>
+          <StyledLink to="/lecture">
+            <FlipSpan data-attr="강의실">강의실</FlipSpan>
+            <FlipSpan data-attr="입장" red>
+              입장
+            </FlipSpan>
+          </StyledLink>
+        </CenteredButtonWrapper>
       </RightWrapper>
     </SectionWrapper>
   );

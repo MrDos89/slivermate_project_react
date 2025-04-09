@@ -84,11 +84,26 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   align-items: flex-end;
   margin-bottom: 2rem;
+  flex-direction: row;
+  gap: 20px;
 `;
 
 const InfoText = styled.div`
   font-size: 1.2rem;
   margin-bottom: 1rem;
+  align-items: center;
+`;
+
+const Divider = styled.span`
+  font-size: 1.5rem;
+  color: #ccc;
+`;
+
+const InnerContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 `;
 
 const Counter = styled.span`
@@ -99,16 +114,54 @@ const Counter = styled.span`
 `;
 
 const Button = styled.button`
-  padding: 10px 20px;
-  font-size: 1rem;
-  color: white;
-  background-color: #32a852; // 녹색
-  border: none;
   cursor: pointer;
-  transition: background-color 0.3s;
+  margin-left: 5px;
+  margin-bottom: 15px;
+  text-shadow: 0 -2px 0 #5f9f79, 0 1px 1px #bce5cf;
+  box-sizing: border-box;
+  font-size: 2em;
+  font-family: Helvetica, Arial, sans-serif;
+  text-decoration: none;
+  font-weight: bold;
+  color: #6fa884;
+  height: 65px;
+  line-height: 65px;
+  padding: 0 32.5px;
+  display: inline-block;
+  width: auto;
+  background: linear-gradient(to bottom, #c3e7d2 0%, #a1d1b3 26%, #7fbb98 100%);
+  border-radius: 5px;
+  border-top: 1px solid #e4f5ec;
+  border-bottom: 1px solid #c0e3d1;
+  top: 0;
+  position: relative;
+  transition: all 0.06s ease-out;
+  box-shadow: 0 4px 0 #5f9f79;
 
   &:hover {
-    background-color: #28a745;
+    background: linear-gradient(
+      to bottom,
+      #d3efe0 0%,
+      #aed7c0 26%,
+      #89c4a2 100%
+    );
+    color: white;
+  }
+
+  &:active {
+    top: 4px;
+    box-shadow: none;
+    background: linear-gradient(
+      to bottom,
+      #b0d8be 0%,
+      #8cc3a2 26%,
+      #6fa884 100%
+    );
+    color: #3a5f4a;
+  }
+
+  &:visited {
+    color: #6fa884;
   }
 `;
 
@@ -184,21 +237,24 @@ const SectionFive = () => {
       <BackgroundImage animate={animate} />
       <GradientOverlay />
       <ContentWrapper visible={contentVisible}>
-        <MainText>배우는 기쁨에서 가르치는 보람까지</MainText>
-        <SubText>
-          파릇에선 경험과 지혜를 나누며 새로운 도전을 시작할 기회를 제공합니다
-        </SubText>
-        <InfoWrapper>
-          <InfoText>
-            호스트 신청자
-            <Counter>{hostCount}</Counter>
-          </InfoText>
-          <InfoText>
-            총 시청 뷰수
-            <Counter>{viewCount}</Counter>
-          </InfoText>
-        </InfoWrapper>
-        <Button onClick={handleButtonClick}>자세히 보기</Button>
+        <InnerContent>
+          <MainText>배우는 기쁨에서 가르치는 보람까지</MainText>
+          <SubText>
+            파릇에선 경험과 지혜를 나누며 새로운 도전을 시작할 기회를 제공합니다
+          </SubText>
+          <InfoWrapper>
+            <InfoText>
+              호스트 신청자
+              <Counter>{hostCount}</Counter>
+            </InfoText>
+            <Divider>|</Divider>
+            <InfoText>
+              총 시청 뷰수
+              <Counter>{viewCount}</Counter>
+            </InfoText>
+          </InfoWrapper>
+          <Button onClick={handleButtonClick}>자세히 보기</Button>
+        </InnerContent>
       </ContentWrapper>
     </SectionWrapper>
   );
