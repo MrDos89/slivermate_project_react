@@ -247,8 +247,16 @@ function ChatTestPage() {
   const API_USER_SESSION_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
     import.meta.env.VITE_API_PORT
   }/api/usergroup/session`;
+  const API_USER_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+    import.meta.env.VITE_API_PORT
+  }/api/user`;
+  const API_CLUB_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+    import.meta.env.VITE_API_PORT
+  }/api/club`;
+
   const [userData, setUserData] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userClubsData, setUserClubsData] = useState([]);
 
   //@note - 유저 세션 체크하기
   useEffect(() => {
@@ -276,6 +284,32 @@ function ChatTestPage() {
       })
       .catch((error) => console.error("회원 정보 불러오기 오류", error));
   }, [API_USER_SESSION_URL, navigate]);
+
+  useEffect(() => {
+    const userId = userData?.uid;
+    if (!userId) return;
+
+    const api = `${API_CLUB_URL}/${userId}/joined`;
+
+    console.log("가입한 클럽 API URL:", api);
+
+    fetch(API_CLUB_URL + `/${userData?.uid}/joined`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          console.error("가입한 클럽 정보 불러오기 실패:", response.status);
+          return;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("가입한 클럽 데이터 확인:", data);
+        setUserClubsData(data);
+      })
+      .catch((error) => console.error("가입한 클럽 정보 불러오기 오류", error));
+  }, [API_CLUB_URL, userData?.uid]);
 
   const [selectedClubId, setSelectedClubId] = useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -389,7 +423,7 @@ function ChatTestPage() {
   };
 
   const renderChatRooms = () => {
-    const sortedClubs = [...dummyClubs].sort((a, b) => {
+    const sortedClubs = [...userClubsData].sort((a, b) => {
       const aUnread = (chatMessages[a.club_id] || []).some(
         (msg) => !msg.isMe && !msg.read
       );
