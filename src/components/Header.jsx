@@ -334,7 +334,7 @@ function Header({ setScrollIndex }) {
             모임
           </NavItem>
           <NavItem
-            $leafIcon="https://cdn-icons-png.flaticon.com/512/3426/3426179.png"
+            $leafIcon="https://cdn-icons-png.flaticon.com/512/1531/1531310.png"
             onClick={() => handleNavigateToScroll(7)} // ✅ 모임 만들기 스크롤 위치
           >
             모임 만들기
@@ -366,8 +366,10 @@ function Header({ setScrollIndex }) {
           </NavItem>
         </Nav>
         <AuthButtons>
-          <PhoneButton onClick={() => setShowModal(true)}>📞</PhoneButton>
-          <PhoneButton onClick={() => setShowNotification(true)}>
+          <PhoneButton onClick={() => setShowModal((prev) => !prev)}>
+            📞
+          </PhoneButton>
+          <PhoneButton onClick={() => setShowNotification((prev) => !prev)}>
             🔔
           </PhoneButton>
           {/* <Button to="/login">
