@@ -30,14 +30,14 @@ const Logo = styled.div`
   font-family: "KCCHyerim-Regular";
   font-size: 47px;
   font-weight: bold;
-  color: rgb(39, 233, 0);
+  color: rgb(55, 218, 79);
   flex: 1;
   text-decoration: none;
   cursor: pointer;
   padding-top: 12px;
 
   &:hover {
-    color: rgb(39, 233, 0);
+    color: rgb(55, 218, 79);
     transform: scale(1.05);
   }
 `;
@@ -121,13 +121,22 @@ const NavItem = styled.span`
 */
 
 const NavItem = styled.span`
+  @font-face {
+    font-family: "MapoPeacefull";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoPeacefullA.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  font-family: "MapoPeacefull";
   position: relative;
   cursor: pointer;
   font-weight: 500;
   color: #333;
   line-height: 70px;
   transition: color 0.3s, font-weight 0.3s;
-  font-size: 18px;
+  font-size: 21px;
   align-items: flex-end;
   height: 100%;
   padding-top: 15px;

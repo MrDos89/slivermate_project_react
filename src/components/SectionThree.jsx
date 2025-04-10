@@ -30,7 +30,7 @@ const SectionWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  gap: 10vw;
+  gap: 12vw;
   background: white;
   color: black;
   overflow: hidden;
@@ -61,20 +61,55 @@ const CircleImage = styled.div`
 `;
 
 const Step = styled.div`
+  @font-face {
+    font-family: "MapoPeacefull";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoPeacefullA.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  font-family: "MapoPeacefull";
+  color: rgb(11, 172, 35);
   font-size: 1.4rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 0.6rem;
 `;
 
 const Title = styled.div`
-  font-size: 1.8rem;
+  @font-face {
+    font-family: "ImcreSoojin";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.3/ImcreSoojin.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Binggrae-Two";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Binggrae-Bold.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  font-family: "Binggrae-Two";
+  font-size: 1.9rem;
   font-weight: bold;
   margin-bottom: 0.6rem;
   white-space: pre-line;
 `;
 
 const Description = styled.div`
-  font-size: 1rem;
+  @font-face {
+    font-family: "SimKyungha";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/SimKyungha.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  font-family: "SimKyungha";
+  font-size: 25px;
   color: #333;
 `;
 
@@ -118,8 +153,7 @@ const SectionThree = () => {
       initial="hidden"
       animate={controls}
     >
-
-<WaveBackground />
+      <WaveBackground />
       <ItemWrapper variants={itemVariants}>
         <CircleImage
           style={{
@@ -129,10 +163,11 @@ const SectionThree = () => {
           }}
         />
         <Step>첫번째 파릇</Step>
-        <Title>수준 높은 강의 서비스</Title>
+        <Title>시니어 맞춤 강의 서비스</Title>
         <Description>
-          파릇에서 제공하는 수준 높은 강의를 통해 새로운 도전과 배움을
-          시작하세요
+          파릇에서 제공하는 시니어 맞춤 강의로
+          <br />
+          새로운 도전과 배움을 시작하세요
         </Description>
       </ItemWrapper>
 
@@ -145,10 +180,11 @@ const SectionThree = () => {
           }}
         />
         <Step>두번째 파릇</Step>
-        <Title>{"같은 취미를 가진\n파릇과의 만남"}</Title>
+        <Title>{"취미가 같은 파릇과의 만남"}</Title>
         <Description>
-          같은 취미를 가진 회원들과 모임을 통해 다양한 소통과 활동을 할 수 있는
-          기회
+          같은 취미를 가진 파릇 회원들과 모임을 통해
+          <br />
+          다양한 소통과 활동을 할 수 있는 기회
         </Description>
       </ItemWrapper>
 
@@ -161,10 +197,11 @@ const SectionThree = () => {
           }}
         />
         <Step>세번째 파릇</Step>
-        <Title>보류 장점</Title>
+        <Title>시니어만을 위한 소식지</Title>
         <Description>
-          이건 뭐 추가하면 좋을까나 시니어에게 필요한 소식을 가장 빨리 전달하는
-          파릇?
+          시니어에게 꼭 필요한 정보를
+          <br />
+          가장 빠르게 전달하는 파릇 칼럼 서비스
         </Description>
       </ItemWrapper>
     </SectionWrapper>

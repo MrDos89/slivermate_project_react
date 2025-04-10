@@ -498,7 +498,15 @@ const SignUpPage = () => {
                 <h1>파릇</h1>
               </div>
               <h2 className="join-h2">회원가입</h2>
-              <UploadImage onUpload={handleUploadImage} />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginBottom: "20px",
+                }}
+              >
+                <UploadImage onUpload={handleUploadImage} />
+              </div>
               <form className="join-form" onSubmit={handleSignup}>
                 <label>이름:</label>
                 <input

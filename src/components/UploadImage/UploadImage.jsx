@@ -3,6 +3,7 @@ import { Button, Alert } from "reactstrap";
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import Resizer from "react-image-file-resizer";
+import { MdAddAPhoto } from "react-icons/md";
 
 const UploadImage = ({ onUpload }) => {
   const ACCESS_KEY = `${import.meta.env.VITE_ACCESS_KEY}`;
@@ -116,14 +117,39 @@ const UploadImage = ({ onUpload }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              fontSize: "3rem",
+              color: "#666",
             }}
           >
-            <img
-              src="/placeholder-profile.png"
-              alt="profile-placeholder"
-              style={{ width: "80px", height: "80px" }}
-            />
+            <MdAddAPhoto />
           </div>
+          // <div
+          //   style={{
+          //     width: "150px",
+          //     height: "150px",
+          //     borderRadius: "50%",
+          //     backgroundColor: "#ddd",
+          //     display: "flex",
+          //     alignItems: "center",
+          //     justifyContent: "center",
+          //   }}
+          // >
+          //   <img
+          //     src="/placeholder-profile.png"
+          //     //alt="profile-placeholder"
+          //     alt=""
+          //     // style={{ width: "80px", height: "80px" }}
+          //     style={{
+          //       width: "150px",
+          //       height: "150px",
+          //       borderRadius: "50%",
+          //       backgroundColor: "#ddd",
+          //       display: "flex",
+          //       alignItems: "center",
+          //       justifyContent: "center",
+          //     }}
+          //   />
+          // </div>
         )}
       </label>
       <br />

@@ -218,24 +218,30 @@ const SectionSeven = () => {
   const [translateY1, setTranslateY1] = useState(0); // 첫 번째 슬라이더 상태
   const [translateY2, setTranslateY2] = useState(0); // 두 번째 슬라이더 상태
 
+  const isPaused1 = useRef(false);
+  const isPaused2 = useRef(false);
+
+  // useEffect 내부 move 함수 수정
   useEffect(() => {
-    const speed = 100;
+    const speed = 150;
     let animationFrame;
 
     const move = () => {
-      // 첫 번째 슬라이더의 애니메이션 처리
-      setTranslateY1((prev) => {
-        const scrollHeight = sliderRef1.current.scrollHeight / 2;
-        if (prev <= -scrollHeight) return 0;
-        return prev - speed;
-      });
+      if (!isPaused1.current) {
+        setTranslateY1((prev) => {
+          const scrollHeight = sliderRef1.current.scrollHeight / 2;
+          if (prev <= -scrollHeight) return 0;
+          return prev - speed;
+        });
+      }
 
-      // 두 번째 슬라이더의 애니메이션 처리
-      setTranslateY2((prev) => {
-        const scrollHeight = sliderRef2.current.scrollHeight / 2;
-        if (prev <= -scrollHeight) return 0;
-        return prev - speed;
-      });
+      if (!isPaused2.current) {
+        setTranslateY2((prev) => {
+          const scrollHeight = sliderRef2.current.scrollHeight / 2;
+          if (prev <= -scrollHeight) return 0;
+          return prev - speed;
+        });
+      }
 
       animationFrame = requestAnimationFrame(move);
     };
@@ -249,7 +255,11 @@ const SectionSeven = () => {
       <BackgroundVideo src={backgroundVideo} autoPlay muted loop playsInline />
 
       {/* 첫 번째 슬라이더 */}
-      <SliderContainer style={{ right: "29%" }}>
+      <SliderContainer
+        style={{ right: "29%" }}
+        onMouseEnter={() => (isPaused1.current = true)}
+        onMouseLeave={() => (isPaused1.current = false)}
+      >
         <SlidesWrapper ref={sliderRef1} translateY={translateY1}>
           {reviews.slice(0, reviews.length / 2).map((item, idx) => (
             <Card key={idx}>
@@ -267,7 +277,11 @@ const SectionSeven = () => {
       </SliderContainer>
 
       {/* 두 번째 슬라이더 */}
-      <SliderContainer style={{ right: "5%" }}>
+      <SliderContainer
+        style={{ right: "5%" }}
+        onMouseEnter={() => (isPaused2.current = true)}
+        onMouseLeave={() => (isPaused2.current = false)}
+      >
         <SlidesWrapper ref={sliderRef2} translateY={translateY2}>
           {reviews.slice(reviews.length / 2).map((item, idx) => (
             <Card key={idx}>

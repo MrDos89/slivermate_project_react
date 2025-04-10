@@ -61,14 +61,41 @@ const RightWrapper = styled.div`
 `;
 
 const MainText = styled.h1`
-  font-size: 2.5rem;
+  @font-face {
+    font-family: "CBNUJIKJI";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202@1.0/CBNUJIKJI.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "KimjungchulMyungjo-Bold";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulMyungjo-Bold.woff2")
+      format("woff2");
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  font-family: "KimjungchulMyungjo-Bold";
+
+  font-size: 3.1rem;
   font-weight: bold;
   color: black;
-  margin-bottom: 1rem;
+  // margin-bottom: 1rem;
 `;
 
 const SubText = styled.p`
-  font-size: 1.2rem;
+  @font-face {
+    font-family: "MapoPeacefull";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoPeacefullA.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  font-family: "MapoPeacefull";
+
+  font-size: 1.5rem;
   color: #666;
   line-height: 1.6;
 `;
@@ -92,11 +119,27 @@ const ImageBox = styled.img`
 `;
 
 const ImageText = styled.div`
+  @font-face {
+    font-family: "KCCMurukmuruk";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCCMurukmuruk.woff2")
+      format("woff2");
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "MaplestoryOTFBold";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff")
+      format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  font-family: "MaplestoryOTFBold";
   margin-top: 30px;
   width: 100%;
   text-align: center;
   font-size: 40px;
-  color: #222;
+  color: rgb(1, 88, 46);
   font-weight: bold;
   white-space: nowrap; // 줄바꿈 방지
   margin-left: 395px;
@@ -127,7 +170,7 @@ const ThumbnailSlider = styled.div`
   width: 100%;
   overflow-x: hidden;
   position: relative;
-  margin-top: 70px;
+  margin-top: 50px;
 `;
 
 const SliderTrack = styled.div`

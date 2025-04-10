@@ -45,7 +45,7 @@ const NavButton = styled.button`
   height: 10px;
   display: block;
   border-radius: 50%;
-  background-color: ${(props) => (props.active ? "#67dbff" : "#ccc")};
+  background-color: ${(props) => (props.active ? "#69D948" : "#ccc")};
   border: none;
   padding: 0;
   margin: 0;
