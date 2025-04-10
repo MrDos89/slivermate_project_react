@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { dummyClubs } from "../data/clubData";
-import { chatMessages } from "../data/chatDummyData";
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -253,10 +251,16 @@ function ChatTestPage() {
   const API_CLUB_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
     import.meta.env.VITE_API_PORT
   }/api/club`;
+  const CHAT_ADDRESS = import.meta.env.VITE_CHAT_ADDRESS;
 
   const [userData, setUserData] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userClubsData, setUserClubsData] = useState([]);
+  const [selectedClubId, setSelectedClubId] = useState(null);
+  const [inputValue, setInputValue] = useState("");
+  const messagesEndRef = useRef(null);
+  const [messages, setMessages] = useState({}); // { clubId: [messages] }
+  const [socket, setSocket] = useState(null);
 
   //@note - 유저 세션 체크하기
   useEffect(() => {
@@ -289,10 +293,6 @@ function ChatTestPage() {
     const userId = userData?.uid;
     if (!userId) return;
 
-    const api = `${API_CLUB_URL}/${userId}/joined`;
-
-    console.log("가입한 클럽 API URL:", api);
-
     fetch(API_CLUB_URL + `/${userData?.uid}/joined`, {
       method: "GET",
       credentials: "include",
@@ -311,169 +311,140 @@ function ChatTestPage() {
       .catch((error) => console.error("가입한 클럽 정보 불러오기 오류", error));
   }, [API_CLUB_URL, userData?.uid]);
 
-  const [selectedClubId, setSelectedClubId] = useState(null);
-  const [inputValue, setInputValue] = useState("");
-  const messagesEndRef = useRef(null);
+  // 웹소켓 연결 및 관리
+  useEffect(() => {
+    if (selectedClubId && isLoggedIn && userData) {
+      const wsUrl = `wss://${
+        import.meta.env.VITE_WEB_SOCKET_ADDRESS
+      }.execute-api.ap-northeast-2.amazonaws.com/production/?channel=${selectedClubId}`;
+
+      const newSocket = new WebSocket(wsUrl);
+      setSocket(newSocket);
+
+      newSocket.onopen = () => {
+        console.log(`WebSocket connected to channel: ${selectedClubId}`);
+        // 필요하다면 서버에 구독 메시지 등을 보낼 수 있습니다.
+        // newSocket.send(JSON.stringify({ action: 'subscribe', channel: selectedClubId }));
+      };
+
+      newSocket.onmessage = (event) => {
+        try {
+          const messageData = JSON.parse(event.data);
+          const { message, nickname, thumbnail } = messageData;
+          if (message && nickname) {
+            setMessages((prevMessages) => ({
+              ...prevMessages,
+              [selectedClubId]: [
+                ...(prevMessages[selectedClubId] || []),
+                {
+                  id: Date.now(),
+                  sender: nickname === userData.nickname ? "me" : nickname,
+                  senderName: nickname,
+                  isMe: nickname === userData.nickname,
+                  content: message,
+                  timestamp: new Date().toISOString(),
+                  read: nickname === userData.nickname, // 내가 보낸 메시지는 읽음 처리
+                  senderProfile: thumbnail,
+                },
+              ],
+            }));
+          }
+        } catch (error) {
+          console.error("Failed to parse WebSocket message:", error);
+        }
+      };
+
+      newSocket.onclose = () => {
+        console.log(`WebSocket disconnected from channel: ${selectedClubId}`);
+        setSocket(null);
+      };
+
+      newSocket.onerror = (error) => {
+        console.error(`WebSocket error on channel ${selectedClubId}:`, error);
+        setSocket(null);
+      };
+
+      // 컴포넌트 언마운트 시 또는 selectedClubId 변경 시 소켓 연결 종료
+      return () => {
+        if (newSocket && newSocket.readyState === WebSocket.OPEN) {
+          newSocket.close();
+        }
+      };
+    } else if (!selectedClubId && socket) {
+      // 선택된 채팅방이 없으면 기존 소켓 연결 종료
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.close();
+      }
+      setSocket(null);
+    }
+  }, [selectedClubId, isLoggedIn, userData, CHAT_ADDRESS]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // const leafVariants = ["🍃", "🌿", "🍀", "🍃"];
-
-  const generateRandomLeaves = (count) => {
-    const leaves = [];
-    const leafVariants = ["🍃", "🌿", "🍀", "🍃"];
-
-    // 기존 랜덤 잎사귀
-    for (let i = 0; i < count; i++) {
-      const left = Math.random() * 100;
-      const delay = Math.random() * 5;
-      const duration = 6 + Math.random() * 5;
-      const rotate = Math.random() > 0.5 ? 360 : -360;
-      const size = 21 + Math.random() * 18;
-      const startTop = `-${Math.floor(60 + Math.random() * 140)}px`;
-      const leaf =
-        leafVariants[Math.floor(Math.random() * leafVariants.length)];
-
-      leaves.push(
-        <FallingLeaf
-          key={`leaf-${i}`}
-          startTop={startTop}
-          style={{
-            left: `${left}%`,
-            animationDelay: `${delay}s`,
-            animationDuration: `${duration}s`,
-            fontSize: `${size}px`,
-            transform: `rotate(${rotate}deg)`,
-          }}
-        >
-          {leaf}
-        </FallingLeaf>
-      );
-    }
-
-    // 🎯 왼쪽에서 떨어질 잎사귀 2개 추가
-    for (let i = 0; i < 2; i++) {
-      const fixedLeft = 10 + i * 10; // 10%, 20%
-      const delay = Math.random() * 5;
-      const duration = 7 + Math.random() * 4;
-      const rotate = Math.random() > 0.5 ? 360 : -360;
-      const size = 20 + Math.random() * 12;
-      const startTop = `-${Math.floor(80 + Math.random() * 120)}px`;
-      const leaf =
-        leafVariants[Math.floor(Math.random() * leafVariants.length)];
-
-      leaves.push(
-        <FallingLeaf
-          key={`extra-left-${i}`}
-          startTop={startTop}
-          style={{
-            left: `${fixedLeft}%`,
-            animationDelay: `${delay}s`,
-            animationDuration: `${duration}s`,
-            fontSize: `${size}px`,
-            transform: `rotate(${rotate}deg)`,
-          }}
-        >
-          {leaf}
-        </FallingLeaf>
-      );
-    }
-
-    return leaves;
-  };
-
-  const [leaves, setLeaves] = useState([]);
-
-  useEffect(() => {
-    setLeaves(generateRandomLeaves(5 + Math.floor(Math.random() * 6)));
-  }, []);
-
   useEffect(() => {
     scrollToBottom();
-    if (selectedClubId && chatMessages[selectedClubId]) {
-      chatMessages[selectedClubId] = chatMessages[selectedClubId].map((msg) =>
-        !msg.isMe && !msg.read ? { ...msg, read: true } : msg
-      );
-    }
-  }, [selectedClubId, inputValue]);
+    // 메시지 읽음 처리 로직 (더 이상 더미 데이터에 의존하지 않음)
+  }, [messages, selectedClubId]);
 
-  const handleSelectClub = (clubId) => {
-    setSelectedClubId(clubId);
+  const handleSelectClub = (club) => {
+    setSelectedClubId(club.club_id);
+    // 이미 연결된 소켓이 있으면 닫고 새로 연결 (useEffect에서 처리)
   };
 
   const handleSend = () => {
-    if (!inputValue.trim()) return;
-    const newMessage = {
-      id: Date.now(),
-      sender: "me",
-      senderName: "나",
-      isMe: true,
-      content: inputValue,
-      timestamp: new Date().toISOString(),
-      read: false,
+    if (
+      !inputValue.trim() ||
+      !socket ||
+      socket.readyState !== WebSocket.OPEN ||
+      !userData
+    )
+      return;
+
+    const messagePayload = {
+      action: "sendmessage",
+      channelId: selectedClubId,
+      message: inputValue,
+      nickname: userData.nickname,
+      thumbnail: userData.profileImageUrl || "", // 사용자 프로필 이미지 URL
     };
 
-    chatMessages[selectedClubId] = [
-      ...(chatMessages[selectedClubId] || []),
-      newMessage,
-    ];
+    socket.send(JSON.stringify(messagePayload));
     setInputValue("");
   };
 
   const renderChatRooms = () => {
-    const sortedClubs = [...userClubsData].sort((a, b) => {
-      const aUnread = (chatMessages[a.club_id] || []).some(
-        (msg) => !msg.isMe && !msg.read
-      );
-      const bUnread = (chatMessages[b.club_id] || []).some(
-        (msg) => !msg.isMe && !msg.read
-      );
-      if (aUnread === bUnread) return 0;
-      return aUnread ? -1 : 1;
-    });
-
-    return sortedClubs.map((club) => {
-      const messages = chatMessages[club.club_id] || [];
-      const lastMessage = messages[messages.length - 1];
-      const unreadCount = messages.filter(
-        (msg) => !msg.isMe && !msg.read
-      ).length;
+    return userClubsData.map((club) => {
+      // const messagesForClub = messages[club.club_id] || [];
+      // const lastMessage = messagesForClub[messagesForClub.length - 1];
+      // const unreadCount = messagesForClub.filter(
+      //   (msg) => !msg.isMe && !msg.read
+      // ).length;
 
       return (
         <ChatRoom
           key={club.club_id}
           active={selectedClubId === club.club_id}
-          onClick={() => handleSelectClub(club.club_id)}
+          onClick={() => handleSelectClub(club)}
         >
           <ChatThumb src={club.club_thumbnail} alt="thumb" />
           <ChatInfo>
             <ChatTitle>{club.club_name}</ChatTitle>
-            <ChatLast>{lastMessage?.content ?? "채팅 없음"}</ChatLast>
           </ChatInfo>
-          <ChatMeta>
-            <ChatTime>{lastMessage?.timestamp?.slice(11, 16)}</ChatTime>
-            {unreadCount > 0 && <ChatUnread>{unreadCount}</ChatUnread>}
-          </ChatMeta>
         </ChatRoom>
       );
     });
   };
 
   const renderMessages = () => {
-    const messages = chatMessages[selectedClubId] || [];
+    const currentMessages = messages[selectedClubId] || [];
 
     if (!selectedClubId) {
-      return (
-        <LeafContainer>
-          {leaves}
-          <Placeholder>채팅방을 선택해주세요</Placeholder>
-        </LeafContainer>
-      );
+      return <Placeholder>채팅방을 선택해주세요</Placeholder>;
     }
 
-    if (messages.length === 0) {
+    if (currentMessages.length === 0) {
       return <Placeholder>아직 대화가 없습니다</Placeholder>;
     }
 
@@ -481,57 +452,62 @@ function ChatTestPage() {
 
     return (
       <ChatMessages>
-        {messages.map((msg) => {
-          if (msg.type === "date") {
-            return <ChatDate key={msg.id}>{msg.content}</ChatDate>;
-          }
-
+        {currentMessages.map((msg) => {
           const currentTime = msg.timestamp?.slice(11, 16);
           const showTime = currentTime !== lastTime;
           lastTime = currentTime;
 
-          return !msg.isMe ? (
-            <div
-              key={msg.id}
-              style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}
-            >
-              <img
-                src={msg.senderProfile}
-                alt="profile"
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  marginTop: "4px",
-                }}
-              />
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <ChatName>{msg.senderName}</ChatName>
-                <ChatBubble isMe={false}>
-                  <ChatText>{msg.content}</ChatText>
-                </ChatBubble>
-                {showTime && (
-                  <ChatTimeSmall isMe={false}>{currentTime}</ChatTimeSmall>
-                )}
-              </div>
-            </div>
-          ) : (
+          return (
             <div
               key={msg.id}
               style={{
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
+                alignItems: msg.isMe ? "flex-end" : "flex-start",
+                gap: "10px",
+                marginBottom: "14px",
+                flexDirection: msg.isMe ? "row-reverse" : "row",
               }}
             >
-              <ChatBubble isMe={true}>
-                <ChatText>{msg.content}</ChatText>
-              </ChatBubble>
-              {showTime && (
-                <ChatTimeSmall isMe={true}>
-                  {currentTime} {msg.read ? "✔" : "안읽음"}
-                </ChatTimeSmall>
+              {!msg.isMe && (
+                <img
+                  src={msg.senderProfile}
+                  alt="profile"
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    marginTop: "4px",
+                  }}
+                />
+              )}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: msg.isMe ? "flex-end" : "flex-start",
+                }}
+              >
+                {!msg.isMe && <ChatName>{msg.senderName}</ChatName>}
+                <ChatBubble isMe={msg.isMe}>
+                  <ChatText>{msg.content}</ChatText>
+                </ChatBubble>
+                {showTime && (
+                  <ChatTimeSmall isMe={msg.isMe}>{currentTime}</ChatTimeSmall>
+                )}
+              </div>
+              {msg.isMe && (
+                <img
+                  src={userData.profileImageUrl}
+                  alt="profile"
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    marginTop: "4px",
+                  }}
+                />
               )}
             </div>
           );
