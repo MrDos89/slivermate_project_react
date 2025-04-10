@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import CustomerModal from "./CustomerModal/CustomerModal";
 import NotificationModal from "./NotificationModal/NotificationModal";
-import LoginStatus from "./MyPagecomponents/LoginStatus"; // 로그인 상태 확인 컴포넌트
+import LoginStatus from "./MyPageComponents/LoginStatus"; // 로그인 상태 확인 컴포넌트
 
 const HeaderContainer = styled.header`
   width: 100%;

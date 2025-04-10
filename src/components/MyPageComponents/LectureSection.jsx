@@ -73,7 +73,13 @@ const LectureSectionContainer = styled.div`
   margin-top: 40px;
 `;
 
-function LectureSection({ user, startIndex, handlePrev, handleNext, VISIBLE_COUNT }) {
+function LectureSection({
+  user,
+  startIndex,
+  handlePrev,
+  handleNext,
+  VISIBLE_COUNT,
+}) {
   return (
     <LectureSectionContainer>
       <SectionTitle>내가 시청중인 강의</SectionTitle>
