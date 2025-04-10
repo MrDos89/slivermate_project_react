@@ -87,7 +87,7 @@ export default function LoginStatus({ onLoginChange }) {
           import.meta.env.VITE_API_PORT
         }/api/user/logout`,
         {
-          method: "POST",
+          method: "GET",
           credentials: "include",
         }
       );
