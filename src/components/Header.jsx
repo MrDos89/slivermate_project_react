@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import CustomerModal from "./CustomerModal/CustomerModal";
 import NotificationModal from "./NotificationModal/NotificationModal";
+import LoginStatus from "./MyPagecomponents/LoginStatus"; // 로그인 상태 확인 컴포넌트
 
 const HeaderContainer = styled.header`
   width: 100%;
@@ -296,12 +297,19 @@ const PhoneButton = styled.button`
 `;
 
 function Header({ setScrollIndex }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false); //  모달 상태
   const [showNotification, setShowNotification] = useState(false);
 
   const handleNavigateToScroll = (index) => {
     navigate(`/?scrollTo=${index}`);
+  };
+
+  const handleLoginChange = (status, userData) => {
+    setIsLoggedIn(status);
+    setUser(userData);
   };
 
   // const handlePhoneClick = () => {
@@ -372,26 +380,21 @@ function Header({ setScrollIndex }) {
           <PhoneButton onClick={() => setShowNotification((prev) => !prev)}>
             🔔
           </PhoneButton>
-          {/* <Button to="/login">
-            <span>로그인</span>
-          </Button>
-          <Button to="/signup">
-            <span>회원가입</span>
-          </Button> */}
-          <SvgButtonWrapper to="/login">
+          <LoginStatus onLoginChange={handleLoginChange} />
+          {/* <SvgButtonWrapper to="/login">
             <svg height="40" width="150">
               <rect id="shape" height="40" width="150" />
             </svg>
             <span>로그인</span>
-          </SvgButtonWrapper>
+          </SvgButtonWrapper> */}
 
           {/* 회원가입 버튼 */}
-          <SvgButtonWrapper to="/signup">
+          {/* <SvgButtonWrapper to="/signup">
             <svg height="40" width="150">
               <rect id="shape" height="40" width="150" />
             </svg>
             <span>회원가입</span>
-          </SvgButtonWrapper>
+          </SvgButtonWrapper> */}
         </AuthButtons>
       </HeaderContainer>
       {/* ✅ 모달 렌더링 */}
