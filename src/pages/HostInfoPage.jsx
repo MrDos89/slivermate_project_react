@@ -26,11 +26,11 @@ const RightSide = styled.div`
 const BackgroundOverlay = styled.div`
   position: absolute;
   inset: 0;
-  background-image: url(${image1});
+  background: linear-gradient(135deg, rgb(228, 253, 170) 0%, #96e6a1 100%);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.4;
+  opacity: 0.7;
   z-index: 0;
 `;
 
@@ -59,7 +59,7 @@ const ActionButton = styled.button`
   z-index: 1;
 
   &:hover {
-    background-color: rgba(68, 115, 146, 0.8);
+    background-color: rgba(68, 132, 175, 0.8);
     color: white;
   }
 `;
@@ -83,7 +83,14 @@ const ScrollableContent = styled.div`
   flex-grow: 1;
   overflow-y: auto;
   padding: 40px 80px;
-  background-color: #f6fdf8;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.4),
+      rgba(255, 255, 255, 0.85)
+    ),
+    url(${image1});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -164,7 +171,6 @@ const CounterValue = styled.div`
   font-size: 2.2rem;
   font-weight: 700;
   color: #2e7d32;
-  
 `;
 
 const fadeUp = keyframes`
