@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled, { createGlobalStyle } from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { dummyClubs } from "../data/clubData";
 import { chatMessages } from "../data/chatDummyData";
 
@@ -221,31 +222,61 @@ const FallingLeaf = styled.div`
   will-change: transform, opacity;
 
   @keyframes fall {
-  0% {
-    transform: translateX(0px) translateY(0px) rotate(0deg);
-    opacity: 0.9;
+    0% {
+      transform: translateX(0px) translateY(0px) rotate(0deg);
+      opacity: 0.9;
+    }
+    25% {
+      transform: translateX(-80px) translateY(200px) rotate(90deg);
+    }
+    50% {
+      transform: translateX(-160px) translateY(400px) rotate(180deg);
+    }
+    75% {
+      transform: translateX(-240px) translateY(600px) rotate(270deg);
+    }
+    100% {
+      transform: translateX(-320px) translateY(800px) rotate(360deg);
+      opacity: 0;
+    }
   }
-  25% {
-    transform: translateX(-80px) translateY(200px) rotate(90deg);
-  }
-  50% {
-    transform: translateX(-160px) translateY(400px) rotate(180deg);
-  }
-  75% {
-    transform: translateX(-240px) translateY(600px) rotate(270deg);
-  }
-  100% {
-    transform: translateX(-320px) translateY(800px) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-
 `;
 
-
-
 function ChatTestPage() {
+  const navigate = useNavigate();
+  const API_USER_SESSION_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+    import.meta.env.VITE_API_PORT
+  }/api/usergroup/session`;
+  const [userData, setUserData] = useState();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  //@note - 유저 세션 체크하기
+  useEffect(() => {
+    fetch(API_USER_SESSION_URL, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            console.log("로그인 세션이 없습니다.");
+            setIsLoggedIn(false);
+            navigate("/login");
+          } else {
+            console.error("회원 정보 불러오기 실패:", response.status);
+          }
+          return; // 에러 발생 시 더 이상 진행하지 않음
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("user 데이터 확인:", data);
+        setUserData(data);
+        setIsLoggedIn(true);
+      })
+      .catch((error) => console.error("회원 정보 불러오기 오류", error));
+  }, [API_USER_SESSION_URL, navigate]);
+
   const [selectedClubId, setSelectedClubId] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
@@ -259,7 +290,7 @@ function ChatTestPage() {
   const generateRandomLeaves = (count) => {
     const leaves = [];
     const leafVariants = ["🍃", "🌿", "🍀", "🍃"];
-  
+
     // 기존 랜덤 잎사귀
     for (let i = 0; i < count; i++) {
       const left = Math.random() * 100;
@@ -268,8 +299,9 @@ function ChatTestPage() {
       const rotate = Math.random() > 0.5 ? 360 : -360;
       const size = 21 + Math.random() * 18;
       const startTop = `-${Math.floor(60 + Math.random() * 140)}px`;
-      const leaf = leafVariants[Math.floor(Math.random() * leafVariants.length)];
-  
+      const leaf =
+        leafVariants[Math.floor(Math.random() * leafVariants.length)];
+
       leaves.push(
         <FallingLeaf
           key={`leaf-${i}`}
@@ -286,7 +318,7 @@ function ChatTestPage() {
         </FallingLeaf>
       );
     }
-  
+
     // 🎯 왼쪽에서 떨어질 잎사귀 2개 추가
     for (let i = 0; i < 2; i++) {
       const fixedLeft = 10 + i * 10; // 10%, 20%
@@ -295,8 +327,9 @@ function ChatTestPage() {
       const rotate = Math.random() > 0.5 ? 360 : -360;
       const size = 20 + Math.random() * 12;
       const startTop = `-${Math.floor(80 + Math.random() * 120)}px`;
-      const leaf = leafVariants[Math.floor(Math.random() * leafVariants.length)];
-  
+      const leaf =
+        leafVariants[Math.floor(Math.random() * leafVariants.length)];
+
       leaves.push(
         <FallingLeaf
           key={`extra-left-${i}`}
@@ -313,11 +346,9 @@ function ChatTestPage() {
         </FallingLeaf>
       );
     }
-  
+
     return leaves;
   };
-  
-  
 
   const [leaves, setLeaves] = useState([]);
 
@@ -359,8 +390,12 @@ function ChatTestPage() {
 
   const renderChatRooms = () => {
     const sortedClubs = [...dummyClubs].sort((a, b) => {
-      const aUnread = (chatMessages[a.club_id] || []).some((msg) => !msg.isMe && !msg.read);
-      const bUnread = (chatMessages[b.club_id] || []).some((msg) => !msg.isMe && !msg.read);
+      const aUnread = (chatMessages[a.club_id] || []).some(
+        (msg) => !msg.isMe && !msg.read
+      );
+      const bUnread = (chatMessages[b.club_id] || []).some(
+        (msg) => !msg.isMe && !msg.read
+      );
       if (aUnread === bUnread) return 0;
       return aUnread ? -1 : 1;
     });
@@ -368,7 +403,9 @@ function ChatTestPage() {
     return sortedClubs.map((club) => {
       const messages = chatMessages[club.club_id] || [];
       const lastMessage = messages[messages.length - 1];
-      const unreadCount = messages.filter((msg) => !msg.isMe && !msg.read).length;
+      const unreadCount = messages.filter(
+        (msg) => !msg.isMe && !msg.read
+      ).length;
 
       return (
         <ChatRoom
@@ -420,7 +457,10 @@ function ChatTestPage() {
           lastTime = currentTime;
 
           return !msg.isMe ? (
-            <div key={msg.id} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+            <div
+              key={msg.id}
+              style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}
+            >
               <img
                 src={msg.senderProfile}
                 alt="profile"
@@ -437,11 +477,20 @@ function ChatTestPage() {
                 <ChatBubble isMe={false}>
                   <ChatText>{msg.content}</ChatText>
                 </ChatBubble>
-                {showTime && <ChatTimeSmall isMe={false}>{currentTime}</ChatTimeSmall>}
+                {showTime && (
+                  <ChatTimeSmall isMe={false}>{currentTime}</ChatTimeSmall>
+                )}
               </div>
             </div>
           ) : (
-            <div key={msg.id} style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+            <div
+              key={msg.id}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
+              }}
+            >
               <ChatBubble isMe={true}>
                 <ChatText>{msg.content}</ChatText>
               </ChatBubble>
@@ -474,7 +523,11 @@ function ChatTestPage() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              placeholder={selectedClubId ? "메시지를 입력하세요" : "채팅방을 먼저 선택하세요"}
+              placeholder={
+                selectedClubId
+                  ? "메시지를 입력하세요"
+                  : "채팅방을 먼저 선택하세요"
+              }
               disabled={!selectedClubId}
             />
             <SendButton onClick={handleSend} disabled={!selectedClubId}>
