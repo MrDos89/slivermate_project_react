@@ -1,7 +1,7 @@
 import axios from 'axios';
 import SignupVo from '../vo/SignupVo';
 
-const API_USER_URL = 'http://54.180.127.164:18090/api/user';
+const API_USER_URL = 'http://${import.meta.env.VITE_API_ADDRESS}:${import.meta.env.VITE_API_PORT}/api/user';
 
 const SignupService = {
   // ✅ 회원가입 요청

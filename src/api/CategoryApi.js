@@ -2,7 +2,7 @@ import axios from "axios";
 import CategoryVo from "../vo/CategoryVo";
 
 // 서버 주소 설정 (환경변수 또는 직접 주소 입력 가능)
-const BASE_URL = "http://13.125.197.66:18090/api/category";
+const BASE_URL = "http://13.125.197.66:${import.meta.env.VITE_API_PORT}/api/category";
 
 const CategoryApi = {
   // 🔹 전체 카테고리 목록 가져오기

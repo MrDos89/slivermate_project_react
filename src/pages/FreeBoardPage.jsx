@@ -33,7 +33,9 @@ const FixedPostBar = styled.div`
 `;
 
 const FreeBoardPage = () => {
-  const API_POST_URL = `http://54.180.127.164:18090/api/post`;
+  const API_POST_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+    import.meta.env.VITE_API_PORT
+  }/api/post`;
 
   const regionId = [
     { id: -1, name: "전체" },

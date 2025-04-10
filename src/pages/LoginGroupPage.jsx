@@ -19,7 +19,9 @@ const LoginGroupPage = () => {
   const group_id = location.state?.group_id;
 
   useEffect(() => {
-    const API_USER_GROUP_URL = `http://54.180.127.164:18090/api/usergroup`;
+    const API_USER_GROUP_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+      import.meta.env.VITE_API_PORT
+    }/api/usergroup`;
 
     if (group_id) {
       fetch(`${API_USER_GROUP_URL}/${group_id}`)
@@ -42,6 +44,37 @@ const LoginGroupPage = () => {
 
   const handleUserSelect = (user) => {
     console.log("Selected user:", user);
+
+    const API_USER_GROUP_LOGIN_URL = `http://${
+      import.meta.env.VITE_API_ADDRESS
+    }:${import.meta.env.VITE_API_PORT}/api/usergroup/login/${group_id}/${
+      user.uid
+    }`;
+
+    console.log("API URL:", API_USER_GROUP_LOGIN_URL);
+    // 로그인 요청
+
+    fetch(API_USER_GROUP_LOGIN_URL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // 세션 유지
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("로그인 실패");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Login successful:", data);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("로그인 오류", error);
+        alert("로그인에 실패했습니다.");
+      });
   };
 
   return (

@@ -1,6 +1,6 @@
 import UserVo from "../vo/UserVo";
 
-const BASE_URL = "http://13.125.197.66:18090/api/user";
+const BASE_URL = "http://13.125.197.66:${import.meta.env.VITE_API_PORT}/api/user";
 
 const UserApi = {
   // 전체 유저 목록 가져오기

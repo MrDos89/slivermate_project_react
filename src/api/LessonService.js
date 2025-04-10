@@ -1,7 +1,7 @@
 import axios from 'axios';
 import LessonVo from '../vo/LessonVo';
 
-const API_BASE_URL = 'http://13.125.197.66:18090/api/lesson'; 
+const API_BASE_URL = 'http://13.125.197.66:${import.meta.env.VITE_API_PORT}/api/lesson'; 
 
 const LessonService = {
   // 강의 전체 목록 가져오기

@@ -38,11 +38,11 @@ const CenteredForm = styled.div`
   border-radius: 20px;
   // box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 
-  // background: rgba(255, 255, 255, 0.1); 
-  // box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); 
+  // background: rgba(255, 255, 255, 0.1);
+  // box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 
-  background: rgba(0, 0, 0, 0.4); 
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); 
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 `;
 
 const StyledInput = styled.input`
@@ -74,15 +74,14 @@ const StyledButton = styled.button`
 
 const StyledFormWrapper = styled.div`
   .join-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 100%; 
-  padding: 0 40px;
-  box-sizing: border-box; 
-}
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 40px;
+    box-sizing: border-box;
+  }
 
   .join-logo-container h1 {
     font-size: 36px;
@@ -167,12 +166,6 @@ const StyledFormWrapper = styled.div`
   }
 `;
 
-
-
-
-
-
-
 const allRegions = [
   [1, "서울특별시"],
   [2, "부산광역시"],
@@ -202,32 +195,34 @@ const userType = [
 ];
 
 const SignUpPage = () => {
-  const API_USER_URL = `http://54.180.127.164:18090/api/user`;
-  const API_USER_GROUP_URL = `http://54.180.127.164:18090/api/usergroup`;
+  const API_USER_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+    import.meta.env.VITE_API_PORT
+  }/api/user`;
+  const API_USER_GROUP_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+    import.meta.env.VITE_API_PORT
+  }/api/usergroup`;
 
   const backgroundVideos = [skan01, skan04, skan09];
-const getRandomVideo = () =>
-  backgroundVideos[Math.floor(Math.random() * backgroundVideos.length)];
+  const getRandomVideo = () =>
+    backgroundVideos[Math.floor(Math.random() * backgroundVideos.length)];
 
-const [currentVideo, setCurrentVideo] = useState(getRandomVideo());
+  const [currentVideo, setCurrentVideo] = useState(getRandomVideo());
 
-const handleChangeVideo = () => {
+  const handleChangeVideo = () => {
     let newVideo;
     do {
       newVideo = getRandomVideo();
     } while (newVideo === currentVideo);
     setCurrentVideo(newVideo);
   };
-  
 
-useEffect(() => {
-  const timer = setInterval(() => {
-    setCurrentVideo(getRandomVideo());
-  }, 20000); // 20초마다 자동 변경
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentVideo(getRandomVideo());
+    }, 20000); // 20초마다 자동 변경
 
-  return () => clearInterval(timer);
-}, []);
-
+    return () => clearInterval(timer);
+  }, []);
 
   const [userData, setUserData] = useState({
     name: "",
@@ -454,170 +449,171 @@ useEffect(() => {
 
   return (
     <>
-  <BackgroundVideo autoPlay muted loop key={currentVideo}>
-    <source src={currentVideo} type="video/mp4" />
-  </BackgroundVideo>
-  <Overlay onClick={handleChangeVideo} />
+      <BackgroundVideo autoPlay muted loop key={currentVideo}>
+        <source src={currentVideo} type="video/mp4" />
+      </BackgroundVideo>
+      <Overlay onClick={handleChangeVideo} />
 
-
-  <CenteredForm>
-  <StyledFormWrapper>
-    <div className="join-container">
-      <button onClick={onBack} className="join-back-button">
-        {/* <MdOutlineBackspace /> */}
-      </button>
-      <div className="join-logo-container">
-        {/* <img src={logoImage} alt="호박고구마 로고" className="join-logo" /> */}
-        <h1>파릇</h1>
-      </div>
-      <h2 className="join-h2">회원가입</h2>
-      <UploadImage onUpload={handleUploadImage} />
-      <form className="join-form" onSubmit={handleSignup}>
-        <label>이름:</label>
-        <input
-          type="text"
-          placeholder="성함"
-          value={userData.user_name}
-          onChange={(e) =>
-            setUserData({ ...userData, user_name: e.target.value })
-          }
-        />
-        <br />
-        <label>닉네임:</label>
-        <input
-          type="text"
-          placeholder="2~10자 특수문자 제외"
-          value={userData.nickname}
-          onChange={(e) =>
-            setUserData({ ...userData, nickname: e.target.value })
-          }
-        />
-        <br />
-        <label>아이디:</label>
-        <input
-          type="text"
-          placeholder="2~10자 특수문자 제외"
-          value={userData.user_id}
-          onChange={(e) =>
-            setUserData({ ...userData, user_id: e.target.value })
-          }
-        />
-        <button type="button" onClick={checkUserIdAvailability}>
-          중복 확인
-        </button>
-        {isUsernameAvailable !== null && (
-          <span>{isUsernameAvailable ? "사용 가능" : "사용 불가"}</span>
-        )}
-        <br />
-        <label>비밀번호:</label>
-        <input
-          type="password"
-          placeholder="8~20자 영문, 숫자, 특수문자 조합"
-          value={userData.user_password}
-          onChange={handlePasswordAvailability}
-        />
-        <span>{passwordStrength}</span>
-        <br />
-        <label>비밀번호 확인:</label>
-        <input
-          type="password"
-          placeholder="비밀번호를 다시 입력하세요"
-          value={checkPasswords.confirmPassword}
-          onChange={handleConfirmPasswordChange}
-        />
-        {passwordMatch !== null && (
-          <span style={{ color: passwordMatch ? "green" : "red" }}>
-            {passwordMatch ? "비밀번호 일치" : "비밀번호 불일치"}
-          </span>
-        )}
-        <br />
-        <label>pin 비밀번호:</label>
-        <input
-          type="pin_password"
-          placeholder="6자리 숫자"
-          value={userData.pin_password}
-          onChange={handlePinPasswordAvailability}
-        />
-        <span>{passwordStrength}</span>
-        <br />
-        <label>비밀번호 확인:</label>
-        <input
-          type="pin_password"
-          placeholder="pin 비밀번호를 다시 입력하세요"
-          value={checkPasswords.confirmPinPassword}
-          onChange={handleConfirmPinPasswordChange}
-        />
-        {pinPasswordMatch !== null && (
-          <span style={{ color: pinPasswordMatch ? "green" : "red" }}>
-            {pinPasswordMatch ? "pin 비밀번호 일치" : "pin 비밀번호 불일치"}
-          </span>
-        )}
-        <br />
-        <label>전화번호:</label>
-        <input
-          type="text"
-          placeholder="- 없이 숫자만 입력"
-          value={userData.tel_number}
-          onChange={(e) =>
-            setUserData({ ...userData, tel_number: e.target.value })
-          }
-        />
-        <br />
-        <label>이메일:</label>
-        <input
-          type="email"
-          placeholder="올바른 이메일 형식을 입력하세요"
-          value={userData.email}
-          onChange={(e) => setUserData({ ...userData, email: e.target.value })}
-        />
-        <button type="button" onClick={() => setIsEmailVerified(true)}>
-          이메일 인증
-        </button>
-        {isEmailVerified && <span>인증 완료</span>}
-        <br />
-        <label>가족 구성:</label>
-        <select
-          value={userData.user_type}
-          onChange={(e) =>
-            setUserData({ ...userData, user_type: e.target.value })
-          }
-        >
-          {userType.map((type, index) => (
-            <option key={index} value={type[0]}>
-              {type[1]}
-            </option>
-          ))}
-        </select>
-        <br />
-        <label>지역:</label>
-        <select
-          value={userData.region_id}
-          onChange={(e) =>
-            setUserData({ ...userData, region_id: e.target.value })
-          }
-        >
-          {allRegions.map((region, index) => (
-            <option key={index} value={region[0]}>
-              {region[1]}
-            </option>
-          ))}
-        </select>
-        <div className="button-group">
-          <button type="submit" disabled={!userData.thumbnail}>
-            가입
-          </button>
-          <button type="button" onClick={() => navigate(-1)}>
-            취소
-          </button>
-        </div>
-      </form>
-      </div>
-      </StyledFormWrapper>
-  </CenteredForm>
-</>
+      <CenteredForm>
+        <StyledFormWrapper>
+          <div className="join-container">
+            <button onClick={onBack} className="join-back-button">
+              {/* <MdOutlineBackspace /> */}
+            </button>
+            <div className="join-logo-container">
+              {/* <img src={logoImage} alt="호박고구마 로고" className="join-logo" /> */}
+              <h1>파릇</h1>
+            </div>
+            <h2 className="join-h2">회원가입</h2>
+            <UploadImage onUpload={handleUploadImage} />
+            <form className="join-form" onSubmit={handleSignup}>
+              <label>이름:</label>
+              <input
+                type="text"
+                placeholder="성함"
+                value={userData.user_name}
+                onChange={(e) =>
+                  setUserData({ ...userData, user_name: e.target.value })
+                }
+              />
+              <br />
+              <label>닉네임:</label>
+              <input
+                type="text"
+                placeholder="2~10자 특수문자 제외"
+                value={userData.nickname}
+                onChange={(e) =>
+                  setUserData({ ...userData, nickname: e.target.value })
+                }
+              />
+              <br />
+              <label>아이디:</label>
+              <input
+                type="text"
+                placeholder="2~10자 특수문자 제외"
+                value={userData.user_id}
+                onChange={(e) =>
+                  setUserData({ ...userData, user_id: e.target.value })
+                }
+              />
+              <button type="button" onClick={checkUserIdAvailability}>
+                중복 확인
+              </button>
+              {isUsernameAvailable !== null && (
+                <span>{isUsernameAvailable ? "사용 가능" : "사용 불가"}</span>
+              )}
+              <br />
+              <label>비밀번호:</label>
+              <input
+                type="password"
+                placeholder="8~20자 영문, 숫자, 특수문자 조합"
+                value={userData.user_password}
+                onChange={handlePasswordAvailability}
+              />
+              <span>{passwordStrength}</span>
+              <br />
+              <label>비밀번호 확인:</label>
+              <input
+                type="password"
+                placeholder="비밀번호를 다시 입력하세요"
+                value={checkPasswords.confirmPassword}
+                onChange={handleConfirmPasswordChange}
+              />
+              {passwordMatch !== null && (
+                <span style={{ color: passwordMatch ? "green" : "red" }}>
+                  {passwordMatch ? "비밀번호 일치" : "비밀번호 불일치"}
+                </span>
+              )}
+              <br />
+              <label>pin 비밀번호:</label>
+              <input
+                type="pin_password"
+                placeholder="6자리 숫자"
+                value={userData.pin_password}
+                onChange={handlePinPasswordAvailability}
+              />
+              <span>{passwordStrength}</span>
+              <br />
+              <label>비밀번호 확인:</label>
+              <input
+                type="pin_password"
+                placeholder="pin 비밀번호를 다시 입력하세요"
+                value={checkPasswords.confirmPinPassword}
+                onChange={handleConfirmPinPasswordChange}
+              />
+              {pinPasswordMatch !== null && (
+                <span style={{ color: pinPasswordMatch ? "green" : "red" }}>
+                  {pinPasswordMatch
+                    ? "pin 비밀번호 일치"
+                    : "pin 비밀번호 불일치"}
+                </span>
+              )}
+              <br />
+              <label>전화번호:</label>
+              <input
+                type="text"
+                placeholder="- 없이 숫자만 입력"
+                value={userData.tel_number}
+                onChange={(e) =>
+                  setUserData({ ...userData, tel_number: e.target.value })
+                }
+              />
+              <br />
+              <label>이메일:</label>
+              <input
+                type="email"
+                placeholder="올바른 이메일 형식을 입력하세요"
+                value={userData.email}
+                onChange={(e) =>
+                  setUserData({ ...userData, email: e.target.value })
+                }
+              />
+              <button type="button" onClick={() => setIsEmailVerified(true)}>
+                이메일 인증
+              </button>
+              {isEmailVerified && <span>인증 완료</span>}
+              <br />
+              <label>가족 구성:</label>
+              <select
+                value={userData.user_type}
+                onChange={(e) =>
+                  setUserData({ ...userData, user_type: e.target.value })
+                }
+              >
+                {userType.map((type, index) => (
+                  <option key={index} value={type[0]}>
+                    {type[1]}
+                  </option>
+                ))}
+              </select>
+              <br />
+              <label>지역:</label>
+              <select
+                value={userData.region_id}
+                onChange={(e) =>
+                  setUserData({ ...userData, region_id: e.target.value })
+                }
+              >
+                {allRegions.map((region, index) => (
+                  <option key={index} value={region[0]}>
+                    {region[1]}
+                  </option>
+                ))}
+              </select>
+              <div className="button-group">
+                <button type="submit" disabled={!userData.thumbnail}>
+                  가입
+                </button>
+                <button type="button" onClick={() => navigate(-1)}>
+                  취소
+                </button>
+              </div>
+            </form>
+          </div>
+        </StyledFormWrapper>
+      </CenteredForm>
+    </>
   );
 };
 
 export default SignUpPage;
-
-
