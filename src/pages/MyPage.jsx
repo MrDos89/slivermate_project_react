@@ -342,6 +342,9 @@ function MyPage() {
 
   //@note - 유저 세션 체크하기
   useEffect(() => {
+    console.log("useEffect - 유저 세션 체크");
+    console.log("API_URL:", API_USER_SESSION_URL);
+
     fetch(API_USER_SESSION_URL, {
       method: "GET",
       credentials: "include",
