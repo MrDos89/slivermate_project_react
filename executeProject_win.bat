@@ -1,4 +1,4 @@
-docker pull mrdos89/hbgogumaserver:latest
+docker pull mrdos89/slivermate-project-react:latest
 @REM docker pull mrdos89/hbgoguma-project:latest
 
 cd compose

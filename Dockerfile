@@ -1,19 +1,28 @@
-# Base Image
-FROM nginx:latest
+# Stage 1: React App 빌드 (nodejs)
+FROM node:22 AS build
 
-# 이미지 메타데이터
-LABEL maintainer="김도형, 이건민, 유예진, 육준일"
-LABEL description="실버메이트"
+WORKDIR /app
 
-# 컨텐츠를 제공 가능하게 복사
-COPY . /usr/share/nginx/html
+# 의존성 설치
+COPY package*.json .
+RUN npm install 
 
-# 외부로 노출할 포트
-# -p 옵션
+# 소스 카피
+#   현재 디렉터리 -> 작업 디렉터리
+COPY . . 
+
+# production 빌드 생성
+RUN npm run build
+
+# Stage 2: React App Service (nginx)
+FROM nginx:alpine
+
+COPY --from=build /app/dist /usr/share/nginx/html
+
 EXPOSE 80
 
-# 컨테이너 시작시 수행할 명령어
-ENTRYPOINT ["nginx"]
-CMD ["-g", "daemon off;"]
-# ENTRYPOINT + CMD 조합
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
+
+# build
+# docker build -t react-cart .
 

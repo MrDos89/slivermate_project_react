@@ -1,6 +1,6 @@
 services:
   frontend:
-    platform: linux/x86_64
+    platform: linux/arm64/v8  # 또는 배포 서버의 플랫폼에 맞춰 linux/amd64
     image: mrdos89/slivermate-project-react:latest
     container_name: slivermate-container
     ports:
