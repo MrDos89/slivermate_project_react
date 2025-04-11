@@ -402,6 +402,22 @@ function ChatTestPage() {
     )
       return;
 
+    const newMessage = {
+      id: Date.now(),
+      sender: userData.nickname, // 또는 "me"와 같이 자신을 나타내는 값
+      senderName: userData.nickname,
+      isMe: true,
+      content: inputValue,
+      timestamp: new Date().toISOString(),
+      read: true, // 내가 보낸 메시지는 읽음 처리
+      thumbnail: userData.profileImageUrl || "",
+    };
+
+    setMessages((prevMessages) => ({
+      ...prevMessages,
+      [selectedClubId]: [...(prevMessages[selectedClubId] || []), newMessage],
+    }));
+
     const messagePayload = {
       action: "sendmessage",
       channelId: selectedClubId,
