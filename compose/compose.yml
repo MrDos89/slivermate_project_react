@@ -1,0 +1,20 @@
+services:
+  frontend:
+    platform: linux/x86_64
+    image: mrdos89/slivermate-project-react:latest
+    container_name: slivermate-container
+    ports:
+      - "80:80"
+    networks:
+      - my-network
+      
+networks:
+  my-network:
+    external: true # 기존 네트워크에 합류 true
+
+# run
+# docker compose --env-file .env up -d
+
+# 서비스 종료
+# docker compose down
+

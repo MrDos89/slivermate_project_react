@@ -389,6 +389,7 @@ function ChatTestPage() {
   }, [messages, selectedClubId]);
 
   const handleSelectClub = (club) => {
+    console.log("채팅방 선택됨:", club.club_id);
     setSelectedClubId(club.club_id);
     // 이미 연결된 소켓이 있으면 닫고 새로 연결 (useEffect에서 처리)
   };
@@ -398,9 +399,14 @@ function ChatTestPage() {
       !inputValue.trim() ||
       !socket ||
       socket.readyState !== WebSocket.OPEN ||
-      !userData
-    )
+      !userData ||
+      !selectedClubId
+    ) {
+      console.log(
+        "메시지 전송 불가: 입력값 없음, 소켓 연결 안됨, 사용자 정보 없음, 채팅방 선택 안됨"
+      );
       return;
+    }
 
     const newMessage = {
       id: Date.now(),
@@ -410,7 +416,7 @@ function ChatTestPage() {
       content: inputValue,
       timestamp: new Date().toISOString(),
       read: true, // 내가 보낸 메시지는 읽음 처리
-      thumbnail: userData.profileImageUrl || "",
+      thumbnail: userData.thumbnail || "",
     };
 
     setMessages((prevMessages) => ({
@@ -423,7 +429,7 @@ function ChatTestPage() {
       channelId: selectedClubId,
       message: inputValue,
       nickname: userData.nickname,
-      thumbnail: userData.profileImageUrl || "", // 사용자 프로필 이미지 URL
+      thumbnail: userData.thumbnail || "", // 사용자 프로필 이미지 URL
     };
 
     socket.send(JSON.stringify(messagePayload));
@@ -514,7 +520,7 @@ function ChatTestPage() {
               </div>
               {msg.isMe && (
                 <img
-                  src={userData.profileImageUrl}
+                  src={userData.thumbnail}
                   alt="profile"
                   style={{
                     width: 40,
