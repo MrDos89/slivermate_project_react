@@ -287,7 +287,7 @@ function ChatTestPage() {
         setIsLoggedIn(true);
       })
       .catch((error) => console.error("회원 정보 불러오기 오류", error));
-  }, [API_USER_SESSION_URL, navigate]);
+  }, []);
 
   useEffect(() => {
     const userId = userData?.uid;

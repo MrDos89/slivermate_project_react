@@ -6,7 +6,7 @@ import {
   UserList,
   UserButton,
   UserThumbnail,
-} from "../js/loginGroup.styles"; // 스타일 파일 불러오기
+} from "../js/LoginGroup.styles"; // 스타일 파일 불러오기
 
 const defaultThumbnail =
   "https://cdn-icons-png.flaticon.com/512/847/847969.png"; // 기본 실루엣 이미지

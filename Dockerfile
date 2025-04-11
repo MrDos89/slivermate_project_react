@@ -15,7 +15,8 @@ COPY . .
 RUN npm run build
 
 # Stage 2: React App Service (nginx)
-FROM nginx:alpine
+# FROM nginx:alpine
+FROM --platform=linux/amd64 nginx:alpine
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
