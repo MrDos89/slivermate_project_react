@@ -31,7 +31,7 @@ const CATEGORY_MAP = {
   ],
 };
 
-const SORT_OPTIONS = ["가격순", "추천순", "최신순", "좋아요순"];
+const SORT_OPTIONS = ["추천순", "최신순", "좋아요순"];
 
 // const Wrapper = styled.div`
 //   width: 100%;

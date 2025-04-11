@@ -17,8 +17,14 @@ const FixedTop = styled.div`
 `;
 
 const Inner = styled.div`
-  width: 100vw;
+  width: auto; // ✅ 내용 너비에 맞게
+  max-width: 100%; // ✅ 혹시 너무 길어질 때 대비
+  margin: 0 auto; // ✅ 부모(Container) 기준 가운데 정렬
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 `;
 
 const ScrollableContent = styled.div`

@@ -6,6 +6,7 @@ import thumb2 from "../images/thumb2.png";
 import PostSection from "../components/MyPageComponents/PostSection";
 import ClubSection from "../components/MyPageComponents/ClubSection";
 import LectureSection from "../components/MyPageComponents/LectureSection";
+import HostVideoSection from "../components/MyPageComponents/HostVideoSection";
 
 // 🔹 더미 유저 데이터
 const dummyUser = {
@@ -293,7 +294,7 @@ const MenuGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
-  margin-top: 200px; /* 첫 버튼과의 간격을 크게 */
+  // margin-top: 200px; /* 첫 버튼과의 간격을 크게 */
 `;
 
 const SideMenu = styled.div`
@@ -306,7 +307,7 @@ const SideMenu = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
-  margin-top: 70px;
+  // margin-top: 70px;
   z-index: 1;
 `;
 
@@ -379,6 +380,9 @@ function MyPage() {
 
   const userInfoRef = useRef(null);
   const postSectionRef = useRef(null);
+  const lectureSectionRef = useRef(null);
+  const clubSectionRef = useRef(null);
+  const hostVideoRef = useRef(null);
 
   const handleScrollTo = (ref) => {
     if (ref.current) {
@@ -428,15 +432,25 @@ function MyPage() {
   return (
     <>
       <SideMenu>
-        <MenuButton onClick={() => handleScrollTo(userInfoRef)}>
-          유저 정보
-        </MenuButton>
         <MenuGroup>
+          <MenuButton onClick={() => handleScrollTo(userInfoRef)}>
+            유저 정보
+          </MenuButton>
+          <MenuButton onClick={() => handleScrollTo(lectureSectionRef)}>
+            내 강의
+          </MenuButton>{" "}
+          <MenuButton onClick={() => handleScrollTo(clubSectionRef)}>
+            내 동아리
+          </MenuButton>{" "}
           <MenuButton onClick={() => handleScrollTo(postSectionRef)}>
             내가 쓴 글
           </MenuButton>
+          <MenuButton onClick={() => handleScrollTo(hostVideoRef)}>
+            내 호스트 영상
+          </MenuButton>
         </MenuGroup>
       </SideMenu>
+
       <MyPageContainer>
         {/* 1. 유저 정보 */}
         <ScrollAnchor ref={userInfoRef}>
@@ -462,20 +476,24 @@ function MyPage() {
         </StatusSection>
 
         {/* 3. 내가 시청 중인 강의 */}
-        <LectureSection
-          user={user}
-          startIndex={startIndex}
-          handlePrev={handlePrev}
-          handleNext={handleNext}
-          VISIBLE_COUNT={VISIBLE_COUNT}
-        />
+        <ScrollAnchor ref={lectureSectionRef}>
+          <LectureSection
+            user={user}
+            startIndex={startIndex}
+            handlePrev={handlePrev}
+            handleNext={handleNext}
+            VISIBLE_COUNT={VISIBLE_COUNT}
+          />
+        </ScrollAnchor>
 
         {/* 4. 내 동아리 */}
-        <ClubSection
-          dummyClubs={dummyClubs}
-          regionMap={regionMap}
-          hobbyMap={hobbyMap}
-        />
+        <ScrollAnchor ref={clubSectionRef}>
+          <ClubSection
+            dummyClubs={dummyClubs}
+            regionMap={regionMap}
+            hobbyMap={hobbyMap}
+          />
+        </ScrollAnchor>
 
         {/* 5. 내가 쓴 글 보기 */}
         <ScrollAnchor ref={postSectionRef}>
@@ -489,6 +507,17 @@ function MyPage() {
             handlePostNext={handlePostNext}
             handlePostTypeChange={handlePostTypeChange}
             hobbyMap={hobbyMap}
+          />
+        </ScrollAnchor>
+
+        {/* 내 호스트 영상  */}
+        <ScrollAnchor ref={hostVideoRef}>
+          <HostVideoSection
+            user={user}
+            startIndex={startIndex}
+            handlePrev={handlePrev}
+            handleNext={handleNext}
+            VISIBLE_COUNT={VISIBLE_COUNT}
           />
         </ScrollAnchor>
       </MyPageContainer>

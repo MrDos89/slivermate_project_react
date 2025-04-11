@@ -223,7 +223,7 @@ const SectionSeven = () => {
 
   // useEffect 내부 move 함수 수정
   useEffect(() => {
-    const speed = 3;
+    const speed = 150;
     let animationFrame;
 
     const move = () => {
