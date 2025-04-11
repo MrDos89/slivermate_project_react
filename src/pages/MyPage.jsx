@@ -340,32 +340,32 @@ function MyPage() {
   const [userData, setUserData] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  //@note - 유저 세션 체크하기
-  useEffect(() => {
-    fetch(API_USER_SESSION_URL, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            console.log("로그인 세션이 없습니다.");
-            setIsLoggedIn(false);
-            navigate("/login");
-          } else {
-            console.error("회원 정보 불러오기 실패:", response.status);
-          }
-          return; // 에러 발생 시 더 이상 진행하지 않음
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("user 데이터 확인:", data);
-        setUserData(data);
-        setIsLoggedIn(true);
-      })
-      .catch((error) => console.error("회원 정보 불러오기 오류", error));
-  }, [API_USER_SESSION_URL, navigate]);
+  // //@note - 유저 세션 체크하기
+  // useEffect(() => {
+  //   fetch(API_USER_SESSION_URL, {
+  //     method: "GET",
+  //     credentials: "include",
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         if (response.status === 401) {
+  //           console.log("로그인 세션이 없습니다.");
+  //           setIsLoggedIn(false);
+  //           navigate("/login");
+  //         } else {
+  //           console.error("회원 정보 불러오기 실패:", response.status);
+  //         }
+  //         return; // 에러 발생 시 더 이상 진행하지 않음
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       console.log("user 데이터 확인:", data);
+  //       setUserData(data);
+  //       setIsLoggedIn(true);
+  //     })
+  //     .catch((error) => console.error("회원 정보 불러오기 오류", error));
+  // }, [API_USER_SESSION_URL, navigate]);
 
   const [startIndex, setStartIndex] = useState(0);
   const [startPostIndex, setStartPostIndex] = useState(0); // 게시글/댓글 페이지네이션 시작 인덱스

@@ -3,7 +3,7 @@ docker pull mrdos89/hbgogumaserver:latest
 
 cd compose
 docker compose down
-docker compose --env-file .env up -d
+docker compose up -d
 cd ..
 
 call npm install
