@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const PostSectionWrapper = styled.div`
-  margin-top: 170px;
+  margin-top: 190px;
 `;
 
 const PostTitle = styled.h2`

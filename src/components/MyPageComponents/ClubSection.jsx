@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const ClubSectionWrapper = styled.div`
-  margin-top: 60px;
+  margin-top: 120px;
 `;
 
 const SectionTitle = styled.h2`

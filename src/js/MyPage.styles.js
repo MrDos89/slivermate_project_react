@@ -63,6 +63,7 @@ export const StatusSection = styled.div`
   width: 1300px;
   height: 100px;
   justify-content: space-between;
+  margin-bottom: 100px;
 `;
 
 export const StatusItem = styled.div`

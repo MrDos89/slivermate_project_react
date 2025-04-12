@@ -6,6 +6,10 @@ import PostSection from "../components/MyPageComponents/PostSection";
 import ClubSection from "../components/MyPageComponents/ClubSection";
 import LectureSection from "../components/MyPageComponents/LectureSection";
 import HostVideoSection from "../components/MyPageComponents/HostVideoSection";
+import FamilySection from "../components/MyPageComponents/FamilySection";
+import SchedulePaymentSection from "../components/MyPageComponents/SchedulePaymentSection"; 
+
+
 import {
   MyPageContainer,
   UserInfoWrapper,
@@ -18,6 +22,8 @@ import {
   StatusItem,
   ScrollAnchor,
   SideMenu,
+  MenuGroup,
+  MenuButton,
 } from "../js/MyPage.styles";
 import { dummyUser } from "../data/myPageDummyUser";
 
@@ -147,6 +153,9 @@ function MyPage() {
   const lectureSectionRef = useRef(null);
   const clubSectionRef = useRef(null);
   const hostVideoRef = useRef(null);
+  const familySectionRef = useRef(null);
+const scheduleSectionRef = useRef(null);
+
 
   const handleScrollTo = (ref) => {
     if (ref.current) {
@@ -210,8 +219,14 @@ function MyPage() {
             내가 쓴 글
           </MenuButton>
           <MenuButton onClick={() => handleScrollTo(hostVideoRef)}>
-            내 호스트 영상
+            내 수업
           </MenuButton>
+          <MenuButton onClick={() => handleScrollTo(familySectionRef)}>
+  가족 구성원
+</MenuButton>
+<MenuButton onClick={() => handleScrollTo(scheduleSectionRef)}>
+  일정 및 결제
+</MenuButton>
         </MenuGroup>
       </SideMenu>
 
@@ -284,6 +299,17 @@ function MyPage() {
             VISIBLE_COUNT={VISIBLE_COUNT}
           />
         </ScrollAnchor>
+
+        {/* 7. 가족구성원 */}  
+        <ScrollAnchor ref={familySectionRef}>
+<FamilySection groupId={userData?.group_id} />
+</ScrollAnchor>
+
+{/* 8. 일정 및 결제 확인 */}
+<ScrollAnchor ref={scheduleSectionRef}>
+<SchedulePaymentSection />
+</ScrollAnchor>
+
       </MyPageContainer>
     </>
   );
