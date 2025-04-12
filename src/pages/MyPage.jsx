@@ -191,11 +191,11 @@ const dummyClubs = [
 ];
 
 const MyPageContainer = styled.div`
-  // padding-top: px;
+  /* padding-top: px; */
   padding: 70px 40px 40px 40px;
   background-color: #f9f9f9;
   min-height: 100vh;
-  // max-width: 1200px;
+  /* max-width: 1200px; */
   margin: 0 auto;
   width: 1300px;
   position: relative;
@@ -294,11 +294,11 @@ const MenuGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
-  // margin-top: 200px; /* 첫 버튼과의 간격을 크게 */
+  /* margin-top: 200px; /* 첫 버튼과의 간격을 크게 */ */
 `;
 
 const SideMenu = styled.div`
-  //position: absolute; //  fixed → absolute
+  /* position: absolute; //  fixed → absolute */
   position: fixed;
   /* top: 0;
   left: -110px; //  MyPageContainer 밖 왼쪽으로 살짝 나가게 */
@@ -307,7 +307,7 @@ const SideMenu = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
-  // margin-top: 70px;
+  /* margin-top: 70px; */
   z-index: 1;
 `;
 
@@ -316,7 +316,7 @@ const MenuButton = styled.button`
   height: 80px;
   padding: 10px;
   background-color: #f9f9f9;
-  // border: 2px solid #67dbff;
+  /* border: 2px solid #67dbff; */
   border-radius: 10px;
   font-weight: bold;
   color: #333;
