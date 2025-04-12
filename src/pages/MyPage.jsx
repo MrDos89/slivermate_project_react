@@ -17,6 +17,7 @@ import {
   StatusSection,
   StatusItem,
   ScrollAnchor,
+  SideMenu,
 } from "../js/MyPage.styles";
 import { dummyUser } from "../data/myPageDummyUser";
 
