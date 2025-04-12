@@ -122,22 +122,69 @@ export const SideMenu = styled.div`
   z-index: 1;
 `;
 
+// export const MenuButton = styled.button`
+//   width: 120px;
+//   height: 80px;
+//   padding: 10px;
+//   background-color: #f9f9f9;
+//   /* border: 2px solid #67dbff; */
+//   border-radius: 10px;
+//   font-weight: bold;
+//   color: #333;
+
+//   cursor: pointer;
+//   &:hover {
+//     background-color: #c9c9c9;
+//     border: 2px solid #c9c9c9;
+//   }
+// `;
+
+//------------------------------------
+
+// export const MenuButton = styled.button`
+//   width: 140px;
+//   height: 60px;
+//   padding: 10px 20px;
+//   background-color: ${({ $isActive, $color }) => ($isActive ? $color : "#f1f1f1")};
+//   border: none;
+//   border-radius: 0 20px 20px 0;
+//   font-weight: bold;
+//   color: #333;
+//   text-align: left;
+//   cursor: pointer;
+//   transition: all 0.3s ease;
+
+//   &:hover {
+//     background-color: ${({ $color }) => $color};
+//     color: white;
+//   }
+// `;
+
+import { darken } from "polished"; // ← npm i polished 설치 필요
+
 export const MenuButton = styled.button`
-  width: 120px;
-  height: 80px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  /* border: 2px solid #67dbff; */
-  border-radius: 10px;
+  width: 140px;
+  height: 60px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 0 20px 20px 0;
   font-weight: bold;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  // ✅ 항상 tabColors[i]만 배경색으로 사용
+  background-color: ${({ $color }) => $color};
+
   color: #333;
 
-  cursor: pointer;
   &:hover {
-    background-color: #c9c9c9;
-    border: 2px solid #c9c9c9;
+    opacity: 0.9; // 살짝만 강조
   }
 `;
+
+
+
 
 export const ScrollAnchor = styled.div`
   scroll-margin-top: 120px;

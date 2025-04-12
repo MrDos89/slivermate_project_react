@@ -4,7 +4,9 @@ import styled from "styled-components";
 const SectionTitle = styled.h2`
   margin-bottom: 10px;
   text-align: left; /* 왼쪽 정렬 */
+
 `;
+
 
 const DividerWrapper = styled.div`
   //   display: flex;

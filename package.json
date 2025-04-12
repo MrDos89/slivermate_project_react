@@ -15,6 +15,7 @@
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "framer-motion": "^12.6.0",
+    "polished": "^4.3.1",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
     "react-cookie": "^8.0.1",

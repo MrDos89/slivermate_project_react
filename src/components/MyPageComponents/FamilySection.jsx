@@ -4,7 +4,7 @@ import defaultThumbnail from "../../images/thumb3.png"; // 기본 썸네일
 
 const FamilyContainer = styled.div`
   padding: 2rem;
-  background: #f7f7f7;
+  background: #edffed;
   border-radius: 1rem;
   margin: 150px 0; 
 `;

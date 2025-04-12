@@ -146,6 +146,18 @@ function MyPage() {
   const [selectedPostType, setSelectedPostType] = useState(1); // 기본적으로 게시글 보기
   const postVisibleCount = 5; // 한 페이지에 보일 게시글/댓글 개수
 
+  const tabColors = [
+    "#EEFFF1", // 유저 정보
+    "#dfffe5", // 내 강의
+    "#d3ffdb", // 내 동아리
+    "#bffdca", // 내가 쓴 글
+    "#b4fcc1", // 내a 수업
+    "#a4f7b3", // 가족 구성원
+    "#8ceb9d", // 일정 및 결제
+  ];
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  
+
   const VISIBLE_COUNT = 5;
 
   const userInfoRef = useRef(null);
@@ -206,31 +218,88 @@ const scheduleSectionRef = useRef(null);
     <>
       <SideMenu>
         <MenuGroup>
-          <MenuButton onClick={() => handleScrollTo(userInfoRef)}>
-            유저 정보
-          </MenuButton>
-          <MenuButton onClick={() => handleScrollTo(lectureSectionRef)}>
-            내 강의
-          </MenuButton>{" "}
-          <MenuButton onClick={() => handleScrollTo(clubSectionRef)}>
-            내 동아리
-          </MenuButton>{" "}
-          <MenuButton onClick={() => handleScrollTo(postSectionRef)}>
-            내가 쓴 글
-          </MenuButton>
-          <MenuButton onClick={() => handleScrollTo(hostVideoRef)}>
-            내 수업
-          </MenuButton>
-          <MenuButton onClick={() => handleScrollTo(familySectionRef)}>
+        <MenuButton
+  onClick={() => {
+    setSelectedTabIndex(0);
+    handleScrollTo(userInfoRef);
+  }}
+  $isActive={selectedTabIndex === 0}
+  $color={tabColors[0]}
+>
+  유저 정보
+</MenuButton>
+
+<MenuButton
+  onClick={() => {
+    setSelectedTabIndex(1);
+    handleScrollTo(lectureSectionRef);
+  }}
+  $isActive={selectedTabIndex === 1}
+  $color={tabColors[1]}
+>
+  내 강의
+</MenuButton>
+<MenuButton
+  onClick={() => {
+    setSelectedTabIndex(2);
+    handleScrollTo(clubSectionRef);
+  }}
+  $isActive={selectedTabIndex === 2}
+  $color={tabColors[2]}
+>
+  내 동아리
+</MenuButton>
+
+<MenuButton
+  onClick={() => {
+    setSelectedTabIndex(3);
+    handleScrollTo(postSectionRef);
+  }}
+  $isActive={selectedTabIndex === 3}
+  $color={tabColors[3]}
+>
+  내가 쓴 글
+</MenuButton>
+
+<MenuButton
+  onClick={() => {
+    setSelectedTabIndex(4);
+    handleScrollTo(hostVideoRef);
+  }}
+  $isActive={selectedTabIndex === 4}
+  $color={tabColors[4]}
+>
+  내 수업
+</MenuButton>
+
+<MenuButton
+  onClick={() => {
+    setSelectedTabIndex(5);
+    handleScrollTo(familySectionRef);
+  }}
+  $isActive={selectedTabIndex === 5}
+  $color={tabColors[5]}
+>
   가족 구성원
 </MenuButton>
-<MenuButton onClick={() => handleScrollTo(scheduleSectionRef)}>
+
+<MenuButton
+  onClick={() => {
+    setSelectedTabIndex(6);
+    handleScrollTo(scheduleSectionRef);
+  }}
+  $isActive={selectedTabIndex === 6}
+  $color={tabColors[6]}
+>
   일정 및 결제
 </MenuButton>
+
         </MenuGroup>
       </SideMenu>
 
-      <MyPageContainer>
+      <MyPageContainer style={{ backgroundColor: tabColors[selectedTabIndex] }}>
+
+
         {/* 1. 유저 정보 */}
         <ScrollAnchor ref={userInfoRef}>
           <UserInfoWrapper>

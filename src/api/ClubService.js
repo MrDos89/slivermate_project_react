@@ -1,7 +1,7 @@
 import axios from 'axios';
 import ClubVo from '../vo/ClubVo';
 
-const API_BASE_URL = 'http://localhost:8080/api/club'; // 👉 실제 서버 주소로 교체 필요
+const API_BASE_URL = ''; // 실제 서버 주소로 교체 필요
 
 const ClubService = {
   // ✅ 동아리 전체 목록 불러오기

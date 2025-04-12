@@ -36,6 +36,7 @@ const TableHeader = styled.th`
 `;
 
 const TableRow = styled.tr`
+background-color: #ffffff;
   &:nth-child(even) {
     background-color: #f4f4f4;
   }
