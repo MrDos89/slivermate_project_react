@@ -3,6 +3,7 @@ import thumb2 from "../images/thumb2.png";
 
 // 🔹 더미 유저 데이터
 export const dummyUser = {
+  uid: 1,
     nickname: "파릇유저",
     isSubscribed: true,
     subscriptionDate: "2025-04-01",

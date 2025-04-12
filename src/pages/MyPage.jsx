@@ -83,24 +83,39 @@ const dummyClubs = [
   {
     id: 1,
     name: "파릇정원",
-    regionId: 1, // 서울특별시
-    categoryId: 1, // 실내
-    hobbyId: 1, // 뜨개질
+    regionId: 1,
+    categoryId: 1,
+    hobbyId: 1,
     members: 12,
     thumbnail: userThumbnail,
     posts: ["식물 키우기 팁 공유해요", "이번 주 모임 공지"],
+    clubUserId: 1, // ✅ 내가 만든 동아리 (user.uid와 같음)
   },
   {
     id: 2,
     name: "캠핑좋아",
-    regionId: 17, // 제주특별자치도
-    categoryId: 2, // 실외
-    hobbyId: 3, // 캠핑
+    regionId: 17,
+    categoryId: 2,
+    hobbyId: 3,
     members: 20,
     thumbnail: thumb2,
     posts: ["제주도 캠핑 명소 공유", "4월 정모 일정 안내"],
+    clubUserId: 99, // ❌ 내가 만든 동아리 아님
+  },
+  {
+    id: 3,
+    name: "요리조리",
+    regionId: 9,
+    categoryId: 1,
+    hobbyId: 6,
+    members: 8,
+    thumbnail: userThumbnail,
+    posts: ["비 오는 날 전 부쳐먹기", "다음은 김치전!"],
+    clubUserId: 1, // ✅ 내가 만든 동아리
   },
 ];
+
+
 
 function MyPage() {
   const user = dummyUser;
@@ -167,6 +182,27 @@ function MyPage() {
   const hostVideoRef = useRef(null);
   const familySectionRef = useRef(null);
 const scheduleSectionRef = useRef(null);
+
+const [groupUsers, setGroupUsers] = useState([]); // 같은 groupId 유저 목록
+const [groupLeaderName, setGroupLeaderName] = useState("");
+
+// fetchUserData 호출 추가
+useEffect(() => {
+  if (userData?.group_id) {
+    fetch(`http://${import.meta.env.VITE_API_ADDRESS}:${import.meta.env.VITE_API_PORT}/api/user/group/${userData.group_id}`)
+      .then(res => res.json())
+      .then(data => {
+        setGroupUsers(data);
+
+        const leader = data.find(member => member.user_type === 1); // 부모1
+        if (leader) {
+          setGroupLeaderName(leader.user_name);
+        }
+      })
+      .catch(err => console.error("그룹 유저 불러오기 오류:", err));
+  }
+}, [userData]);
+
 
 
   const handleScrollTo = (ref) => {
@@ -316,57 +352,82 @@ const scheduleSectionRef = useRef(null);
 
         {/* 2. 유저 상태 */}
         <StatusSection>
-          <StatusItem>
-            ✅ 구독 상태: {user.isSubscribed ? "구독중" : "미구독"}
-          </StatusItem>
-          <StatusItem>📆 구독 시작일: {user.subscriptionDate}</StatusItem>
-          <StatusItem>👥 가입한 동아리: {user.clubCount}개</StatusItem>
-        </StatusSection>
-
+  <StatusItem>
+    👨‍👩‍👧 가족정보: {user.familyRole ?? "정보 없음"}
+  </StatusItem>
+  <StatusItem>
+    👥 가입한 동아리: {user.clubCount}개
+  </StatusItem>
+</StatusSection>
         {/* 3. 내가 시청 중인 강의 */}
         <ScrollAnchor ref={lectureSectionRef}>
-          <LectureSection
-            user={user}
-            startIndex={startIndex}
-            handlePrev={handlePrev}
-            handleNext={handleNext}
-            VISIBLE_COUNT={VISIBLE_COUNT}
-          />
+        <LectureSection
+  user={user}
+  startIndex={startIndex}
+  handlePrev={handlePrev}
+  handleNext={handleNext}
+  VISIBLE_COUNT={VISIBLE_COUNT}
+  sectionTitle={
+    user.userType === 1
+      ? "내가 시청중인 강의"
+      : `${groupLeaderName} 님이 시청하는 강의`
+  }
+/>
+
         </ScrollAnchor>
 
         {/* 4. 내 동아리 */}
         <ScrollAnchor ref={clubSectionRef}>
-          <ClubSection
-            dummyClubs={dummyClubs}
-            regionMap={regionMap}
-            hobbyMap={hobbyMap}
-          />
+        <ClubSection
+  dummyClubs={dummyClubs}
+  regionMap={regionMap}
+  hobbyMap={hobbyMap}
+  sectionTitle={
+    user.userType === 1
+      ? "내 동아리"
+      : `${groupLeaderName} 님의 동아리`
+  }
+  userId={user.uid}
+/>
+
         </ScrollAnchor>
 
         {/* 5. 내가 쓴 글 보기 */}
         <ScrollAnchor ref={postSectionRef}>
-          <PostSection
-            user={user}
-            visiblePosts={visiblePosts}
-            selectedPostType={selectedPostType}
-            postVisibleCount={postVisibleCount}
-            startPostIndex={startPostIndex}
-            handlePostPrev={handlePostPrev}
-            handlePostNext={handlePostNext}
-            handlePostTypeChange={handlePostTypeChange}
-            hobbyMap={hobbyMap}
-          />
+        <PostSection
+  user={user}
+  visiblePosts={visiblePosts}
+  selectedPostType={selectedPostType}
+  postVisibleCount={postVisibleCount}
+  startPostIndex={startPostIndex}
+  handlePostPrev={handlePostPrev}
+  handlePostNext={handlePostNext}
+  handlePostTypeChange={handlePostTypeChange}
+  hobbyMap={hobbyMap}
+  sectionTitle={
+    user.userType === 1
+      ? "내가 쓴 글 & 댓글 보기"
+      : `${groupLeaderName} 님이 쓴 글 & 댓글 보기`
+  }
+/>
+
         </ScrollAnchor>
 
         {/* 내 호스트 영상  */}
         <ScrollAnchor ref={hostVideoRef}>
-          <HostVideoSection
-            user={user}
-            startIndex={startIndex}
-            handlePrev={handlePrev}
-            handleNext={handleNext}
-            VISIBLE_COUNT={VISIBLE_COUNT}
-          />
+        <HostVideoSection
+  user={user}
+  startIndex={startIndex}
+  handlePrev={handlePrev}
+  handleNext={handleNext}
+  VISIBLE_COUNT={VISIBLE_COUNT}
+  sectionTitle={
+    user.userType === 1
+      ? "내 호스트 영상"
+      : `${groupLeaderName} 님의 호스트 영상`
+  }
+/>
+
         </ScrollAnchor>
 
         {/* 7. 가족구성원 */}  

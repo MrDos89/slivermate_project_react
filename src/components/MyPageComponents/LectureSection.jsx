@@ -81,10 +81,11 @@ function LectureSection({
   handlePrev,
   handleNext,
   VISIBLE_COUNT,
+  sectionTitle,
 }) {
   return (
     <LectureSectionContainer>
-      <SectionTitle>내가 시청중인 강의</SectionTitle>
+      <SectionTitle>{sectionTitle}</SectionTitle>
       <DividerWrapper>
         <Divider />
         <LectureSliderWrapper>

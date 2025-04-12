@@ -78,10 +78,11 @@ function PostSection({
   handlePostNext,
   handlePostTypeChange,
   hobbyMap,
+  sectionTitle,
 }) {
   return (
     <PostSectionWrapper>
-      <PostTitle>내가 쓴 글 & 댓글 보기</PostTitle>
+      <PostTitle>{sectionTitle}</PostTitle> 
       <PostDropdown onChange={handlePostTypeChange}>
         <option value={1}>게시글 보기</option>
         <option value={2}>댓글 보기</option>

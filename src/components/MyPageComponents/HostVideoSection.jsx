@@ -74,10 +74,11 @@ function HostVideoSection({
   handlePrev,
   handleNext,
   VISIBLE_COUNT,
+  sectionTitle,
 }) {
   return (
     <LectureSectionContainer>
-      <SectionTitle>내 호스트 영상</SectionTitle>
+      <SectionTitle>{sectionTitle}</SectionTitle>
       <DividerWrapper>
         <Divider />
         <LectureSliderWrapper>
