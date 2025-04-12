@@ -5,6 +5,10 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 60px;
+  padding: 40px;
+
+  /* ✅ 양쪽 그림자 추가 */
+  box-shadow: -8px 0 15px rgba(30, 177, 0, 0.05), 8px 0 15px rgba(30, 177, 0, 0.05);
 `;
 
 export const FixedTop = styled.div`
@@ -72,6 +76,7 @@ export const CategoryWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-left: 110px;
 `;
 
 export const SubCategoryRow = styled.div`

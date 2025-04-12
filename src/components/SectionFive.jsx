@@ -253,7 +253,7 @@ const SectionFive = () => {
               <Counter>{viewCount}</Counter>
             </InfoText>
           </InfoWrapper>
-          <Button onClick={handleButtonClick}>자세히 보기</Button>
+          <Button onClick={handleButtonClick}>호스트 신청하기</Button>
         </InnerContent>
       </ContentWrapper>
     </SectionWrapper>

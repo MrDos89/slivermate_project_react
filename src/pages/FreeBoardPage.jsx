@@ -27,7 +27,7 @@ const FixedPostBar = styled.div`
   left: 0;
   width: 100%;
   background-color: white;
-  z-index: 1000;
+  z-index: 100;
   padding: 20px 0;
   border-bottom: 1px solid #eee;
 `;

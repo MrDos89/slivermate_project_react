@@ -41,6 +41,7 @@ const Container = styled.div`
   min-height: 100vh;
   display: flex;
   justify-content: center;
+  
 `;
 
 const Inner = styled.div`
@@ -54,6 +55,7 @@ const Inner = styled.div`
   flex-direction: column;
   margin-top: 70px;
   margin-bottom: 70px;
+  
 `;
 
 const Title = styled.h1`

@@ -1,5 +1,3 @@
-// 📁 src/pages/ClubPostDetailPage.jsx
-
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -8,109 +6,128 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
 const Container = styled.div`
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 24px;
+  max-width: 960px;
+  margin: 80px auto;
+  padding: 48px;
   background: white;
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  font-size: 1.6rem;
+  line-height: 1.9;
 `;
 
 const Title = styled.h2`
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: bold;
-  margin-bottom: 14px;
+  margin-bottom: 24px;
+  color: #222;
 `;
 
 const Info = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: 16px;
+  margin-bottom: 28px;
 `;
 
 const ProfileImg = styled.img`
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
+  border: 1px solid #ccc;
 `;
 
 const Username = styled.div`
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   font-weight: bold;
 `;
 
-// const Date = styled.div`
 const CreatedAt = styled.div`
-  font-size: 1.1rem;
-  color: #888;
+  font-size: 1.4rem;
+  color: #777;
+  margin-top: 4px;
 `;
 
 const Content = styled.div`
-  font-size: 1.4rem;
-  line-height: 1.6;
-  margin-top: 20px;
+  font-size: 1.7rem;
+  color: #333;
+  line-height: 2;
+  white-space: pre-line;
+  margin-top: 36px;
+  margin-bottom: 32px;
 `;
 
 const Image = styled.img`
+  max-width: 800px;
   width: 100%;
-  border-radius: 12px;
+  height: auto;
+  border-radius: 10px;
   margin-top: 20px;
-  max-height: 400px;
   object-fit: cover;
+  border: 1px solid #ddd;
 `;
 
 // 댓글
 const CommentSection = styled.div`
-  margin-top: 40px;
+  margin-top: 60px;
 `;
 
 const CommentTitle = styled.h3`
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  color: #333;
 `;
 
 const CommentBox = styled.div`
-  margin-bottom: 16px;
-  border: 1px solid #eee;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
   border-radius: 10px;
-  padding: 16px;
+  padding: 20px;
   background: #fafafa;
 `;
 
 const CommentUser = styled.div`
   font-weight: bold;
-  margin-bottom: 4px;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: #222;
 `;
 
 const CommentText = styled.div`
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  color: #444;
 `;
 
 const CommentInputWrapper = styled.div`
   display: flex;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 12px;
+  margin-top: 30px;
 `;
 
 const CommentInput = styled.textarea`
   flex: 1;
-  padding: 12px;
+  padding: 16px;
+  font-size: 1.5rem;
   border-radius: 10px;
-  border: 1px solid #ccc;
-  resize: none;
-  font-size: 1.2rem;
+  border: 1px solid #bbb;
+  resize: vertical;
+  min-height: 120px;
 `;
 
 const CommentButton = styled.button`
   background: #2e7d32;
   color: white;
   border: none;
-  padding: 12px 18px;
-  border-radius: 8px;
-  font-size: 1.1rem;
+  padding: 16px 24px;
+  border-radius: 10px;
+  font-size: 1.4rem;
+  font-weight: bold;
   cursor: pointer;
+
+  &:hover {
+    background: #256628;
+  }
 `;
 
 const ClubPostDetailPage = () => {
@@ -135,11 +152,6 @@ const ClubPostDetailPage = () => {
   const club = dummyClubs.find((c) => c.club_id === Number(clubId));
   const post = club?.posts?.find((p) => String(p.id) === postId);
 
-  console.log("clubId:", clubId);
-  console.log("postId:", postId);
-  console.log("club:", club);
-  console.log("post:", post);
-
   if (!club || !post) {
     return (
       <div style={{ textAlign: "center", marginTop: 60 }}>
@@ -151,23 +163,24 @@ const ClubPostDetailPage = () => {
   return (
     <Container>
       <Title>{club.club_name}</Title>
+
       <Info>
         <ProfileImg
           src={post.userThumbnail || "/images/defaultUserThumbnail.png"}
         />
         <div>
           <Username>{post.user}</Username>
-          {/* <Date> */}
           <CreatedAt>
             {format(new Date(post.createdAt), "yyyy.MM.dd HH:mm", {
               locale: ko,
             })}
-            {/* </Date> */}
           </CreatedAt>
         </div>
       </Info>
 
-      {post.images?.length > 0 && <Image src={post.images[0].url} alt="post" />}
+      {post.images?.length > 0 && (
+        <Image src={post.images[0].url} alt="post" />
+      )}
 
       <Content>{post.content}</Content>
 
@@ -184,7 +197,6 @@ const ClubPostDetailPage = () => {
 
         <CommentInputWrapper>
           <CommentInput
-            rows={3}
             placeholder="댓글을 입력하세요..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}

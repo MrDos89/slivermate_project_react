@@ -21,6 +21,66 @@ const repeatedThumbnails = Array.from(
 const images = [image1, image2, image3];
 const texts = ["믿고보는 파릇 강사", "월결제로 무한 강의", "배움을 공유"];
 
+//버튼
+
+
+
+const FlipWrap = styled.div`
+  width: 180px;
+  height: 60px;
+  perspective: 1000px;
+  margin-top: 70px;
+`;
+
+const FlipButton = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+`;
+
+const FlipLink = styled.div`
+  width: 100%;
+  height: 100%;
+  background: #3e8560;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  line-height: 60px;
+  text-align: center;
+  border-radius: 10px;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+const FlipCover = styled.div`
+  width: 100%;
+  height: 100%;
+  background: white;
+  color: #3e8560;
+  font-weight: bold;
+  font-size: 1.1rem;
+  line-height: 60px;
+  text-align: center;
+  border-radius: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  transform-origin: left;
+  transform: rotateY(0deg) translateZ(0px);
+  transition: transform 0.6s ease-in-out;
+
+  ${FlipWrap}:hover & {
+    transform: rotateY(-100deg) translateZ(5px);
+  }
+`;
+
+
+//버튼 ---------
+
 const SectionWrapper = styled.div`
   width: 100vw;
   height: 100vh;
@@ -379,13 +439,18 @@ const SectionFour = () => {
           </ArrowButton>
         </ThumbnailSlider>
         <CenteredButtonWrapper>
-          <StyledLink to="/lecture">
-            <FlipSpan data-attr="강의실">강의실</FlipSpan>
-            <FlipSpan data-attr="입장" red>
-              입장
-            </FlipSpan>
-          </StyledLink>
-        </CenteredButtonWrapper>
+  <FlipWrap onClick={() => navigate("/lecture")}>
+    <FlipButton>
+      <FlipCover>강의실 입장하실?</FlipCover>
+      <FlipLink>입장하기</FlipLink>
+    </FlipButton>
+  </FlipWrap>
+</CenteredButtonWrapper>
+
+
+
+
+
       </RightWrapper>
     </SectionWrapper>
   );
