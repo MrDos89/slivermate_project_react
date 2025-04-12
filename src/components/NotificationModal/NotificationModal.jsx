@@ -35,7 +35,9 @@ const ActionButtons = styled.div`
   gap: 10px;
 `;
 
-const ActionButton = styled.button`
+const ActionButton = styled.button.withConfig({
+  shouldForwardProp: (prop) => !["active", "danger"].includes(prop),
+})`
   background-color: ${({ active, danger }) =>
     active ? (danger ? "#f44336" : "#d0f3c8") : "#eeeeee"};
   color: ${({ active, danger }) => (active && danger ? "#fff" : "#333")};
@@ -44,6 +46,7 @@ const ActionButton = styled.button`
   font-size: 14px;
   border-radius: 8px;
   cursor: pointer;
+
   &:hover {
     background-color: ${({ danger }) => (danger ? "#d32f2f" : "#c2eabd")};
     color: ${({ danger }) => (danger ? "#fff" : "#000")};

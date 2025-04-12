@@ -34,7 +34,7 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: ${(props) => props.bgColor};
+  background-color: ${(props) => props.bgcolor};
   opacity: ${(props) => (props.show ? 0.95 : 0)};
   transition: opacity 0.4s ease-in-out;
   display: flex;
@@ -96,7 +96,7 @@ const SectionNine = () => {
           backgroundImage: `url(${feedImage})`,
         }}
       >
-        <Overlay show={hoverRight} bgColor="rgba(128, 128, 128, 0.95)">
+        <Overlay show={hoverRight} bgcolor="rgba(128, 128, 128, 0.95)">
           파릇을 위한, 시니어에게 꼭 필요한 정보와 이야기를 모았습니다.
           <br />
           파릇의 시니어 칼럼 보기
@@ -115,7 +115,7 @@ const SectionNine = () => {
           backgroundImage: `url('https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/jz1/image/l7OUjnJ92Uh2_Q3NUcm3OybaEfg.jpg')`,
         }}
       >
-        <Overlay show={hoverLeft} bgColor="rgba(76, 175, 80, 0.95)">
+        <Overlay show={hoverLeft} bgcolor="rgba(76, 175, 80, 0.95)">
           파릇을 위한, 파릇만의 자유게시판!
           <br />
           파릇 커뮤니티 입장하기

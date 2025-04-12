@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import FeedItem from "./FeedItem";
+import isPropValid from "@emotion/is-prop-valid"; // styled-components v6 이상부터는 필요
 
 const ListWrapper = styled.div`
   margin-top: 50px;
@@ -13,7 +14,9 @@ const PaginationWrapper = styled.div`
   gap: 12px;
 `;
 
-const PageButton = styled.button`
+const PageButton = styled.button.withConfig({
+  shouldForwardProp: (prop) => prop !== "active",
+})`
   background-color: ${(props) => (props.active ? "#91c29b" : "#fff")};
   color: ${(props) => (props.active ? "white" : "#333")};
   border: 1px solid #ccc;

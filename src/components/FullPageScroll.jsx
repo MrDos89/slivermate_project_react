@@ -11,6 +11,7 @@ import SectionSeven from "./SectionSeven.jsx";
 import SectionEight from "./SectionEight.jsx";
 import SectionNine from "./SectionNine.jsx";
 import CustomerModal from "./CustomerModal/CustomerModal";
+import isPropValid from "@emotion/is-prop-valid"; // styled-components v6 이상부터는 필요
 
 // const FullPageWrapper = styled.div`
 //   position: fixed;
@@ -40,7 +41,9 @@ const NavigationContainer = styled.div`
   z-index: 1000;
 `;
 
-const NavButton = styled.button`
+const NavButton = styled.button.withConfig({
+  shouldForwardProp: (prop) => prop !== "active",
+})`
   width: 10px;
   height: 10px;
   display: block;
@@ -50,7 +53,7 @@ const NavButton = styled.button`
   padding: 0;
   margin: 0;
   outline: none;
-  box-sizing: content-box; /* 🔥 박스 크기 제대로 조정 */
+  box-sizing: content-box;
   cursor: pointer;
   transition: background 0.3s;
 
