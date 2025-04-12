@@ -9,3 +9,7 @@ cd ..
 npm install 
 
 npm install && npm run dev
+
+# docker buildx build --platform linux/amd64 -t slivermate-project-react .
+# docker tag slivermate-project-react mrdos89/slivermate-project-react
+# docker push mrdos89/slivermate-project-react
