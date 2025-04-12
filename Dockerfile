@@ -20,6 +20,9 @@ FROM --platform=linux/amd64 nginx:alpine
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
+# nginx.conf 복사
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
