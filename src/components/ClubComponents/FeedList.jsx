@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import FeedItem from "./FeedItem";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +29,10 @@ const PageButton = styled.button.withConfig({
 
 const FeedList = ({ posts, clubId }) => {
   const navigate = useNavigate();
+
+  const API_POST_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+    import.meta.env.VITE_API_PORT
+  }/api/post`;
 
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 5;

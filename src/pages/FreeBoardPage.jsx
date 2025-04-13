@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { dummyPosts } from "../data/posts";
 import styled from "styled-components";
 import Dropdown from "../components/FreeBoardComponents/Dropdown";
@@ -33,9 +34,44 @@ const FixedPostBar = styled.div`
 `;
 
 const FreeBoardPage = () => {
-  const API_POST_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+  const navigate = useNavigate();
+
+  const API_USER_SESSION_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
     import.meta.env.VITE_API_PORT
-  }/api/post`;
+  }/api/user/session`;
+
+  const [userData, setUserData] = useState();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  //@note - 유저 세션 체크하기
+  useEffect(() => {
+    console.log("useEffect - 유저 세션 체크");
+    console.log("API_URL:", API_USER_SESSION_URL);
+
+    fetch(API_USER_SESSION_URL, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            console.log("로그인 세션이 없습니다.");
+            setIsLoggedIn(false);
+            navigate("/login");
+          } else {
+            console.error("회원 정보 불러오기 실패:", response.status);
+          }
+          return; // 에러 발생 시 더 이상 진행하지 않음
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("user 데이터 확인:", data);
+        setUserData(data);
+        setIsLoggedIn(true);
+      })
+      .catch((error) => console.error("회원 정보 불러오기 오류", error));
+  }, []);
 
   const regionId = [
     { id: -1, name: "전체" },
@@ -124,6 +160,7 @@ const FreeBoardPage = () => {
 
   // const [posts, setPosts] = useState([]);
   const [posts, setPosts] = useState(dummyPosts);
+  const [error, setError] = useState(null);
 
   const handleAddPost = (newPost) => {
     setPosts((prev) => [newPost, ...prev]);
