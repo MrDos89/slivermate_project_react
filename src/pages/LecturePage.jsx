@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaLeaf } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { lectureDummy } from "../data/lectureDummy";
+import axios from "axios";
 
 const CATEGORY_MAP = {
   실내: [
@@ -33,73 +33,41 @@ const CATEGORY_MAP = {
 
 const SORT_OPTIONS = ["추천순", "최신순", "좋아요순"];
 
-// const Wrapper = styled.div`
-//   width: 100%;
-//   max-width: 1700px;
-//   margin: 0 auto;
-//   padding: 20px 20px;
-//   padding-top: 60px;
-// `;
-
-{
-  /* 
-const FixedTop = styled.div`
-  flex-shrink: 0;
-  padding: 20px;
-  background-color: white;
-  z-index: 10;
-  border-bottom: 1px solid #eee;
-`;
-
-const Inner = styled.div`
-  width: 100%;
-  /* max-width: 1900px;  
-  margin: 0 auto;
-  /* padding: 0 20px; // 좌우 여백 살짝 
-`;
-*/
-}
-
-const FixedTop = styled.div`
-  flex-shrink: 0;
-  background-color: white;
-  z-index: 10;
-  border-bottom: 1px solid #eee;
-  /* padding: 20px; 제거 */
-`;
-
-const Inner = styled.div`
-  width: 100vw; // ← 브라우저 기준으로 설정
-  padding: 20px; // ← 여기서 여백 조정
-  max-width: 1200px;
-  margin: 0 auto;
-`;
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh; // 전체 높이
+  height: 100vh;
   overflow: hidden;
   padding-top: 60px;
+`;
+
+const FixedTop = styled.div`
+  flex-shrink: 0;
+  background-color: white;
+  z-index: 10;
+  border-bottom: 1px solid #eee;
+`;
+
+const Inner = styled.div`
+  width: 100vw;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 const ScrollableContent = styled.div`
   flex-grow: 1;
   overflow-y: auto;
   padding: 20px;
-
-  /* 스크롤바 숨기기 (크로스브라우징 처리) */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
-
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
   }
 `;
 
 const SearchBarWrapper = styled.form`
   position: relative;
-  //width: 60%;
   width: 100%;
   max-width: 500px;
   margin: 0 auto 20px;
@@ -109,17 +77,15 @@ const SearchBarWrapper = styled.form`
 
 const SearchBar = styled.input`
   width: 100%;
-  padding: 12px 50px 12px 20px; // 오른쪽 패딩 확보
+  padding: 12px 50px 12px 20px;
   font-size: 1rem;
   border: 2px solid #a5d6a7;
   border-radius: 30px;
   outline: none;
   transition: border-color 0.3s;
-
   &:focus {
     border-color: #66bb6a;
   }
-
   &::placeholder {
     color: #a5a5a5;
     font-style: italic;
@@ -136,17 +102,9 @@ const SearchButton = styled.button`
   cursor: pointer;
   color: #66bb6a;
   font-size: 1.2rem;
-
   &:hover {
     color: #43a047;
   }
-`;
-
-const CenteredBlock = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center; // 가운데 정렬 핵심!
 `;
 
 const CategoryWrapper = styled.div`
@@ -155,7 +113,6 @@ const CategoryWrapper = styled.div`
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  // align-items: center; // 가운데 정렬
   gap: 10px;
 `;
 
@@ -183,7 +140,6 @@ const CategoryButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: font-weight 0.2s ease;
-
   &:hover {
     font-weight: bold;
   }
@@ -192,7 +148,7 @@ const CategoryButton = styled.button`
 const SortDropdown = styled.select`
   margin-top: 20px;
   padding: 8px 12px;
-  display: block; /*  block 요소로 */
+  display: block;
   margin-left: 0;
 `;
 
@@ -237,20 +193,30 @@ const LecturePage = () => {
   const [subCategory, setSubCategory] = useState("전체");
   const [sortBy, setSortBy] = useState("가격순");
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [lessons, setLessons] = useState([]);
   const navigate = useNavigate();
 
-  const filtered = lectureDummy
+  useEffect(() => {
+    axios
+      .get("http://43.201.50.194:18090/api/lesson") // ✅ 하드코딩된 주소
+      .then((res) => setLessons(res.data))
+      .catch((err) => console.error(err));
+  }, []);
+
+  const filtered = lessons
     .filter((lesson) => {
       const categoryMatch =
         mainCategory === "실내"
           ? lesson.lesson_category === 1
           : lesson.lesson_category === 2;
+
       const subMatch =
         subCategory === "전체" || lesson.lesson_sub_category === subCategory;
+
       const searchMatch =
         lesson.lesson_name.includes(searchTerm) ||
         lesson.lesson_sub_category.includes(searchTerm);
+
       return categoryMatch && subMatch && searchMatch;
     })
     .sort((a, b) => {
@@ -272,12 +238,7 @@ const LecturePage = () => {
     <Container>
       <FixedTop>
         <Inner>
-          <SearchBarWrapper
-            onSubmit={(e) => {
-              e.preventDefault();
-              // 검색 실행 로직 (현재 상태 그대로 유지하므로 자동 실행됨)
-            }}
-          >
+          <SearchBarWrapper onSubmit={(e) => e.preventDefault()}>
             <SearchBar
               placeholder="검색어를 입력하세요"
               value={searchTerm}
@@ -290,7 +251,7 @@ const LecturePage = () => {
           <CategoryWrapper>
             {Object.entries(CATEGORY_MAP).map(([group, buttons]) => (
               <SubCategoryRow key={group}>
-                <CategoryTitle style={{ marginTop: 0 }}>{group}</CategoryTitle>
+                <CategoryTitle>{group}</CategoryTitle>
                 {buttons.map((btn) => {
                   const isActive =
                     mainCategory === group &&
@@ -302,7 +263,7 @@ const LecturePage = () => {
                     <CategoryButton
                       key={btn}
                       $active={isActive}
-                      $isTotal={isTotal} // ✅ 추가!
+                      $isTotal={isTotal}
                       onClick={() => {
                         setMainCategory(group);
                         setSubCategory(btn);
@@ -332,16 +293,6 @@ const LecturePage = () => {
           </SortDropdown>
         </div>
 
-        {/* <CardGrid>
-          {filtered.map((lesson) => (
-            <Card key={lesson.lesson_id}>
-              <Thumb src={lesson.lesson_thumbnail} />
-              <Title>{lesson.lesson_name}</Title>
-              <Author>{lesson.user_name}</Author>
-              <Desc>{lesson.lesson_desc}</Desc>
-            </Card>
-          ))}
-        </CardGrid> */}
         <CardGrid>
           {filtered.map((lesson) => (
             <Card

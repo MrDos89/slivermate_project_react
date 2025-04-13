@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { lectureDummy } from "../data/lectureDummy";
+import axios from "axios";
+
+const API_BASE = "http://43.201.50.194:18090";
 
 const Container = styled.div`
   display: flex;
@@ -17,9 +19,9 @@ const FixedTop = styled.div`
 `;
 
 const Inner = styled.div`
-  width: auto; // ✅ 내용 너비에 맞게
-  max-width: 100%; // ✅ 혹시 너무 길어질 때 대비
-  margin: 0 auto; // ✅ 부모(Container) 기준 가운데 정렬
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -34,7 +36,6 @@ const ScrollableContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
-
   scrollbar-width: none;
   -ms-overflow-style: none;
   &::-webkit-scrollbar {
@@ -146,7 +147,7 @@ const FancyGrass = styled.div`
     .map(
       (_, i) => `
     &.animate .blade:nth-child(${i + 1}) {
-      left: ${5 + i * 5}% ;
+      left: ${5 + i * 5}%;
       height: ${15 + (i % 5) * 3}px;
       animation-delay: ${i * 0.05}s;
     }
@@ -172,11 +173,23 @@ const FancyGrass = styled.div`
 
 const LectureDetailPage = () => {
   const { id } = useParams();
-  const lesson = lectureDummy.find((item) => item.lesson_id === parseInt(id));
-  const completedSteps = 2;
-
+  const [lesson, setLesson] = useState(null);
+  const [related, setRelated] = useState([]);
   const [visibleSteps, setVisibleSteps] = useState([]);
   const stampRefs = useRef([]);
+  const completedSteps = 2;
+
+  useEffect(() => {
+    axios
+      .get(`${API_BASE}/api/lesson/${id}`)
+      .then((res) => setLesson(res.data))
+      .catch((err) => console.error("상세 강의 로딩 실패", err));
+
+    axios
+      .get(`${API_BASE}/api/lesson/${id}/related`)
+      .then((res) => setRelated(res.data))
+      .catch((err) => console.error("관련 강의 로딩 실패", err));
+  }, [id]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -208,11 +221,6 @@ const LectureDetailPage = () => {
     );
   }
 
-  const sameLectures = lectureDummy.filter(
-    (item) =>
-      item.user_id === lesson.user_id && item.lesson_id !== lesson.lesson_id
-  );
-
   return (
     <Container>
       <FixedTop>
@@ -230,7 +238,7 @@ const LectureDetailPage = () => {
         <SliderWrapper>
           <button>❮</button>
           <ThumbnailList>
-            {sameLectures.map((lec) => (
+            {related.map((lec) => (
               <ThumbnailItem key={lec.lesson_id} src={lec.lesson_thumbnail} />
             ))}
           </ThumbnailList>
