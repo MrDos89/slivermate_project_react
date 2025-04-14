@@ -181,7 +181,7 @@ const CommentUser = styled.div`
 `;
 
 const PostDetailPage = () => {
-  const { id } = useParams();
+  const { postId } = useParams();
   const { user, loading } = useAuth();
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
@@ -190,14 +190,16 @@ const PostDetailPage = () => {
   const navigate = useNavigate();
   // 포스트 처리
   useEffect(() => {
-    loadPost();
-  }, [id]); // id가 바뀔 때마다 다시 호출
+    if (postId) {
+      loadPost();
+    }
+  }, [postId]); // id가 바뀔 때마다 다시 호출
 
   const API_POST_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
     import.meta.env.VITE_API_PORT
   }/api/post`;
 
-  const loadPost = async () => {
+  const loadPost = async (id) => {
     try {
       const response = await fetch(`${API_POST_URL}/${id}`, {
         method: "GET",
