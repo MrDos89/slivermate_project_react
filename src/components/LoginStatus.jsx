@@ -4,7 +4,7 @@ import { useAuth } from "./Context/AuthContext";
 
 const SvgButtonWrapper = styled(Link)`
   position: relative;
-  width: 150px;
+  width: 120px;
   height: 40px;
   display: inline-block;
   text-decoration: none;
@@ -17,7 +17,7 @@ const SvgButtonWrapper = styled(Link)`
     fill: transparent;
     stroke: #06d6a0;
     stroke-dasharray: 70 300;
-    stroke-dashoffset: -220;
+    stroke-dashoffset: -185;
     transition: 1s all ease;
   }
 
@@ -55,14 +55,14 @@ export default function LoginStatus() {
         <>
           <span>{user?.user_id}님</span>
           <SvgButtonWrapper to="/mypage">
-            <svg height="40" width="150">
-              <rect id="shape" height="40" width="150" />
+            <svg height="40" width="120">
+              <rect id="shape" height="40" width="120" />
             </svg>
             <span>내정보</span>
           </SvgButtonWrapper>
           <SvgButtonWrapper as="div" onClick={handleLogout}>
-            <svg height="40" width="150">
-              <rect id="shape" height="40" width="150" />
+            <svg height="40" width="120">
+              <rect id="shape" height="40" width="120" />
             </svg>
             <span>로그아웃</span>
           </SvgButtonWrapper>
@@ -70,14 +70,14 @@ export default function LoginStatus() {
       ) : (
         <>
           <SvgButtonWrapper to="/login">
-            <svg height="40" width="150">
-              <rect id="shape" height="40" width="150" />
+            <svg height="40" width="120">
+              <rect id="shape" height="40" width="120" />
             </svg>
             <span>로그인</span>
           </SvgButtonWrapper>
           <SvgButtonWrapper to="/signup">
-            <svg height="40" width="150">
-              <rect id="shape" height="40" width="150" />
+            <svg height="40" width="120">
+              <rect id="shape" height="40" width="120" />
             </svg>
             <span>회원가입</span>
           </SvgButtonWrapper>
