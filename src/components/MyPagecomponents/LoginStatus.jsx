@@ -78,7 +78,7 @@ export default function LoginStatus({ onLoginChange }) {
 
   useEffect(() => {
     checkLoginStatus();
-  }, []);
+  }, [checkLoginStatus]);
 
   const handleLogout = async () => {
     try {
