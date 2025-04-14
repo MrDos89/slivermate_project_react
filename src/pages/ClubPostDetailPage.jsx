@@ -178,11 +178,9 @@ const ClubPostDetailPage = () => {
         </div>
       </Info>
 
-      {post.images?.length > 0 && (
-        <Image src={post.images[0].url} alt="post" />
-      )}
+      {post.images?.length > 0 && <Image src={post.images[0].url} alt="post" />}
 
-      <Content>{post.content}</Content>
+      <Content>{post.postNote}</Content>
 
       {/* ✨ 댓글 영역 */}
       <CommentSection>

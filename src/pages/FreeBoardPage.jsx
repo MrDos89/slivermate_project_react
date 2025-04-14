@@ -153,10 +153,19 @@ const FreeBoardPage = () => {
   //   ? posts
   //   : posts.filter((post) => post.tags.includes(selectedHobby.id));
   const filteredPosts = posts
-    .filter(
-      (post) => selectedHobby.id === -1 || post.tags.includes(selectedHobby.id)
-    )
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    .filter((post) => {
+      if (selectedHobby.id === -1) return true;
+
+      const tagId =
+        post.postCategoryId === 1
+          ? post.postSubCategoryId
+          : post.postSubCategoryId + 9;
+
+      return selectedHobby.id === tagId;
+    })
+    .sort((a, b) => new Date(b.registerDate) - new Date(a.registerDate));
+
+  console.log("filteredPosts", filteredPosts);
 
   return (
     <>

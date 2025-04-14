@@ -36,7 +36,7 @@ const TableHeader = styled.th`
 `;
 
 const TableRow = styled.tr`
-background-color: #ffffff;
+  background-color: #ffffff;
   &:nth-child(even) {
     background-color: #f4f4f4;
   }
@@ -82,7 +82,7 @@ function PostSection({
 }) {
   return (
     <PostSectionWrapper>
-      <PostTitle>{sectionTitle}</PostTitle> 
+      <PostTitle>{sectionTitle}</PostTitle>
       <PostDropdown onChange={handlePostTypeChange}>
         <option value={1}>게시글 보기</option>
         <option value={2}>댓글 보기</option>
@@ -104,14 +104,13 @@ function PostSection({
             {visiblePosts.map((post, index) => (
               <TableRow key={post.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{post.content}</TableCell>
+                <TableCell>{post.postNote}</TableCell>
                 <TableCell>{post.date}</TableCell>
                 <TableCell>{user.nickname}</TableCell>
                 <TableCell>
                   {
-                    hobbyMap[
-                      post.hobby.categoryId === 1 ? "indoor" : "outdoor"
-                    ]?.list[post.hobby.hobbyId]
+                    hobbyMap[post.hobby.categoryId === 1 ? "indoor" : "outdoor"]
+                      ?.list[post.hobby.hobbyId]
                   }
                 </TableCell>
                 <TableCell>{post.clubName}</TableCell>

@@ -208,7 +208,7 @@ const PostDetailPage = () => {
         </InfoBox>
 
         {/* 본문 */}
-        <Content>{post.content}</Content>
+        <Content>{post.postNote}</Content>
 
         {/* 이미지 */}
         {post.images.length > 0 && (
@@ -239,7 +239,9 @@ const PostDetailPage = () => {
 
         {/* 댓글 리스트 */}
         <CommentsList>
-          <h4 style={{ fontSize: '1.25rem', marginBottom: '16px', color: '#333' }}>
+          <h4
+            style={{ fontSize: "1.25rem", marginBottom: "16px", color: "#333" }}
+          >
             댓글 2개
           </h4>
           <Comment>
