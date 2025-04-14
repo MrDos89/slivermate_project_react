@@ -149,6 +149,8 @@ const FeedItem = ({ post, clubId }) => {
     );
   };
 
+  console.log("🔍 FeedItem post 객체:", post);
+
   return (
     <Card>
       <TopRow>
