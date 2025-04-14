@@ -1,8 +1,10 @@
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { dummyPosts } from "../data/posts";
 import styled from "styled-components";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import { useAuth } from "../components/Context/AuthContext";
 
 // 전체 페이지 배경
 const PageContainer = styled.div`
@@ -178,7 +180,27 @@ const CommentUser = styled.div`
 
 const PostDetailPage = () => {
   const { id } = useParams();
-  const post = dummyPosts.find((p) => p.id === parseInt(id));
+  const { user, loading } = useAuth();
+  const [post, setPost] = useState(null);
+  // const post = dummyPosts.find((p) => p.id === parseInt(id));
+
+  // fetchUserData 호출 추가
+  useEffect(() => {
+    fetch(
+      `http://${import.meta.env.VITE_API_ADDRESS}:${
+        import.meta.env.VITE_API_PORT
+      }/api/post/${id}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setPost(data.data);
+        } else {
+          console.error("게시글 불러오기 오류:", data.message);
+        }
+      })
+      .catch((err) => console.error("게시글 불러오기 오류:", err));
+  }, [user]);
 
   if (!post) {
     return (
@@ -195,15 +217,15 @@ const PostDetailPage = () => {
         <InfoBox>
           <UserInfo>
             <ProfileImg src={post.userThumbnail} />
-            <UserName>{post.user}</UserName>
+            <UserName>{post.userNickname}</UserName>
           </UserInfo>
           <InfoMeta>
             <PostDate>
-              {format(new Date(post.createdAt), "yyyy.MM.dd HH:mm", {
+              {format(new Date(post.registerDate), "yyyy.MM.dd HH:mm", {
                 locale: ko,
               })}
             </PostDate>
-            <ViewCount>조회수 {post.views ?? 123}</ViewCount>
+            {/* <ViewCount>조회수 {post.views ?? 123}</ViewCount> */}
           </InfoMeta>
         </InfoBox>
 
@@ -211,14 +233,14 @@ const PostDetailPage = () => {
         <Content>{post.postNote}</Content>
 
         {/* 이미지 */}
-        {post.images.length > 0 && (
+        {post.postImages.length > 0 && (
           <ImageList>
-            {post.images.map((img, idx) => (
+            {post.postImages.map((img, idx) => (
               <PostImage
                 key={idx}
-                src={img.url}
+                src={img}
                 alt={`post-img-${idx}`}
-                onClick={() => window.open(img.url, "_blank")}
+                onClick={() => window.open(img, "_blank")}
               />
             ))}
           </ImageList>
@@ -226,8 +248,8 @@ const PostDetailPage = () => {
 
         {/* 좋아요 및 댓글 수 */}
         <Meta>
-          <span>❤️ 좋아요 {post.likes}</span>
-          <span>💬 댓글 {post.comments}</span>
+          <span>❤️ 좋아요 {post.postLikeCount}</span>
+          <span>💬 댓글 {post.postCommentCount}</span>
         </Meta>
 
         {/* 댓글 작성 */}
@@ -238,7 +260,7 @@ const PostDetailPage = () => {
         </CommentBox>
 
         {/* 댓글 리스트 */}
-        <CommentsList>
+        {/* <CommentsList>
           <h4
             style={{ fontSize: "1.25rem", marginBottom: "16px", color: "#333" }}
           >
@@ -252,7 +274,7 @@ const PostDetailPage = () => {
             <CommentUser>기본유저2</CommentUser>
             정말 감성적이에요 😍
           </Comment>
-        </CommentsList>
+        </CommentsList> */}
       </Wrapper>
     </PageContainer>
   );

@@ -184,11 +184,11 @@ function MyPage() {
 
   // fetchUserData 호출 추가
   useEffect(() => {
-    if (userData?.group_id) {
+    if (user?.group_id) {
       fetch(
         `http://${import.meta.env.VITE_API_ADDRESS}:${
           import.meta.env.VITE_API_PORT
-        }/api/user/group/${userData.group_id}`
+        }/api/user/group/${user.group_id}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -201,7 +201,7 @@ function MyPage() {
         })
         .catch((err) => console.error("그룹 유저 불러오기 오류:", err));
     }
-  }, [userData]);
+  }, [user]);
 
   const handleScrollTo = (ref) => {
     if (ref.current) {
@@ -419,7 +419,7 @@ function MyPage() {
 
         {/* 7. 가족구성원 */}
         <ScrollAnchor ref={familySectionRef}>
-          <FamilySection groupId={userData?.group_id} />
+          <FamilySection groupId={user?.group_id} />
         </ScrollAnchor>
 
         {/* 8. 일정 및 결제 확인 */}

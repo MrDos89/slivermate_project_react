@@ -175,7 +175,7 @@ const FeedItem = ({ post }) => {
         <ImageCarousel>
           <SlideButton onClick={prevImage}>&lt;</SlideButton>
           <ImageDisplay
-            src={post.postImages[currentImage].url}
+            src={post.postImages[currentImage]}
             alt={`post-image-${currentImage}`}
           />
           <SlideButton onClick={nextImage}>&gt;</SlideButton>
