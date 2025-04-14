@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
 
   // context/AuthContext.jsx 내부
   const logout = async () => {
-    await fetch("/api/user/logout", { method: "POST", credentials: "include" });
+    await fetch("/api/user/logout", { method: "GET", credentials: "include" });
     setUser(null);
   };
 
