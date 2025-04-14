@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { useAuth } from "../components/Context/AuthContext";
 import PostVo from "../vo/PostVo";
+import CommentVo from "../vo/commentVo";
 
 // 전체 페이지 배경
 const PageContainer = styled.div`
@@ -249,12 +250,9 @@ const PostDetailPage = () => {
       const data = await response.json();
       console.log("🟢 응답 바디:", data);
 
-      const comments = data.map((item) => ({
-        userNickname: item.nickname,
-        userThumbnail: item.user_thumbnail,
-        commentText: item.comment_text,
-        updatedAt: item.register_date,
-      }));
+      const comments = data.map((item) => CommentVo.fromJson(item));
+      setComments(comments);
+      console.log("🟡 댓글 데이터:", comments);
 
       console.log("🟢 파싱 완료. 댓글 수:", comments.length);
       return comments;
@@ -350,9 +348,11 @@ const PostDetailPage = () => {
                   fontSize: "0.95rem",
                 }}
               >
-                {format(new Date(comment.updatedAt), "yyyy.MM.dd HH:mm", {
-                  locale: ko,
-                })}
+                {comment.updDate && !isNaN(new Date(comment.updDate))
+                  ? format(new Date(comment.updDate), "yyyy.MM.dd HH:mm", {
+                      locale: ko,
+                    })
+                  : "날짜 없음"}
               </div>
               {comment.commentText}
             </Comment>
