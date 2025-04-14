@@ -47,6 +47,7 @@ const Nav = styled.nav`
   gap: 30px;
   justify-content: center;
   flex: 2;
+  margin-left: -80px; // 원하는 정도 조절
 `;
 
 /*
@@ -192,7 +193,7 @@ const AuthButtons = styled.div`
   gap: 3px;
   flex: 1;
   justify-content: flex-end;
-  padding-right: 60px;
+  padding-right: 100px;
 `;
 
 // const Button = styled(Link)`
@@ -241,44 +242,6 @@ const AuthButtons = styled.div`
 // `;
 
 // 고객센터
-
-const SvgButtonWrapper = styled(Link)`
-  position: relative;
-  width: 150px;
-  height: 40px;
-  display: inline-block;
-  text-decoration: none;
-
-  svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    stroke-width: 3px;
-    fill: transparent;
-    stroke: #06d6a0;
-    stroke-dasharray: 70 300;
-    stroke-dashoffset: -220;
-    transition: 1s all ease;
-  }
-
-  &:hover svg {
-    stroke: #06d6a0;
-    stroke-width: 3px;
-    stroke-dasharray: 50 0;
-    stroke-dashoffset: 0;
-  }
-
-  span {
-    position: relative;
-    color: #06d6a0;
-    font-weight: 400;
-    font-size: 16px;
-    text-align: center;
-    line-height: 40px;
-    z-index: 1;
-    display: block;
-  }
-`;
 
 const PhoneButton = styled.button`
   width: 40px;
@@ -383,20 +346,6 @@ function Header({ setScrollIndex }) {
             🔔
           </PhoneButton>
           <LoginStatus />
-          {/* <SvgButtonWrapper to="/login">
-            <svg height="40" width="150">
-              <rect id="shape" height="40" width="150" />
-            </svg>
-            <span>로그인</span>
-          </SvgButtonWrapper> */}
-
-          {/* 회원가입 버튼 */}
-          {/* <SvgButtonWrapper to="/signup">
-            <svg height="40" width="150">
-              <rect id="shape" height="40" width="150" />
-            </svg>
-            <span>회원가입</span>
-          </SvgButtonWrapper> */}
         </AuthButtons>
       </HeaderContainer>
       {/* ✅ 모달 렌더링 */}
