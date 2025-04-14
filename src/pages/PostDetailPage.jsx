@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { dummyPosts } from "../data/posts";
+import { useNavigate } from "react-router-dom";
+// import { dummyPosts } from "../data/posts";
 import styled from "styled-components";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { useAuth } from "../components/Context/AuthContext";
+import PostVo from "../vo/PostVo";
 
 // 전체 페이지 배경
 const PageContainer = styled.div`
@@ -182,25 +184,95 @@ const PostDetailPage = () => {
   const { id } = useParams();
   const { user, loading } = useAuth();
   const [post, setPost] = useState(null);
-  // const post = dummyPosts.find((p) => p.id === parseInt(id));
+  const [error, setError] = useState(null);
+  const [comments, setComments] = useState([]);
 
-  // fetchUserData 호출 추가
+  const navigate = useNavigate();
+  // 포스트 처리
   useEffect(() => {
-    fetch(
-      `http://${import.meta.env.VITE_API_ADDRESS}:${
-        import.meta.env.VITE_API_PORT
-      }/api/post/${id}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setPost(data.data);
-        } else {
-          console.error("게시글 불러오기 오류:", data.message);
+    loadPost();
+  }, [id]); // id가 바뀔 때마다 다시 호출
+
+  const API_POST_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+    import.meta.env.VITE_API_PORT
+  }/api/post`;
+
+  const loadPost = async () => {
+    try {
+      const response = await fetch(`${API_POST_URL}/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const data = await response.json();
+      console.log("✅ 받아온 단일 게시글:", data);
+
+      const post = PostVo.fromJson(data);
+      setPost(post);
+
+      if (!response.ok) {
+        throw new Error("포스트 가져오기 실패");
+      }
+    } catch (error) {
+      console.error("포스트 가져오기 오류", error);
+      setError("서버 오류가 발생했습니다.");
+    }
+  };
+
+  const loadComments = async (postId) => {
+    console.log("🟡 loadComments 호출됨: postId =", postId);
+
+    try {
+      const response = await fetch(
+        `http://${import.meta.env.VITE_API_ADDRESS}:${
+          import.meta.env.VITE_API_PORT
+        }/api/comment/by-post?post_id=${postId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // 세션 쿠키 유지
         }
-      })
-      .catch((err) => console.error("게시글 불러오기 오류:", err));
-  }, [user]);
+      );
+
+      if (!response.ok) {
+        console.warn("🔴 비정상 응답:", response.status);
+        return [];
+      }
+
+      const data = await response.json();
+      console.log("🟢 응답 바디:", data);
+
+      const comments = data.map((item) => ({
+        userNickname: item.nickname,
+        userThumbnail: item.user_thumbnail,
+        commentText: item.comment_text,
+        updatedAt: item.register_date,
+      }));
+
+      console.log("🟢 파싱 완료. 댓글 수:", comments.length);
+      return comments;
+    } catch (error) {
+      console.error("❌ fetchComments error:", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    if (post) {
+      loadComments(post.postId).then((data) => {
+        setComments(data);
+      });
+    }
+  }, [post]);
+
+  useEffect(() => {
+    loadPost();
+  }, []);
 
   if (!post) {
     return (
@@ -260,21 +332,30 @@ const PostDetailPage = () => {
         </CommentBox>
 
         {/* 댓글 리스트 */}
-        {/* <CommentsList>
+        <CommentsList>
           <h4
             style={{ fontSize: "1.25rem", marginBottom: "16px", color: "#333" }}
           >
-            댓글 2개
+            댓글 {comments.length}개
           </h4>
-          <Comment>
-            <CommentUser>기본유저1</CommentUser>
-            멋진 사진이네요!
-          </Comment>
-          <Comment>
-            <CommentUser>기본유저2</CommentUser>
-            정말 감성적이에요 😍
-          </Comment>
-        </CommentsList> */}
+          {comments.map((comment, idx) => (
+            <Comment key={idx}>
+              <CommentUser>{comment.userNickname}</CommentUser>
+              <div
+                style={{
+                  marginBottom: "6px",
+                  color: "#777",
+                  fontSize: "0.95rem",
+                }}
+              >
+                {format(new Date(comment.updatedAt), "yyyy.MM.dd HH:mm", {
+                  locale: ko,
+                })}
+              </div>
+              {comment.commentText}
+            </Comment>
+          ))}
+        </CommentsList>
       </Wrapper>
     </PageContainer>
   );
