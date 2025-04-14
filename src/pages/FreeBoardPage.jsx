@@ -1,10 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../components/Context/AuthContext";
 import { dummyPosts } from "../data/posts";
 import styled from "styled-components";
 import Dropdown from "../components/FreeBoardComponents/Dropdown";
 import MyPostWriter from "../components/FreeBoardComponents/MyPostWriter";
 import FeedList from "../components/FreeBoardComponents/FeedList";
+
+import PostVo from "../vo/PostVo";
 
 const Wrapper = styled.div`
   width: 1200px;
@@ -35,43 +38,31 @@ const FixedPostBar = styled.div`
 
 const FreeBoardPage = () => {
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
+  const [selectedRegion, setSelectedRegion] = useState({
+    id: -1,
+    name: "전체",
+  });
+  const [selectedHobby, setSelectedHobby] = useState({ id: -1, name: "전체" });
 
-  const API_USER_SESSION_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+  const [showRegionList, setShowRegionList] = useState(false);
+  const [showHobbyList, setShowHobbyList] = useState(false);
+
+  // const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState(dummyPosts);
+  const [error, setError] = useState(null);
+  const API_POST_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
     import.meta.env.VITE_API_PORT
-  }/api/user/session`;
+  }/api/post`;
 
-  const [userData, setUserData] = useState();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  //@note - 유저 세션 체크하기
   useEffect(() => {
-    console.log("useEffect - 유저 세션 체크");
-    console.log("API_URL:", API_USER_SESSION_URL);
+    if (!loading && !user) {
+      navigate("/login");
+    }
+  }, [loading, user]);
 
-    fetch(API_USER_SESSION_URL, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            console.log("로그인 세션이 없습니다.");
-            setIsLoggedIn(false);
-            navigate("/login");
-          } else {
-            console.error("회원 정보 불러오기 실패:", response.status);
-          }
-          return; // 에러 발생 시 더 이상 진행하지 않음
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("user 데이터 확인:", data);
-        setUserData(data);
-        setIsLoggedIn(true);
-      })
-      .catch((error) => console.error("회원 정보 불러오기 오류", error));
-  }, []);
+  // 이제 user 정보는 여기서 전역적으로 사용 가능
+  console.log("현재 로그인한 유저 정보:", user);
 
   const regionId = [
     { id: -1, name: "전체" },
@@ -118,53 +109,45 @@ const FreeBoardPage = () => {
     ...outdoorHobbies,
   ];
 
+  // const [selectedRegion, setSelectedRegion] = useState({ id: null, name: "지역 선택" });
+  // const [selectedHobby, setSelectedHobby] = useState({ id: null, name: "카테고리 선택" });
   // 포스트 처리
-  const handlePost = async () => {
+  const loadPost = async () => {
     // e.preventDefault();
-
     try {
       const response = await fetch(API_POST_URL, {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include", // ✅ 세션 유지
-        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
       console.log("data", data);
 
-      navigate("/grouplogin", { state: { group_id: data.group_id } });
+      setPosts(data);
 
       if (!response.ok) {
-        throw new Error("로그인 실패");
+        throw new Error("포스트 리스트 가져오기 실패");
       }
     } catch (error) {
-      console.error("로그인 오류", error);
+      console.error("포스트 리스트 가져오기 오류", error);
       setError("서버 오류가 발생했습니다.");
     }
   };
 
-  // const [selectedRegion, setSelectedRegion] = useState({ id: null, name: "지역 선택" });
-  // const [selectedHobby, setSelectedHobby] = useState({ id: null, name: "카테고리 선택" });
-
-  const [selectedRegion, setSelectedRegion] = useState({
-    id: -1,
-    name: "전체",
-  });
-  const [selectedHobby, setSelectedHobby] = useState({ id: -1, name: "전체" });
-
-  const [showRegionList, setShowRegionList] = useState(false);
-  const [showHobbyList, setShowHobbyList] = useState(false);
-
-  // const [posts, setPosts] = useState([]);
-  const [posts, setPosts] = useState(dummyPosts);
-  const [error, setError] = useState(null);
-
   const handleAddPost = (newPost) => {
     setPosts((prev) => [newPost, ...prev]);
   };
+
+  useEffect(() => {
+    loadPost();
+  }, []);
+
+  if (loading) {
+    return <div>로딩 중...</div>; // 또는 Spinner
+  }
 
   // const filteredPosts = selectedHobby.id === -1
   //   ? posts

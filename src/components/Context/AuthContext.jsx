@@ -1,75 +1,38 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
+// context/AuthContext.jsx
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null); // 사용자 정보
+  const [loading, setLoading] = useState(true);
 
-  const checkLoginStatus = useCallback(async () => {
-    try {
-      const response = await fetch(
-        `http://${import.meta.env.VITE_API_ADDRESS}:${
-          import.meta.env.VITE_API_PORT
-        }/api/user/session`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setIsLoggedIn(true);
-        setUser(data);
-      } else {
-        setIsLoggedIn(false);
-        setUser(null);
-      }
-    } catch (error) {
-      console.error("로그인 상태 확인 중 오류:", error);
-      setIsLoggedIn(false);
-      setUser(null);
-    }
-  }, []);
+  const API_USER_SESSION_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+    import.meta.env.VITE_API_PORT
+  }/api/user/session`;
 
   useEffect(() => {
-    checkLoginStatus();
-  }, [checkLoginStatus]);
-
-  const logout = async () => {
-    try {
-      const response = await fetch(
-        `http://${import.meta.env.VITE_API_ADDRESS}:${
-          import.meta.env.VITE_API_PORT
-        }/api/user/logout`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-      if (response.ok) {
-        setIsLoggedIn(false);
+    // 세션으로 유저 정보 확인
+    fetch(API_USER_SESSION_URL, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Unauthorized");
+        const data = await res.json();
+        setUser(data);
+      })
+      .catch(() => {
         setUser(null);
-      }
-    } catch (err) {
-      console.error("로그아웃 오류:", err);
-    }
-  };
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, logout }}>
+    <AuthContext.Provider value={{ user, setUser, loading }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export const useAuth = () => useContext(AuthContext);

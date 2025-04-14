@@ -1,6 +1,6 @@
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "./Context/AuthContext";
 
 const SvgButtonWrapper = styled(Link)`
   position: relative;
