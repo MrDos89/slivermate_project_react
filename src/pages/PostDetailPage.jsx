@@ -191,7 +191,7 @@ const PostDetailPage = () => {
   // 포스트 처리
   useEffect(() => {
     if (postId) {
-      loadPost();
+      loadPost(postId);
     }
   }, [postId]); // id가 바뀔 때마다 다시 호출
 
