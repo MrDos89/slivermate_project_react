@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../components/Context/AuthContext";
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -242,9 +243,10 @@ const FallingLeaf = styled.div`
 
 function ChatTestPage() {
   const navigate = useNavigate();
-  const API_USER_SESSION_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
-    import.meta.env.VITE_API_PORT
-  }/api/usergroup/session`;
+  const { user, logout } = useAuth();
+  // const API_USER_SESSION_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+  //   import.meta.env.VITE_API_PORT
+  // }/api/usergroup/session`;
   const API_USER_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
     import.meta.env.VITE_API_PORT
   }/api/user`;
@@ -253,8 +255,6 @@ function ChatTestPage() {
   }/api/club`;
   const CHAT_ADDRESS = import.meta.env.VITE_CHAT_ADDRESS;
 
-  const [userData, setUserData] = useState();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userClubsData, setUserClubsData] = useState([]);
   const [selectedClubId, setSelectedClubId] = useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -262,38 +262,38 @@ function ChatTestPage() {
   const [messages, setMessages] = useState({}); // { clubId: [messages] }
   const [socket, setSocket] = useState(null);
 
-  //@note - 유저 세션 체크하기
-  useEffect(() => {
-    fetch(API_USER_SESSION_URL, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            console.log("로그인 세션이 없습니다.");
-            setIsLoggedIn(false);
-            navigate("/login");
-          } else {
-            console.error("회원 정보 불러오기 실패:", response.status);
-          }
-          return; // 에러 발생 시 더 이상 진행하지 않음
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("user 데이터 확인:", data);
-        setUserData(data);
-        setIsLoggedIn(true);
-      })
-      .catch((error) => console.error("회원 정보 불러오기 오류", error));
-  }, []);
+  // //@note - 유저 세션 체크하기
+  // useEffect(() => {
+  //   fetch(API_USER_SESSION_URL, {
+  //     method: "GET",
+  //     credentials: "include",
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         if (response.status === 401) {
+  //           console.log("로그인 세션이 없습니다.");
+  //           setIsLoggedIn(false);
+  //           navigate("/login");
+  //         } else {
+  //           console.error("회원 정보 불러오기 실패:", response.status);
+  //         }
+  //         return; // 에러 발생 시 더 이상 진행하지 않음
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       console.log("user 데이터 확인:", data);
+  //       setUserData(data);
+  //       setIsLoggedIn(true);
+  //     })
+  //     .catch((error) => console.error("회원 정보 불러오기 오류", error));
+  // }, []);
 
   useEffect(() => {
-    const userId = userData?.uid;
+    const userId = user?.uid;
     if (!userId) return;
 
-    fetch(API_CLUB_URL + `/${userData?.uid}/joined`, {
+    fetch(API_CLUB_URL + `/${user?.uid}/joined`, {
       method: "GET",
       credentials: "include",
     })
@@ -309,11 +309,11 @@ function ChatTestPage() {
         setUserClubsData(data);
       })
       .catch((error) => console.error("가입한 클럽 정보 불러오기 오류", error));
-  }, [API_CLUB_URL, userData?.uid]);
+  }, [API_CLUB_URL, user?.uid]);
 
   // 웹소켓 연결 및 관리
   useEffect(() => {
-    if (selectedClubId && isLoggedIn && userData) {
+    if (selectedClubId && user) {
       const wsUrl = `wss://${
         import.meta.env.VITE_WEB_SOCKET_ADDRESS
       }.execute-api.ap-northeast-2.amazonaws.com/production/?channel=${selectedClubId}`;
@@ -338,12 +338,12 @@ function ChatTestPage() {
                 ...(prevMessages[selectedClubId] || []),
                 {
                   id: Date.now(),
-                  sender: nickname === userData.nickname ? "me" : nickname,
+                  sender: nickname === user.nickname ? "me" : nickname,
                   senderName: nickname,
-                  isMe: nickname === userData.nickname,
+                  isMe: nickname === user.nickname,
                   content: message,
                   timestamp: new Date().toISOString(),
-                  read: nickname === userData.nickname, // 내가 보낸 메시지는 읽음 처리
+                  read: nickname === user.nickname, // 내가 보낸 메시지는 읽음 처리
                   senderProfile: thumbnail,
                 },
               ],
@@ -377,7 +377,7 @@ function ChatTestPage() {
       }
       setSocket(null);
     }
-  }, [selectedClubId, isLoggedIn, userData, CHAT_ADDRESS]);
+  }, [selectedClubId, user, CHAT_ADDRESS]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -399,7 +399,7 @@ function ChatTestPage() {
       !inputValue.trim() ||
       !socket ||
       socket.readyState !== WebSocket.OPEN ||
-      !userData ||
+      !user ||
       !selectedClubId
     ) {
       console.log(
@@ -410,13 +410,13 @@ function ChatTestPage() {
 
     const newMessage = {
       id: Date.now(),
-      sender: userData.nickname, // 또는 "me"와 같이 자신을 나타내는 값
-      senderName: userData.nickname,
+      sender: user.nickname, // 또는 "me"와 같이 자신을 나타내는 값
+      senderName: user.nickname,
       isMe: true,
       content: inputValue,
       timestamp: new Date().toISOString(),
       read: true, // 내가 보낸 메시지는 읽음 처리
-      thumbnail: userData.thumbnail || "",
+      thumbnail: user.thumbnail || "",
     };
 
     setMessages((prevMessages) => ({
@@ -428,8 +428,8 @@ function ChatTestPage() {
       action: "sendmessage",
       channelId: selectedClubId,
       message: inputValue,
-      nickname: userData.nickname,
-      thumbnail: userData.thumbnail || "", // 사용자 프로필 이미지 URL
+      nickname: user.nickname,
+      thumbnail: user.thumbnail || "", // 사용자 프로필 이미지 URL
     };
 
     socket.send(JSON.stringify(messagePayload));
@@ -520,7 +520,7 @@ function ChatTestPage() {
               </div>
               {msg.isMe && (
                 <img
-                  src={userData.thumbnail}
+                  src={user.thumbnail}
                   alt="profile"
                   style={{
                     width: 40,

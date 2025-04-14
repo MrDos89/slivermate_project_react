@@ -7,8 +7,8 @@ import ClubSection from "../components/MyPageComponents/ClubSection";
 import LectureSection from "../components/MyPageComponents/LectureSection";
 import HostVideoSection from "../components/MyPageComponents/HostVideoSection";
 import FamilySection from "../components/MyPageComponents/FamilySection";
-import SchedulePaymentSection from "../components/MyPageComponents/SchedulePaymentSection"; 
-
+import SchedulePaymentSection from "../components/MyPageComponents/SchedulePaymentSection";
+import { useAuth } from "../components/Context/AuthContext";
 
 import {
   MyPageContainer,
@@ -115,46 +115,43 @@ const dummyClubs = [
   },
 ];
 
-
-
 function MyPage() {
-  const user = dummyUser;
+  // const user = dummyUser;
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const API_USER_SESSION_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
-    import.meta.env.VITE_API_PORT
-  }/api/user/session`;
-  const [userData, setUserData] = useState();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const API_USER_SESSION_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+  //   import.meta.env.VITE_API_PORT
+  // }/api/user/session`;
 
-  //@note - 유저 세션 체크하기
-  useEffect(() => {
-    console.log("useEffect - 유저 세션 체크");
-    console.log("API_URL:", API_USER_SESSION_URL);
+  // //@note - 유저 세션 체크하기
+  // useEffect(() => {
+  //   console.log("useEffect - 유저 세션 체크");
+  //   console.log("API_URL:", API_USER_SESSION_URL);
 
-    fetch(API_USER_SESSION_URL, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
-            console.log("로그인 세션이 없습니다.");
-            setIsLoggedIn(false);
-            navigate("/login");
-          } else {
-            console.error("회원 정보 불러오기 실패:", response.status);
-          }
-          return; // 에러 발생 시 더 이상 진행하지 않음
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("user 데이터 확인:", data);
-        setUserData(data);
-        setIsLoggedIn(true);
-      })
-      .catch((error) => console.error("회원 정보 불러오기 오류", error));
-  }, []);
+  //   fetch(API_USER_SESSION_URL, {
+  //     method: "GET",
+  //     credentials: "include",
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         if (response.status === 401) {
+  //           console.log("로그인 세션이 없습니다.");
+  //           setIsLoggedIn(false);
+  //           navigate("/login");
+  //         } else {
+  //           console.error("회원 정보 불러오기 실패:", response.status);
+  //         }
+  //         return; // 에러 발생 시 더 이상 진행하지 않음
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       console.log("user 데이터 확인:", data);
+  //       setUserData(data);
+  //       setIsLoggedIn(true);
+  //     })
+  //     .catch((error) => console.error("회원 정보 불러오기 오류", error));
+  // }, []);
 
   const [startIndex, setStartIndex] = useState(0);
   const [startPostIndex, setStartPostIndex] = useState(0); // 게시글/댓글 페이지네이션 시작 인덱스
@@ -171,7 +168,6 @@ function MyPage() {
     "#8ceb9d", // 일정 및 결제
   ];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  
 
   const VISIBLE_COUNT = 5;
 
@@ -181,29 +177,31 @@ function MyPage() {
   const clubSectionRef = useRef(null);
   const hostVideoRef = useRef(null);
   const familySectionRef = useRef(null);
-const scheduleSectionRef = useRef(null);
+  const scheduleSectionRef = useRef(null);
 
-const [groupUsers, setGroupUsers] = useState([]); // 같은 groupId 유저 목록
-const [groupLeaderName, setGroupLeaderName] = useState("");
+  const [groupUsers, setGroupUsers] = useState([]); // 같은 groupId 유저 목록
+  const [groupLeaderName, setGroupLeaderName] = useState("");
 
-// fetchUserData 호출 추가
-useEffect(() => {
-  if (userData?.group_id) {
-    fetch(`http://${import.meta.env.VITE_API_ADDRESS}:${import.meta.env.VITE_API_PORT}/api/user/group/${userData.group_id}`)
-      .then(res => res.json())
-      .then(data => {
-        setGroupUsers(data);
+  // fetchUserData 호출 추가
+  useEffect(() => {
+    if (userData?.group_id) {
+      fetch(
+        `http://${import.meta.env.VITE_API_ADDRESS}:${
+          import.meta.env.VITE_API_PORT
+        }/api/user/group/${userData.group_id}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setGroupUsers(data);
 
-        const leader = data.find(member => member.user_type === 1); // 부모1
-        if (leader) {
-          setGroupLeaderName(leader.user_name);
-        }
-      })
-      .catch(err => console.error("그룹 유저 불러오기 오류:", err));
-  }
-}, [userData]);
-
-
+          const leader = data.find((member) => member.user_type === 1); // 부모1
+          if (leader) {
+            setGroupLeaderName(leader.user_name);
+          }
+        })
+        .catch((err) => console.error("그룹 유저 불러오기 오류:", err));
+    }
+  }, [userData]);
 
   const handleScrollTo = (ref) => {
     if (ref.current) {
@@ -254,88 +252,85 @@ useEffect(() => {
     <>
       <SideMenu>
         <MenuGroup>
-        <MenuButton
-  onClick={() => {
-    setSelectedTabIndex(0);
-    handleScrollTo(userInfoRef);
-  }}
-  $isActive={selectedTabIndex === 0}
-  $color={tabColors[0]}
->
-  유저 정보
-</MenuButton>
+          <MenuButton
+            onClick={() => {
+              setSelectedTabIndex(0);
+              handleScrollTo(userInfoRef);
+            }}
+            $isActive={selectedTabIndex === 0}
+            $color={tabColors[0]}
+          >
+            유저 정보
+          </MenuButton>
 
-<MenuButton
-  onClick={() => {
-    setSelectedTabIndex(1);
-    handleScrollTo(lectureSectionRef);
-  }}
-  $isActive={selectedTabIndex === 1}
-  $color={tabColors[1]}
->
-  내 강의
-</MenuButton>
-<MenuButton
-  onClick={() => {
-    setSelectedTabIndex(2);
-    handleScrollTo(clubSectionRef);
-  }}
-  $isActive={selectedTabIndex === 2}
-  $color={tabColors[2]}
->
-  내 동아리
-</MenuButton>
+          <MenuButton
+            onClick={() => {
+              setSelectedTabIndex(1);
+              handleScrollTo(lectureSectionRef);
+            }}
+            $isActive={selectedTabIndex === 1}
+            $color={tabColors[1]}
+          >
+            내 강의
+          </MenuButton>
+          <MenuButton
+            onClick={() => {
+              setSelectedTabIndex(2);
+              handleScrollTo(clubSectionRef);
+            }}
+            $isActive={selectedTabIndex === 2}
+            $color={tabColors[2]}
+          >
+            내 동아리
+          </MenuButton>
 
-<MenuButton
-  onClick={() => {
-    setSelectedTabIndex(3);
-    handleScrollTo(postSectionRef);
-  }}
-  $isActive={selectedTabIndex === 3}
-  $color={tabColors[3]}
->
-  내가 쓴 글
-</MenuButton>
+          <MenuButton
+            onClick={() => {
+              setSelectedTabIndex(3);
+              handleScrollTo(postSectionRef);
+            }}
+            $isActive={selectedTabIndex === 3}
+            $color={tabColors[3]}
+          >
+            내가 쓴 글
+          </MenuButton>
 
-<MenuButton
-  onClick={() => {
-    setSelectedTabIndex(4);
-    handleScrollTo(hostVideoRef);
-  }}
-  $isActive={selectedTabIndex === 4}
-  $color={tabColors[4]}
->
-  내 수업
-</MenuButton>
+          <MenuButton
+            onClick={() => {
+              setSelectedTabIndex(4);
+              handleScrollTo(hostVideoRef);
+            }}
+            $isActive={selectedTabIndex === 4}
+            $color={tabColors[4]}
+          >
+            내 수업
+          </MenuButton>
 
-<MenuButton
-  onClick={() => {
-    setSelectedTabIndex(5);
-    handleScrollTo(familySectionRef);
-  }}
-  $isActive={selectedTabIndex === 5}
-  $color={tabColors[5]}
->
-  가족 구성원
-</MenuButton>
+          <MenuButton
+            onClick={() => {
+              setSelectedTabIndex(5);
+              handleScrollTo(familySectionRef);
+            }}
+            $isActive={selectedTabIndex === 5}
+            $color={tabColors[5]}
+          >
+            가족 구성원
+          </MenuButton>
 
-<MenuButton
-  onClick={() => {
-    setSelectedTabIndex(6);
-    handleScrollTo(scheduleSectionRef);
-  }}
-  $isActive={selectedTabIndex === 6}
-  $color={tabColors[6]}
->
-  일정 및 결제
-</MenuButton>
-
+          <MenuButton
+            onClick={() => {
+              setSelectedTabIndex(6);
+              handleScrollTo(scheduleSectionRef);
+            }}
+            $isActive={selectedTabIndex === 6}
+            $color={tabColors[6]}
+          >
+            일정 및 결제
+          </MenuButton>
         </MenuGroup>
       </SideMenu>
 
       <MyPageContainer style={{ backgroundColor: tabColors[selectedTabIndex] }}>
-
-
         {/* 1. 유저 정보 */}
         <ScrollAnchor ref={userInfoRef}>
           <UserInfoWrapper>
@@ -352,94 +347,85 @@ useEffect(() => {
 
         {/* 2. 유저 상태 */}
         <StatusSection>
-  <StatusItem>
-    👨‍👩‍👧 가족정보: {user.familyRole ?? "정보 없음"}
-  </StatusItem>
-  <StatusItem>
-    👥 가입한 동아리: {user.clubCount}개
-  </StatusItem>
-</StatusSection>
+          <StatusItem>👨‍👩‍👧 가족정보: {user.familyRole ?? "정보 없음"}</StatusItem>
+          <StatusItem>👥 가입한 동아리: {user.clubCount}개</StatusItem>
+        </StatusSection>
         {/* 3. 내가 시청 중인 강의 */}
         <ScrollAnchor ref={lectureSectionRef}>
-        <LectureSection
-  user={user}
-  startIndex={startIndex}
-  handlePrev={handlePrev}
-  handleNext={handleNext}
-  VISIBLE_COUNT={VISIBLE_COUNT}
-  sectionTitle={
-    user.userType === 1
-      ? "내가 시청중인 강의"
-      : `${groupLeaderName} 님이 시청하는 강의`
-  }
-/>
-
+          <LectureSection
+            user={user}
+            startIndex={startIndex}
+            handlePrev={handlePrev}
+            handleNext={handleNext}
+            VISIBLE_COUNT={VISIBLE_COUNT}
+            sectionTitle={
+              user.userType === 1
+                ? "내가 시청중인 강의"
+                : `${groupLeaderName} 님이 시청하는 강의`
+            }
+          />
         </ScrollAnchor>
 
         {/* 4. 내 동아리 */}
         <ScrollAnchor ref={clubSectionRef}>
-        <ClubSection
-  dummyClubs={dummyClubs}
-  regionMap={regionMap}
-  hobbyMap={hobbyMap}
-  sectionTitle={
-    user.userType === 1
-      ? "내 동아리"
-      : `${groupLeaderName} 님의 동아리`
-  }
-  userId={user.uid}
-/>
-
+          <ClubSection
+            dummyClubs={dummyClubs}
+            regionMap={regionMap}
+            hobbyMap={hobbyMap}
+            sectionTitle={
+              user.userType === 1
+                ? "내 동아리"
+                : `${groupLeaderName} 님의 동아리`
+            }
+            userId={user.uid}
+          />
         </ScrollAnchor>
 
         {/* 5. 내가 쓴 글 보기 */}
         <ScrollAnchor ref={postSectionRef}>
-        <PostSection
-  user={user}
-  visiblePosts={visiblePosts}
-  selectedPostType={selectedPostType}
-  postVisibleCount={postVisibleCount}
-  startPostIndex={startPostIndex}
-  handlePostPrev={handlePostPrev}
-  handlePostNext={handlePostNext}
-  handlePostTypeChange={handlePostTypeChange}
-  hobbyMap={hobbyMap}
-  sectionTitle={
-    user.userType === 1
-      ? "내가 쓴 글 & 댓글 보기"
-      : `${groupLeaderName} 님이 쓴 글 & 댓글 보기`
-  }
-/>
-
+          <PostSection
+            user={user}
+            visiblePosts={visiblePosts}
+            selectedPostType={selectedPostType}
+            postVisibleCount={postVisibleCount}
+            startPostIndex={startPostIndex}
+            handlePostPrev={handlePostPrev}
+            handlePostNext={handlePostNext}
+            handlePostTypeChange={handlePostTypeChange}
+            hobbyMap={hobbyMap}
+            sectionTitle={
+              user.userType === 1
+                ? "내가 쓴 글 & 댓글 보기"
+                : `${groupLeaderName} 님이 쓴 글 & 댓글 보기`
+            }
+          />
         </ScrollAnchor>
 
         {/* 내 호스트 영상  */}
         <ScrollAnchor ref={hostVideoRef}>
-        <HostVideoSection
-  user={user}
-  startIndex={startIndex}
-  handlePrev={handlePrev}
-  handleNext={handleNext}
-  VISIBLE_COUNT={VISIBLE_COUNT}
-  sectionTitle={
-    user.userType === 1
-      ? "내 호스트 영상"
-      : `${groupLeaderName} 님의 호스트 영상`
-  }
-/>
-
+          <HostVideoSection
+            user={user}
+            startIndex={startIndex}
+            handlePrev={handlePrev}
+            handleNext={handleNext}
+            VISIBLE_COUNT={VISIBLE_COUNT}
+            sectionTitle={
+              user.userType === 1
+                ? "내 호스트 영상"
+                : `${groupLeaderName} 님의 호스트 영상`
+            }
+          />
         </ScrollAnchor>
 
-        {/* 7. 가족구성원 */}  
+        {/* 7. 가족구성원 */}
         <ScrollAnchor ref={familySectionRef}>
-<FamilySection groupId={userData?.group_id} />
-</ScrollAnchor>
+          <FamilySection groupId={userData?.group_id} />
+        </ScrollAnchor>
 
-{/* 8. 일정 및 결제 확인 */}
-<ScrollAnchor ref={scheduleSectionRef}>
-<SchedulePaymentSection />
-</ScrollAnchor>
-
+        {/* 8. 일정 및 결제 확인 */}
+        <ScrollAnchor ref={scheduleSectionRef}>
+          <SchedulePaymentSection />
+        </ScrollAnchor>
       </MyPageContainer>
     </>
   );
