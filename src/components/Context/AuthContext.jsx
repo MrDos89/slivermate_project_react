@@ -11,6 +11,25 @@ export const AuthProvider = ({ children }) => {
     import.meta.env.VITE_API_PORT
   }/api/user/session`;
 
+  // context/AuthContext.jsx 내부
+  const logout = async () => {
+    await fetch("/api/user/logout", { method: "POST", credentials: "include" });
+    setUser(null);
+  };
+
+  const refreshSession = async () => {
+    try {
+      const res = await fetch(API_USER_SESSION_URL, {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await res.json();
+      setUser(data);
+    } catch {
+      setUser(null);
+    }
+  };
+
   useEffect(() => {
     // 세션으로 유저 정보 확인
     fetch(API_USER_SESSION_URL, {
@@ -29,7 +48,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading }}>
+    <AuthContext.Provider
+      value={{ user, setUser, loading, logout, refreshSession }}
+    >
       {children}
     </AuthContext.Provider>
   );

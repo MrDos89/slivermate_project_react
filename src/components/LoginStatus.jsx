@@ -42,7 +42,7 @@ const SvgButtonWrapper = styled(Link)`
 
 export default function LoginStatus() {
   const navigate = useNavigate();
-  const { isLoggedIn, user, logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleLogout = async () => {
     await logout();
@@ -51,7 +51,7 @@ export default function LoginStatus() {
 
   return (
     <div className="auth-status">
-      {isLoggedIn ? (
+      {user != null ? (
         <>
           <span>{user?.user_id}님</span>
           <SvgButtonWrapper to="/mypage">

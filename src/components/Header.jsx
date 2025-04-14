@@ -306,19 +306,12 @@ const PhoneButton = styled.button`
 `;
 
 function Header({ setScrollIndex }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false); //  모달 상태
   const [showNotification, setShowNotification] = useState(false);
 
   const handleNavigateToScroll = (index) => {
     navigate(`/?scrollTo=${index}`);
-  };
-
-  const handleLoginChange = (status, userData) => {
-    setIsLoggedIn(status);
-    setUser(userData);
   };
 
   // const handlePhoneClick = () => {
@@ -389,7 +382,7 @@ function Header({ setScrollIndex }) {
           <PhoneButton onClick={() => setShowNotification((prev) => !prev)}>
             🔔
           </PhoneButton>
-          <LoginStatus onLoginChange={handleLoginChange} />
+          <LoginStatus />
           {/* <SvgButtonWrapper to="/login">
             <svg height="40" width="150">
               <rect id="shape" height="40" width="150" />
