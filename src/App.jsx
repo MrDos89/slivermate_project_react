@@ -86,7 +86,7 @@ function App() {
           />
           <Route path="/freeboard" element={<FreeBoardPage />} />
           <Route path="/senior-column" element={<SeniorColumnPage />} />
-          <Route path="/post/:id" element={<PostDetailPage />} />
+          <Route path="/post/:postId" element={<PostDetailPage />} />
 
           <Route
             path="/mypage"

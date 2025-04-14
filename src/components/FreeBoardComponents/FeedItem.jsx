@@ -126,7 +126,7 @@ const FeedItem = ({ post }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/post/${post.id}`);
+    navigate(`/post/${post.postId}`);
   };
 
   const renderTime = () => {
