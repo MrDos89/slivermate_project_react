@@ -126,7 +126,8 @@ const FreeBoardPage = () => {
       const data = await response.json();
       console.log("data", data);
 
-      setPosts(data);
+      const postList = data.map((item) => PostVo.fromJson(item));
+      setPosts(postList);
 
       if (!response.ok) {
         throw new Error("포스트 리스트 가져오기 실패");
