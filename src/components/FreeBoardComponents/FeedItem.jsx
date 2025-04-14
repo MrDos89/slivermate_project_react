@@ -130,26 +130,28 @@ const FeedItem = ({ post }) => {
   };
 
   const renderTime = () => {
-    const createdAt = new Date(post.createdAt || Date.now());
-    const diff = Date.now() - createdAt.getTime();
+    const registerDate = new Date(post.registerDate || Date.now());
+    const diff = Date.now() - registerDate.getTime();
     const oneDay = 24 * 60 * 60 * 1000;
 
     if (diff < oneDay) {
-      return formatDistanceToNow(createdAt, { addSuffix: true, locale: ko });
+      return formatDistanceToNow(registerDate, { addSuffix: true, locale: ko });
     } else {
-      return format(createdAt, "yyyy.MM.dd", { locale: ko });
+      return format(registerDate, "yyyy.MM.dd", { locale: ko });
     }
   };
 
   const [currentImage, setCurrentImage] = useState(0);
 
   const nextImage = () => {
-    setCurrentImage((prev) => (prev + 1 < post.images.length ? prev + 1 : 0));
+    setCurrentImage((prev) =>
+      prev + 1 < post.postImages.length ? prev + 1 : 0
+    );
   };
 
   const prevImage = () => {
     setCurrentImage((prev) =>
-      prev - 1 >= 0 ? prev - 1 : post.images.length - 1
+      prev - 1 >= 0 ? prev - 1 : post.postImages.length - 1
     );
   };
 
@@ -162,18 +164,18 @@ const FeedItem = ({ post }) => {
             alt="user"
           />
           <NameDate>
-            <Name>{post.user}</Name>
+            <Name>{post.userNickname}</Name>
             <Time>{renderTime()}</Time>
           </NameDate>
         </Profile>
         <div>⋯</div>
       </TopRow>
 
-      {post.images?.length > 0 && (
+      {post.postImages?.length > 0 && (
         <ImageCarousel>
           <SlideButton onClick={prevImage}>&lt;</SlideButton>
           <ImageDisplay
-            src={post.images[currentImage].url}
+            src={post.postImages[currentImage].url}
             alt={`post-image-${currentImage}`}
           />
           <SlideButton onClick={nextImage}>&gt;</SlideButton>
@@ -196,8 +198,8 @@ const FeedItem = ({ post }) => {
       </Content>
 
       <ActionRow>
-        <Action>❤️ {post.likes || 0}</Action>
-        <Action>💬 {post.comments || 0}</Action>
+        <Action>❤️ {post.postLikeCount || 0}</Action>
+        <Action>💬 {post.postCommentCount || 0}</Action>
       </ActionRow>
     </Card>
   );
