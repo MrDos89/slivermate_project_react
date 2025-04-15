@@ -106,7 +106,7 @@ function PostSection({
             </tr>
           </thead>
           <tbody>
-            {visiblePosts.map((post, index) => (
+            {userPosts.map((post, index) => (
               <TableRow key={post.postId}>
                 <TableCell>{startPostIndex + index + 1}</TableCell>
                 <TableCell>{post.postNote}</TableCell>
