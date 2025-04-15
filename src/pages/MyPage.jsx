@@ -476,6 +476,7 @@ function MyPage() {
             user={user}
             userPosts={userPosts}
             userComments={userComments}
+            postVisibleCount={postVisibleCount}
             selectedPostType={selectedPostType}
             startPostIndex={startPostIndex}
             setStartPostIndex={setStartPostIndex}
