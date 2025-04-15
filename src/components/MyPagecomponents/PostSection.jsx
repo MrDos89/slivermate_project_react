@@ -84,14 +84,14 @@ function PostSection({
   console.log("넘겨받은 userComments 확인 👉", userComments);
 
   // 필터링 후 슬라이스
-  const selectedList = selectedPostType === 1 ? userPosts : userComments;
+  const selectedList =
+    selectedPostType === 1 ? userPosts || [] : userComments || [];
+  const totalCount = selectedList.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / postVisibleCount));
   const slicedList = selectedList.slice(
     startPostIndex,
     startPostIndex + postVisibleCount
   );
-
-  const totalCount = selectedList.length;
-  const totalPages = Math.ceil(totalCount / postVisibleCount);
 
   const handlePostPrev = () => {
     setStartPostIndex((prev) => Math.max(prev - postVisibleCount, 0));
