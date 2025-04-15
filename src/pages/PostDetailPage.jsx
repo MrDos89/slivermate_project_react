@@ -230,6 +230,7 @@ const PostDetailPage = () => {
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
   const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState(""); // 댓글 입력 상태
 
   const navigate = useNavigate();
   // 포스트 처리
@@ -242,6 +243,49 @@ const PostDetailPage = () => {
   const API_POST_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
     import.meta.env.VITE_API_PORT
   }/api/post`;
+
+  const handleCommentSubmit = async () => {
+    if (!newComment.trim()) return;
+
+    const now = new Date();
+
+    const newCommentVo = new CommentVo({
+      commentId: 0, // 등록 시 서버에서 부여
+      postId: post.postId,
+      userId: user.uid,
+      clubId: post.clubId || 0,
+      commentText: newComment,
+      updDate: now,
+      userNickname: user.userNickname,
+      userThumbnail: user.userThumbnail,
+    });
+
+    try {
+      const response = await fetch(
+        `http://${import.meta.env.VITE_API_ADDRESS}:${
+          import.meta.env.VITE_API_PORT
+        }/api/comment/newcomment`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(newCommentVo.toJson()),
+        }
+      );
+
+      if (response.ok) {
+        setNewComment("");
+        const updated = await loadComments(post.postId);
+        setComments(updated);
+      } else {
+        console.error("❌ 댓글 등록 실패:", response.status);
+      }
+    } catch (error) {
+      console.error("❌ 댓글 등록 중 에러:", error);
+    }
+  };
 
   const loadPost = async (id) => {
     try {
@@ -366,18 +410,23 @@ const PostDetailPage = () => {
         {/* 댓글 작성 */}
         <CommentBox>
           <CommentLabel htmlFor="comment">댓글 작성</CommentLabel>
-          <CommentInput id="comment" placeholder="댓글을 작성하세요." />
-          <CommentSubmit>등록</CommentSubmit>
+          <CommentInput
+            id="comment"
+            placeholder="댓글을 작성하세요."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <CommentSubmit onClick={handleCommentSubmit}>등록</CommentSubmit>
           <CommentFormBottomLine /> {/* ✅ 여기서 선을 버튼 밑으로! */}
         </CommentBox>
 
         {/* 댓글 리스트 */}
         <CommentsList>
-          <h4
+          {/* <h4
             style={{ fontSize: "1.25rem", marginBottom: "16px", color: "#333" }}
           >
             댓글 {comments.length}개
-          </h4>
+          </h4> */}
           {comments.map((comment, idx) => (
             <Comment key={idx}>
               <CommentProfileImg src={comment.userThumbnail} />
