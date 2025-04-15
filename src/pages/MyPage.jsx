@@ -246,7 +246,7 @@ function MyPage() {
         const clubList = rawData.map((item) => ClubVo.fromJson(item));
         setUserClubs(clubList);
       } catch (error) {
-        console.error("❌ 게시글 데이터 불러오기 오류:", error);
+        console.error("❌ 모임 데이터 불러오기 오류:", error);
       }
     };
 
