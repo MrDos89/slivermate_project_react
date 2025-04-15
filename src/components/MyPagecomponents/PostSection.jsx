@@ -111,6 +111,7 @@ function PostSection({
               <TableHeader>내용</TableHeader>
               <TableHeader>작성일</TableHeader>
               <TableHeader>유저이름</TableHeader>
+              <TableHeader>취미</TableHeader>
             </tr>
           </thead>
           <tbody>
