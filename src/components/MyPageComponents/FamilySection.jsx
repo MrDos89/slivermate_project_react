@@ -6,7 +6,7 @@ const FamilyContainer = styled.div`
   padding: 2rem;
   background: #edffed;
   border-radius: 1rem;
-  margin: 150px 0; 
+  margin: 150px 0;
 `;
 
 const FamilyTitle = styled.h2`
@@ -16,9 +16,9 @@ const FamilyTitle = styled.h2`
 `;
 
 //const FamilyList = styled.div`
- // display: flex;
- // flex-wrap: wrap;
- // gap: 1rem;
+// display: flex;
+// flex-wrap: wrap;
+// gap: 1rem;
 //`;
 const FamilyList = styled.div`
   display: flex;
@@ -27,12 +27,12 @@ const FamilyList = styled.div`
 `;
 
 //const FamilyCard = styled.div`
-  //background: white;
-  //border-radius: 1rem;
-  //padding: 1rem;
-  //width: 150px;
-  //box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  // text-align: center;
+//background: white;
+//border-radius: 1rem;
+//padding: 1rem;
+//width: 150px;
+//box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+// text-align: center;
 //`;
 
 const FamilyCard = styled.div`
@@ -44,13 +44,12 @@ const FamilyCard = styled.div`
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
-
 //const FamilyImage = styled.img`
- // width: 80px;
-  //height: 80px;
-  //object-fit: cover;
-  //border-radius: 50%;
-  //margin-bottom: 0.5rem;
+// width: 80px;
+//height: 80px;
+//object-fit: cover;
+//border-radius: 50%;
+//margin-bottom: 0.5rem;
 //`;
 
 const FamilyImage = styled.img`
@@ -60,7 +59,6 @@ const FamilyImage = styled.img`
   border-radius: 50%;
   margin-right: 1rem;
 `;
-
 
 const FamilyName = styled.div`
   font-weight: bold;
@@ -78,33 +76,33 @@ const InfoWrapper = styled.div`
   flex-direction: column;
 `;
 
-const FamilySection = ({ groupId }) => {
+const FamilySection = ({ groupId, groupUsers }) => {
   const [familyData, setFamilyData] = useState([]);
 
   useEffect(() => {
-    // ✅ 더미 데이터 삽입
-    const dummyFamily = [
-      {
-        uid: 101,
-        user_name: "김아빠",
-        thumbnail: null,
-        user_group_id: groupId || 9999,
-      },
-      {
-        uid: 102,
-        user_name: "이엄마",
-        thumbnail: null,
-        user_group_id: groupId || 9999,
-      },
-      {
-        uid: 103,
-        user_name: "박동생",
-        thumbnail: null,
-        user_group_id: groupId || 9999,
-      },
-    ];
+    // // ✅ 더미 데이터 삽입
+    // const dummyFamily = [
+    //   {
+    //     uid: 101,
+    //     user_name: "김아빠",
+    //     thumbnail: null,
+    //     user_group_id: groupId || 9999,
+    //   },
+    //   {
+    //     uid: 102,
+    //     user_name: "이엄마",
+    //     thumbnail: null,
+    //     user_group_id: groupId || 9999,
+    //   },
+    //   {
+    //     uid: 103,
+    //     user_name: "박동생",
+    //     thumbnail: null,
+    //     user_group_id: groupId || 9999,
+    //   },
+    // ];
 
-    setFamilyData(dummyFamily);
+    setFamilyData(groupUsers);
 
     // ⚠️ 실제 fetch 사용 시 아래 코드 주석 해제
     /*
@@ -138,16 +136,15 @@ const FamilySection = ({ groupId }) => {
           //   <FamilyId>ID: {user.user_group_id}</FamilyId>
           // </FamilyCard>
           <FamilyCard key={user.uid}>
-  <FamilyImage
-    src={user.thumbnail || defaultThumbnail}
-    alt={`${user.user_name} 프로필`}
-  />
-  <InfoWrapper>
-    <FamilyName>{user.user_name}</FamilyName>
-    <FamilyId>ID: {user.user_group_id}</FamilyId>
-  </InfoWrapper>
-</FamilyCard>
-
+            <FamilyImage
+              src={user.thumbnail || defaultThumbnail}
+              alt={`${user.nickname} 프로필`}
+            />
+            <InfoWrapper>
+              <FamilyName>{user.userName}</FamilyName>
+              <FamilyId>ID: {user.userType === 1 ? "부모님" : "자녀"}</FamilyId>
+            </InfoWrapper>
+          </FamilyCard>
         ))}
       </FamilyList>
     </FamilyContainer>

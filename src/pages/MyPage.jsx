@@ -9,6 +9,8 @@ import HostVideoSection from "../components/MyPageComponents/HostVideoSection";
 import FamilySection from "../components/MyPageComponents/FamilySection";
 import SchedulePaymentSection from "../components/MyPageComponents/SchedulePaymentSection";
 import { useAuth } from "../components/Context/AuthContext";
+import UserVo from "../vo/UserVo";
+import PostVo from "../vo/PostVo";
 
 import {
   MyPageContainer,
@@ -155,15 +157,25 @@ function MyPage() {
       fetch(
         `http://${import.meta.env.VITE_API_ADDRESS}:${
           import.meta.env.VITE_API_PORT
-        }/api/user/group/${user.group_id}`
+        }/api/usergroup/${user.group_id}`
       )
         .then((res) => res.json())
-        .then((data) => {
-          setGroupUsers(data);
+        .then((resData) => {
+          const data = resData.data;
 
-          const leader = data.find((member) => member.user_type === 1); // 부모1
+          if (!Array.isArray(data)) {
+            console.error("data가 배열이 아님:", data);
+            return;
+          }
+
+          // ✅ UserVo 인스턴스로 변환
+          const userList = data.map((item) => UserVo.fromJson(item));
+          setGroupUsers(userList);
+
+          // ✅ 리더 찾기 (user_type === 1인 유저)
+          const leader = userList.find((member) => member.userType === 1);
           if (leader) {
-            setGroupLeaderName(leader.user_name);
+            setGroupLeaderName(leader.userName);
           }
         })
         .catch((err) => console.error("그룹 유저 불러오기 오류:", err));
@@ -183,8 +195,16 @@ function MyPage() {
 
         if (!response.ok) throw new Error("게시글 불러오기 실패");
 
-        const data = await response.json();
-        setUserPosts(data);
+        const rawData = await response.json();
+
+        if (!Array.isArray(rawData)) {
+          console.error("게시글 데이터가 배열이 아님:", rawData);
+          return;
+        }
+
+        // ✅ PostVo 인스턴스로 변환
+        const postList = rawData.map((item) => PostVo.fromJson(item));
+        setUserPosts(postList);
       } catch (error) {
         console.error("❌ 게시글 데이터 불러오기 오류:", error);
       }
@@ -411,7 +431,7 @@ function MyPage() {
 
         {/* 7. 가족구성원 */}
         <ScrollAnchor ref={familySectionRef}>
-          <FamilySection groupId={user?.group_id} />
+          <FamilySection groupId={user?.group_id} groupUsers={groupUsers} />
         </ScrollAnchor>
 
         {/* 8. 일정 및 결제 확인 */}

@@ -103,18 +103,20 @@ function PostSection({
           </thead>
           <tbody>
             {visiblePosts.map((post, index) => (
-              <TableRow key={post.id}>
-                <TableCell>{index + 1}</TableCell>
+              <TableRow key={post.postId}>
+                <TableCell>{startPostIndex + index + 1}</TableCell>
                 <TableCell>{post.postNote}</TableCell>
-                <TableCell>{post.date}</TableCell>
-                <TableCell>{user.nickname}</TableCell>
+                <TableCell>
+                  {new Date(post.registerDate).toLocaleDateString("ko-KR")}
+                </TableCell>
+                <TableCell>{post.userNickname}</TableCell>
                 <TableCell>
                   {
-                    hobbyMap[post.hobby.categoryId === 1 ? "indoor" : "outdoor"]
-                      ?.list[post.hobby.hobbyId]
+                    hobbyMap[post.postCategoryId === 1 ? "실내" : "실외"]?.list[
+                      post.postSubCategoryId
+                    ]
                   }
                 </TableCell>
-                <TableCell>{post.clubName}</TableCell>
               </TableRow>
             ))}
           </tbody>
