@@ -116,42 +116,10 @@ const dummyClubs = [
 ];
 
 function MyPage() {
-  // const user = dummyUser;
+  const dummyUser = dummyUser;
   const { user, loading } = useAuth();
   const navigate = useNavigate();
-  // const API_USER_SESSION_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
-  //   import.meta.env.VITE_API_PORT
-  // }/api/user/session`;
-
-  // //@note - 유저 세션 체크하기
-  // useEffect(() => {
-  //   console.log("useEffect - 유저 세션 체크");
-  //   console.log("API_URL:", API_USER_SESSION_URL);
-
-  //   fetch(API_USER_SESSION_URL, {
-  //     method: "GET",
-  //     credentials: "include",
-  //   })
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         if (response.status === 401) {
-  //           console.log("로그인 세션이 없습니다.");
-  //           setIsLoggedIn(false);
-  //           navigate("/login");
-  //         } else {
-  //           console.error("회원 정보 불러오기 실패:", response.status);
-  //         }
-  //         return; // 에러 발생 시 더 이상 진행하지 않음
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       console.log("user 데이터 확인:", data);
-  //       setUserData(data);
-  //       setIsLoggedIn(true);
-  //     })
-  //     .catch((error) => console.error("회원 정보 불러오기 오류", error));
-  // }, []);
+  const [userPosts, setUserPosts] = useState([]);
 
   const [startIndex, setStartIndex] = useState(0);
   const [startPostIndex, setStartPostIndex] = useState(0); // 게시글/댓글 페이지네이션 시작 인덱스
@@ -203,6 +171,29 @@ function MyPage() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    const fetchUserPosts = async () => {
+      try {
+        const response = await fetch(
+          `http://${import.meta.env.VITE_API_ADDRESS}:${
+            import.meta.env.VITE_API_PORT
+          }/api/post/u/${user.uid}`
+        );
+
+        if (!response.ok) throw new Error("게시글 불러오기 실패");
+
+        const data = await response.json();
+        setUserPosts(data);
+      } catch (error) {
+        console.error("❌ 게시글 데이터 불러오기 오류:", error);
+      }
+    };
+
+    fetchUserPosts();
+  }, [user]);
+
   const handleScrollTo = (ref) => {
     if (ref.current) {
       ref.current.scrollIntoView({ behavior: "smooth" });
@@ -214,11 +205,11 @@ function MyPage() {
   };
 
   const handleNext = () => {
-    if (startIndex + VISIBLE_COUNT < user.watchingLectures.length)
+    if (startIndex + VISIBLE_COUNT < dummyUser.watchingLectures.length)
       setStartIndex(startIndex + 1);
   };
 
-  const visibleLectures = user.watchingLectures.slice(
+  const visibleLectures = dummyUser.watchingLectures.slice(
     startIndex,
     startIndex + VISIBLE_COUNT
   );
@@ -230,7 +221,7 @@ function MyPage() {
 
   // 3. 다음 페이지로 이동하는 함수
   const handlePostNext = () => {
-    const filteredPosts = user.posts.filter(
+    const filteredPosts = userPosts.filter(
       (post) => post.type === selectedPostType
     );
     if (startPostIndex + postVisibleCount < filteredPosts.length)
@@ -244,7 +235,7 @@ function MyPage() {
   };
 
   // 5. 선택된 게시글/댓글 목록을 필터링
-  const visiblePosts = user.posts
+  const visiblePosts = userPosts
     .filter((post) => post.type === selectedPostType)
     .slice(startPostIndex, startPostIndex + postVisibleCount);
 
