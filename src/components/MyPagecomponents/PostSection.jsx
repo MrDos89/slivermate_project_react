@@ -133,10 +133,8 @@ function PostSection({
                   </TableCell>
                   <TableCell>{post.userNickname}</TableCell>
                   <TableCell>
-                    {
-                      hobbyMap[post.postCategoryId === 1 ? "indoor" : "outdoor"]
-                        ?.list[post.postSubCategoryId]
-                    }
+                    {hobbyMap[post.postCategoryId === 1 ? "indoor" : "outdoor"]
+                      ?.list?.[post.postSubCategoryId] || "-"}
                   </TableCell>
                 </TableRow>
               ))}
