@@ -115,13 +115,6 @@ const Meta = styled.div`
   margin-top: 40px;
 `;
 
-// 댓글 작성 영역
-const CommentBox = styled.div`
-  margin-top: 60px;
-  border-top: 1px solid #ddd;
-  padding-top: 32px;
-`;
-
 const CommentLabel = styled.label`
   display: block;
   font-size: 1.3rem;
@@ -166,19 +159,69 @@ const CommentsList = styled.div`
 `;
 
 const Comment = styled.div`
-  border-top: 1px solid #e2e2e2;
-  padding: 20px 0;
+  display: flex;
+  align-items: flex-start;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+`;
 
-  &:first-of-type {
-    border-top: none;
-  }
+const CommentProfileImg = styled.img`
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 16px;
+`;
+
+const CommentContent = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const CommentBox = styled.div`
+  margin-top: 60px;
+  padding-top: 32px;
+  margin-bottom: 40px;
+`;
+
+const CommentFormBottomLine = styled.hr`
+  border: none;
+  border-top: 1px solid #ddd;
+  margin-top: 24px;
+`;
+
+const CommentBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+const CommentTopRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const CommentUser = styled.div`
   font-weight: bold;
-  font-size: 1.3rem;
-  margin-bottom: 8px;
+  font-size: 1.2rem;
   color: #222;
+`;
+
+const CommentDate = styled.div`
+  font-size: 0.95rem;
+  color: #888;
+`;
+
+const CommentText = styled.div`
+  font-size: 1.1rem;
+  margin-top: 6px;
+  color: #333;
+  text-align: left; // ✅ 명시적으로 좌측 정렬
+  word-break: break-word; // ✅ 긴 단어 줄바꿈
 `;
 
 const PostDetailPage = () => {
@@ -325,6 +368,7 @@ const PostDetailPage = () => {
           <CommentLabel htmlFor="comment">댓글 작성</CommentLabel>
           <CommentInput id="comment" placeholder="댓글을 작성하세요." />
           <CommentSubmit>등록</CommentSubmit>
+          <CommentFormBottomLine /> {/* ✅ 여기서 선을 버튼 밑으로! */}
         </CommentBox>
 
         {/* 댓글 리스트 */}
@@ -336,21 +380,20 @@ const PostDetailPage = () => {
           </h4>
           {comments.map((comment, idx) => (
             <Comment key={idx}>
-              <CommentUser>{comment.userNickname}</CommentUser>
-              <div
-                style={{
-                  marginBottom: "6px",
-                  color: "#777",
-                  fontSize: "0.95rem",
-                }}
-              >
-                {comment.updDate && !isNaN(new Date(comment.updDate))
-                  ? format(new Date(comment.updDate), "yyyy.MM.dd HH:mm", {
-                      locale: ko,
-                    })
-                  : "날짜 없음"}
-              </div>
-              {comment.commentText}
+              <CommentProfileImg src={comment.userThumbnail} />
+              <CommentBody>
+                <CommentTopRow>
+                  <CommentUser>{comment.userNickname}</CommentUser>
+                  <CommentDate>
+                    {comment.updDate && !isNaN(new Date(comment.updDate))
+                      ? format(new Date(comment.updDate), "yyyy.MM.dd HH:mm", {
+                          locale: ko,
+                        })
+                      : "날짜 없음"}
+                  </CommentDate>
+                </CommentTopRow>
+                <CommentText>{comment.commentText}</CommentText>
+              </CommentBody>
             </Comment>
           ))}
         </CommentsList>
