@@ -11,6 +11,8 @@ import SchedulePaymentSection from "../components/MyPageComponents/SchedulePayme
 import { useAuth } from "../components/Context/AuthContext";
 import UserVo from "../vo/UserVo";
 import PostVo from "../vo/PostVo";
+import ClubVo from "../vo/ClubVo";
+import CommentVo from "../vo/CommentVo";
 
 import {
   MyPageContainer,
@@ -120,7 +122,14 @@ const dummyClubs = [
 function MyPage() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+
   const [userPosts, setUserPosts] = useState([]);
+  const [userClubs, setUserClubs] = useState([]);
+  const [userComments, setUserComments] = useState([]);
+  const [userAnnouncements, setUserAnnouncements] = useState([]);
+
+  const [groupUsers, setGroupUsers] = useState([]); // 같은 groupId 유저 목록
+  const [groupLeaderName, setGroupLeaderName] = useState("");
 
   const [startIndex, setStartIndex] = useState(0);
   const [startPostIndex, setStartPostIndex] = useState(0); // 게시글/댓글 페이지네이션 시작 인덱스
@@ -147,9 +156,6 @@ function MyPage() {
   const hostVideoRef = useRef(null);
   const familySectionRef = useRef(null);
   const scheduleSectionRef = useRef(null);
-
-  const [groupUsers, setGroupUsers] = useState([]); // 같은 groupId 유저 목록
-  const [groupLeaderName, setGroupLeaderName] = useState("");
 
   // fetchUserData 호출 추가
   useEffect(() => {
@@ -182,6 +188,7 @@ function MyPage() {
     }
   }, [user]);
 
+  // fetchPostData 호출 추가
   useEffect(() => {
     if (!user?.uid) return;
 
@@ -211,6 +218,104 @@ function MyPage() {
     };
 
     fetchUserPosts();
+  }, [user]);
+
+  // fetchClubData 호출 추가
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    const fetchUserClubs = async () => {
+      try {
+        const response = await fetch(
+          `http://${import.meta.env.VITE_API_ADDRESS}:${
+            import.meta.env.VITE_API_PORT
+          }/api/club/${user.groupId}/joined`
+        );
+
+        if (!response.ok) throw new Error("모임 불러오기 실패");
+
+        const rawData = await response.json();
+
+        if (!Array.isArray(rawData)) {
+          console.error("모임 데이터가 배열이 아님:", rawData);
+          return;
+        }
+
+        // ✅ ClubVo 인스턴스로 변환
+        const clubList = rawData.map((item) => ClubVo.fromJson(item));
+        setUserClubs(clubList);
+      } catch (error) {
+        console.error("❌ 게시글 데이터 불러오기 오류:", error);
+      }
+    };
+
+    fetchUserClubs();
+  }, [user]);
+
+  // fetchCommentData 호출 추가
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    const fetchCommentData = async () => {
+      try {
+        const response = await fetch(
+          `http://${import.meta.env.VITE_API_ADDRESS}:${
+            import.meta.env.VITE_API_PORT
+          }/api/comment/u/${user.uid}`
+        );
+
+        if (!response.ok) throw new Error("댓글 불러오기 실패");
+
+        const rawData = await response.json();
+
+        if (!Array.isArray(rawData)) {
+          console.error("댓글 데이터가 배열이 아님:", rawData);
+          return;
+        }
+
+        // ✅ CommentVo 인스턴스로 변환
+        const commentList = rawData.map((item) => CommentVo.fromJson(item));
+        setUserComments(commentList);
+      } catch (error) {
+        console.error("❌ 댓글 데이터 불러오기 오류:", error);
+      }
+    };
+
+    fetchCommentData();
+  }, [user]);
+
+  // fetchAnnouncementData 호출 추가
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    const fetchAnnouncementData = async () => {
+      try {
+        const response = await fetch(
+          `http://${import.meta.env.VITE_API_ADDRESS}:${
+            import.meta.env.VITE_API_PORT
+          }/api/announcement/u/${user.uid}`
+        );
+
+        if (!response.ok) throw new Error("일정 불러오기 실패");
+
+        const rawData = await response.json();
+
+        if (!Array.isArray(rawData)) {
+          console.error("일정 데이터가 배열이 아님:", rawData);
+          return;
+        }
+
+        // ✅ CommentVo 인스턴스로 변환
+        const announcementList = rawData.map((item) =>
+          CommentVo.fromJson(item)
+        );
+        setUserAnnouncements(announcementList);
+      } catch (error) {
+        console.error("❌ 댓글 데이터 불러오기 오류:", error);
+      }
+    };
+
+    fetchAnnouncementData();
   }, [user]);
 
   const handleScrollTo = (ref) => {
@@ -273,7 +378,7 @@ function MyPage() {
             유저 정보
           </MenuButton>
 
-          <MenuButton
+          {/* <MenuButton
             onClick={() => {
               setSelectedTabIndex(1);
               handleScrollTo(lectureSectionRef);
@@ -282,14 +387,14 @@ function MyPage() {
             $color={tabColors[1]}
           >
             내 강의
-          </MenuButton>
+          </MenuButton> */}
           <MenuButton
             onClick={() => {
               setSelectedTabIndex(2);
               handleScrollTo(clubSectionRef);
             }}
             $isActive={selectedTabIndex === 2}
-            $color={tabColors[2]}
+            $color={tabColors[1]}
           >
             내 동아리
           </MenuButton>
@@ -300,12 +405,12 @@ function MyPage() {
               handleScrollTo(postSectionRef);
             }}
             $isActive={selectedTabIndex === 3}
-            $color={tabColors[3]}
+            $color={tabColors[2]}
           >
             내가 쓴 글
           </MenuButton>
 
-          <MenuButton
+          {/* <MenuButton
             onClick={() => {
               setSelectedTabIndex(4);
               handleScrollTo(hostVideoRef);
@@ -314,7 +419,7 @@ function MyPage() {
             $color={tabColors[4]}
           >
             내 수업
-          </MenuButton>
+          </MenuButton> */}
 
           <MenuButton
             onClick={() => {
@@ -322,7 +427,7 @@ function MyPage() {
               handleScrollTo(familySectionRef);
             }}
             $isActive={selectedTabIndex === 5}
-            $color={tabColors[5]}
+            $color={tabColors[3]}
           >
             가족 구성원
           </MenuButton>
@@ -333,7 +438,7 @@ function MyPage() {
               handleScrollTo(scheduleSectionRef);
             }}
             $isActive={selectedTabIndex === 6}
-            $color={tabColors[6]}
+            $color={tabColors[4]}
           >
             일정 및 결제
           </MenuButton>
@@ -350,16 +455,18 @@ function MyPage() {
             </UserProfile>
             <Buttons>
               {/* <Button>회원정보</Button> */}
-              <Button>로그아웃</Button>
+              {/* <Button>로그아웃</Button> */}
             </Buttons>
           </UserInfoWrapper>
         </ScrollAnchor>
 
         {/* 2. 유저 상태 */}
         <StatusSection>
-          <StatusItem>👨‍👩‍👧 가족정보: {user.userType ?? "정보 없음"}</StatusItem>
+          <StatusItem>
+            👨‍👩‍👧 가족정보: {user.userType === 1 ? "부모님" : "자녀"}
+          </StatusItem>
           {/* <StatusItem>👥 가입한 동아리: {user.clubCount}개</StatusItem> */}
-          <StatusItem>👥 가입한 동아리: 3 개</StatusItem>
+          <StatusItem>👥 가입한 동아리: {userClubs.length} 개</StatusItem>
         </StatusSection>
         {/* 3. 내가 시청 중인 강의 */}
         <ScrollAnchor ref={lectureSectionRef}>
@@ -381,6 +488,7 @@ function MyPage() {
         <ScrollAnchor ref={clubSectionRef}>
           <ClubSection
             dummyClubs={dummyClubs}
+            userClubs={userClubs}
             regionMap={regionMap}
             hobbyMap={hobbyMap}
             sectionTitle={
@@ -397,6 +505,7 @@ function MyPage() {
           <PostSection
             user={user}
             userPosts={userPosts}
+            userComments={userComments}
             visiblePosts={visiblePosts}
             selectedPostType={selectedPostType}
             postVisibleCount={postVisibleCount}
@@ -436,7 +545,7 @@ function MyPage() {
 
         {/* 8. 일정 및 결제 확인 */}
         <ScrollAnchor ref={scheduleSectionRef}>
-          <SchedulePaymentSection />
+          <SchedulePaymentSection userAnnouncements={userAnnouncements} />
         </ScrollAnchor>
       </MyPageContainer>
     </>
