@@ -30,6 +30,8 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const isLoggedIn = !!user;
+
   useEffect(() => {
     // 세션으로 유저 정보 확인
     fetch(API_USER_SESSION_URL, {
@@ -49,7 +51,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, setUser, loading, logout, refreshSession }}
+      value={{ user, setUser, loading, logout, refreshSession, isLoggedIn }}
     >
       {children}
     </AuthContext.Provider>

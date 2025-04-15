@@ -101,7 +101,7 @@ const FamilySection = ({ groupId, groupUsers }) => {
     //     user_group_id: groupId || 9999,
     //   },
     // ];
-
+    console.log("넘겨받은 groupUsers 확인 👉", groupUsers);
     setFamilyData(groupUsers);
 
     // ⚠️ 실제 fetch 사용 시 아래 코드 주석 해제
@@ -120,7 +120,7 @@ const FamilySection = ({ groupId, groupUsers }) => {
         console.error("가족 정보 불러오기 실패", err);
       });
     */
-  }, [groupId]);
+  }, [groupId, groupUsers]);
 
   return (
     <FamilyContainer>
@@ -142,7 +142,10 @@ const FamilySection = ({ groupId, groupUsers }) => {
             />
             <InfoWrapper>
               <FamilyName>{user.userName}</FamilyName>
-              <FamilyId>ID: {user.userType === 1 ? "부모님" : "자녀"}</FamilyId>
+              <FamilyId>ID: {user.userId}</FamilyId>
+              <FamilyId>
+                가족관계: {user.userType === 1 ? "부모님" : "자녀"}
+              </FamilyId>
             </InfoWrapper>
           </FamilyCard>
         ))}
