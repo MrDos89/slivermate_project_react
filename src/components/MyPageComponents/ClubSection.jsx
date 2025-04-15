@@ -100,15 +100,20 @@ const ClubPost = styled.div`
   text-overflow: ellipsis;
 `;
 
-function ClubSection({ dummyClubs, regionMap, hobbyMap, sectionTitle, userId }) {
+function ClubSection({
+  dummyClubs,
+  userClubs,
+  regionMap,
+  hobbyMap,
+  sectionTitle,
+  userId,
+}) {
   const isOwner = (club) => {
     if (!userId) return false;
     return club.clubUserId === userId;
   };
 
-  const sortedClubs = [...dummyClubs].sort((a, b) =>
-    isOwner(b) - isOwner(a)
-  );
+  const sortedClubs = [...userClubs].sort((a, b) => isOwner(b) - isOwner(a));
 
   return (
     <ClubSectionWrapper>
@@ -128,21 +133,21 @@ function ClubSection({ dummyClubs, regionMap, hobbyMap, sectionTitle, userId }) 
             <ClubCardWrapper key={club.id}>
               {isCreatedByMe && <CrownIcon>👑</CrownIcon>}
               <ClubCard>
-                <ClubThumbnailWrapper img={club.thumbnail}>
+                <ClubThumbnailWrapper img={club.clubThumbnail}>
                   <ClubOverlay>
                     <div style={{ textAlign: "right", width: "100%" }}>
-                      <ClubName>{club.name}</ClubName>
+                      <ClubName>{club.clubName}</ClubName>
                       <ClubInfo>
-                        {regionName} / {hobbyName} / {club.members}명
+                        {regionName} / {hobbyName} / {club.clubMemberNumber}명
                       </ClubInfo>
                     </div>
                   </ClubOverlay>
                 </ClubThumbnailWrapper>
-                <ClubPosts>
+                {/* <ClubPosts>
                   {club.posts.map((post, i) => (
                     <ClubPost key={i}>• {post}</ClubPost>
                   ))}
-                </ClubPosts>
+                </ClubPosts> */}
               </ClubCard>
             </ClubCardWrapper>
           );
