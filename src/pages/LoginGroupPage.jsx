@@ -46,7 +46,7 @@ const ModalButton = styled.button`
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   font-weight: bold;
-  background: #ff914d;
+  background: #27ae60;
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -125,7 +125,7 @@ const LoginGroupPage = () => {
 
   return (
     <LoginGroupContainer>
-      <BackButton onClick={() => navigate("/")}>뒤로가기</BackButton>
+      {/* <BackButton onClick={() => navigate("/")}>뒤로가기</BackButton> */}
       <h1>사용자 선택</h1>
       <p>아래에서 로그인할 사용자를 선택하세요.</p>
       <UserList>
