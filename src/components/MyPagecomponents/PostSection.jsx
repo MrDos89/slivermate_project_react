@@ -104,35 +104,60 @@ function PostSection({
       </PostDropdown>
 
       <TableWrapper>
-        <Table>
-          <thead>
-            <tr>
-              <TableHeader>번호</TableHeader>
-              <TableHeader>내용</TableHeader>
-              <TableHeader>작성일</TableHeader>
-              <TableHeader>유저이름</TableHeader>
-              <TableHeader>취미</TableHeader>
-            </tr>
-          </thead>
-          <tbody>
-            {slicedList.map((post, index) => (
-              <TableRow key={post.postId}>
-                <TableCell>{startPostIndex + index + 1}</TableCell>
-                <TableCell>{post.postNote}</TableCell>
-                <TableCell>
-                  {new Date(post.registerDate).toLocaleDateString("ko-KR")}
-                </TableCell>
-                <TableCell>{post.userNickname}</TableCell>
-                <TableCell>
-                  {
-                    hobbyMap[post.postCategoryId === 1 ? "indoor" : "outdoor"]
-                      ?.list[post.postSubCategoryId]
-                  }
-                </TableCell>
-              </TableRow>
-            ))}
-          </tbody>
-        </Table>
+        {selectedPostType === 1 ? (
+          <Table>
+            <thead>
+              <tr>
+                <TableHeader>번호</TableHeader>
+                <TableHeader>내용</TableHeader>
+                <TableHeader>작성일</TableHeader>
+                <TableHeader>유저이름</TableHeader>
+                <TableHeader>취미</TableHeader>
+              </tr>
+            </thead>
+            <tbody>
+              {slicedList.map((post, index) => (
+                <TableRow key={post.postId}>
+                  <TableCell>{startPostIndex + index + 1}</TableCell>
+                  <TableCell>{post.postNote}</TableCell>
+                  <TableCell>
+                    {new Date(post.registerDate).toLocaleDateString("ko-KR")}
+                  </TableCell>
+                  <TableCell>{post.userNickname}</TableCell>
+                  <TableCell>
+                    {
+                      hobbyMap[post.postCategoryId === 1 ? "indoor" : "outdoor"]
+                        ?.list[post.postSubCategoryId]
+                    }
+                  </TableCell>
+                </TableRow>
+              ))}
+            </tbody>
+          </Table>
+        ) : (
+          <Table>
+            <thead>
+              <tr>
+                <TableHeader>번호</TableHeader>
+                <TableHeader>내용</TableHeader>
+                <TableHeader>작성일</TableHeader>
+                <TableHeader>유저이름</TableHeader>
+              </tr>
+            </thead>
+            <tbody>
+              {slicedList.map((post, index) => (
+                <TableRow key={post.commentId}>
+                  <TableCell>{startPostIndex + index + 1}</TableCell>
+                  <TableCell>{post.commentText}</TableCell>
+                  <TableCell>
+                    {new Date(post.updDate).toLocaleDateString("ko-KR")}
+                  </TableCell>
+                  <TableCell>{post.userNickname}</TableCell>
+                </TableRow>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </TableWrapper>
 
       <PaginationWrapper>
