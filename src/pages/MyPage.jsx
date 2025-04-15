@@ -329,7 +329,7 @@ function MyPage() {
               <Nickname>{user.nickname}</Nickname>
             </UserProfile>
             <Buttons>
-              <Button>회원정보</Button>
+              {/* <Button>회원정보</Button> */}
               <Button>로그아웃</Button>
             </Buttons>
           </UserInfoWrapper>
