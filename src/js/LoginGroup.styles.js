@@ -2,13 +2,12 @@ import styled from "styled-components";
 
 export const LoginGroupContainer = styled.div`
   width: 100vw;
-  height: 100vh;
-  background-color: #e6f5e6; // 연녹색
+  min-height: 100vh;
+  background-color: #e6f5e6;
   display: flex;
   flex-direction: column;
-  justify-content: center; // ✅ 세로 중앙 정렬!
   align-items: center;
-  padding: 2rem;
+  padding-top: 5rem; // 💡 이걸로 아래로 내리기
 `;
 
 export const BackButton = styled.button`
@@ -24,6 +23,7 @@ export const UserList = styled.div`
   gap: 1.5rem;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   margin-top: 2rem;
 `;
 
