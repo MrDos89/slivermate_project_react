@@ -328,44 +328,11 @@ function MyPage() {
     }
   };
 
-  const handlePrev = () => {
-    if (startIndex > 0) setStartIndex(startIndex - 1);
-  };
-
-  // const handleNext = () => {
-  //   if (startIndex + VISIBLE_COUNT < dummyUser.watchingLectures.length)
-  //     setStartIndex(startIndex + 1);
-  // };
-
-  // const visibleLectures = dummyUser.watchingLectures.slice(
-  //   startIndex,
-  //   startIndex + VISIBLE_COUNT
-  // );
-
-  // 2. 이전 페이지로 이동하는 함수
-  const handlePostPrev = () => {
-    if (startPostIndex > 0) setStartPostIndex(startPostIndex - 1);
-  };
-
-  // 3. 다음 페이지로 이동하는 함수
-  const handlePostNext = () => {
-    const filteredPosts = userPosts.filter(
-      (post) => post.type === selectedPostType
-    );
-    if (startPostIndex + postVisibleCount < filteredPosts.length)
-      setStartPostIndex(startPostIndex + 1);
-  };
-
   // 4. 드롭다운에서 게시글/댓글을 선택하면 해당 항목만 필터링
   const handlePostTypeChange = (e) => {
     setSelectedPostType(Number(e.target.value));
     setStartPostIndex(0); // 게시글/댓글 변경 시 첫 페이지로 돌아가도록
   };
-
-  // 5. 선택된 게시글/댓글 목록을 필터링
-  const visiblePosts = userPosts
-    .filter((post) => post.type === selectedPostType)
-    .slice(startPostIndex, startPostIndex + postVisibleCount);
 
   return (
     <>
@@ -514,8 +481,6 @@ function MyPage() {
             selectedPostType={selectedPostType}
             postVisibleCount={postVisibleCount}
             startPostIndex={startPostIndex}
-            handlePostPrev={handlePostPrev}
-            handlePostNext={handlePostNext}
             handlePostTypeChange={handlePostTypeChange}
             hobbyMap={hobbyMap}
             sectionTitle={

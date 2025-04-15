@@ -76,12 +76,13 @@ function PostSection({
   selectedPostType,
   postVisibleCount,
   startPostIndex,
-  handlePostPrev,
-  handlePostNext,
   handlePostTypeChange,
   hobbyMap,
   sectionTitle,
 }) {
+  const [startPostIndex, setStartPostIndex] = useState(0);
+  const postVisibleCount = 5; // 한 페이지에 보여줄 개수
+
   console.log("넘겨받은 userPosts 확인 👉", userPosts);
   console.log("넘겨받은 userComments 확인 👉", userComments);
 
@@ -94,6 +95,16 @@ function PostSection({
 
   const totalCount = selectedList.length;
   const totalPages = Math.ceil(totalCount / postVisibleCount);
+
+  const handlePostPrev = () => {
+    setStartPostIndex((prev) => Math.max(prev - postVisibleCount, 0));
+  };
+
+  const handlePostNext = () => {
+    if (startPostIndex + postVisibleCount < selectedList.length) {
+      setStartPostIndex((prev) => prev + postVisibleCount);
+    }
+  };
 
   return (
     <PostSectionWrapper>
@@ -169,10 +180,7 @@ function PostSection({
         </span>
         <PageButton
           onClick={handlePostNext}
-          disabled={
-            startPostIndex + postVisibleCount >=
-            slicedList.filter((post) => post.type === selectedPostType).length
-          }
+          disabled={startPostIndex + postVisibleCount >= selectedList.length}
         >
           다음
         </PageButton>
