@@ -270,10 +270,6 @@ const PostDetailPage = () => {
     }
   }, [post]);
 
-  useEffect(() => {
-    loadPost();
-  }, []);
-
   if (!post) {
     return (
       <PageContainer>
