@@ -72,17 +72,14 @@ function PostSection({
   user,
   userPosts,
   userComments,
-  visiblePosts,
   selectedPostType,
   postVisibleCount,
   startPostIndex,
+  setStartPostIndex,
   handlePostTypeChange,
   hobbyMap,
   sectionTitle,
 }) {
-  const [startPostIndex, setStartPostIndex] = useState(0);
-  const postVisibleCount = 5; // 한 페이지에 보여줄 개수
-
   console.log("넘겨받은 userPosts 확인 👉", userPosts);
   console.log("넘겨받은 userComments 확인 👉", userComments);
 

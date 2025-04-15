@@ -479,8 +479,8 @@ function MyPage() {
             userComments={userComments}
             visiblePosts={visiblePosts}
             selectedPostType={selectedPostType}
-            postVisibleCount={postVisibleCount}
             startPostIndex={startPostIndex}
+            setStartPostIndex={setStartPostIndex}
             handlePostTypeChange={handlePostTypeChange}
             hobbyMap={hobbyMap}
             sectionTitle={
