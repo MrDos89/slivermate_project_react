@@ -85,6 +85,16 @@ function PostSection({
   console.log("넘겨받은 userPosts 확인 👉", userPosts);
   console.log("넘겨받은 userComments 확인 👉", userComments);
 
+  // 필터링 후 슬라이스
+  const selectedList = selectedPostType === 1 ? userPosts : userComments;
+  const slicedList = selectedList.slice(
+    startPostIndex,
+    startPostIndex + postVisibleCount
+  );
+
+  const totalCount = selectedList.length;
+  const totalPages = Math.ceil(totalCount / postVisibleCount);
+
   return (
     <PostSectionWrapper>
       <PostTitle>{sectionTitle}</PostTitle>
@@ -101,12 +111,10 @@ function PostSection({
               <TableHeader>내용</TableHeader>
               <TableHeader>작성일</TableHeader>
               <TableHeader>유저이름</TableHeader>
-              <TableHeader>취미</TableHeader>
-              <TableHeader>동아리 이름</TableHeader>
             </tr>
           </thead>
           <tbody>
-            {userPosts.map((post, index) => (
+            {slicedList.map((post, index) => (
               <TableRow key={post.postId}>
                 <TableCell>{startPostIndex + index + 1}</TableCell>
                 <TableCell>{post.postNote}</TableCell>
@@ -116,9 +124,8 @@ function PostSection({
                 <TableCell>{post.userNickname}</TableCell>
                 <TableCell>
                   {
-                    hobbyMap[post.postCategoryId === 1 ? "실내" : "실외"]?.list[
-                      post.postSubCategoryId
-                    ]
+                    hobbyMap[post.postCategoryId === 1 ? "indoor" : "outdoor"]
+                      ?.list[post.postSubCategoryId]
                   }
                 </TableCell>
               </TableRow>
@@ -132,17 +139,13 @@ function PostSection({
           이전
         </PageButton>
         <span>
-          {Math.floor(startPostIndex / postVisibleCount) + 1} /{" "}
-          {Math.ceil(
-            userPosts.filter((post) => post.type === selectedPostType).length /
-              postVisibleCount
-          )}
+          {Math.floor(startPostIndex / postVisibleCount) + 1} / {totalPages}
         </span>
         <PageButton
           onClick={handlePostNext}
           disabled={
             startPostIndex + postVisibleCount >=
-            userPosts.filter((post) => post.type === selectedPostType).length
+            slicedList.filter((post) => post.type === selectedPostType).length
           }
         >
           다음
