@@ -70,6 +70,7 @@ const PageButton = styled.button`
 
 function PostSection({
   user,
+  userPosts,
   visiblePosts,
   selectedPostType,
   postVisibleCount,
@@ -127,7 +128,7 @@ function PostSection({
         <span>
           {Math.floor(startPostIndex / postVisibleCount) + 1} /{" "}
           {Math.ceil(
-            user.posts.filter((post) => post.type === selectedPostType).length /
+            userPosts.filter((post) => post.type === selectedPostType).length /
               postVisibleCount
           )}
         </span>
@@ -135,7 +136,7 @@ function PostSection({
           onClick={handlePostNext}
           disabled={
             startPostIndex + postVisibleCount >=
-            user.posts.filter((post) => post.type === selectedPostType).length
+            userPosts.filter((post) => post.type === selectedPostType).length
           }
         >
           다음

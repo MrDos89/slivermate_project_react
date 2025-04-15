@@ -4,9 +4,7 @@ import styled from "styled-components";
 const SectionTitle = styled.h2`
   margin-bottom: 10px;
   text-align: left; /* 왼쪽 정렬 */
-
 `;
-
 
 const DividerWrapper = styled.div`
   //   display: flex;
@@ -89,7 +87,7 @@ function LectureSection({
       <DividerWrapper>
         <Divider />
         <LectureSliderWrapper>
-          {startIndex > 0 && <LeftButton onClick={handlePrev}>‹</LeftButton>}
+          {/* {startIndex > 0 && <LeftButton onClick={handlePrev}>‹</LeftButton>}
           <LectureList
             style={{
               transform: `translateX(-${startIndex * 132}px)`,
@@ -105,7 +103,7 @@ function LectureSection({
           </LectureList>
           {startIndex + VISIBLE_COUNT < user.watchingLectures.length && (
             <RightButton onClick={handleNext}>›</RightButton>
-          )}
+          )} */}
         </LectureSliderWrapper>
         <Divider />
       </DividerWrapper>

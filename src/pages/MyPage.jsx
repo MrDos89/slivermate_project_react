@@ -116,7 +116,6 @@ const dummyClubs = [
 ];
 
 function MyPage() {
-  const dummyUser = dummyUser;
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [userPosts, setUserPosts] = useState([]);
@@ -204,15 +203,15 @@ function MyPage() {
     if (startIndex > 0) setStartIndex(startIndex - 1);
   };
 
-  const handleNext = () => {
-    if (startIndex + VISIBLE_COUNT < dummyUser.watchingLectures.length)
-      setStartIndex(startIndex + 1);
-  };
+  // const handleNext = () => {
+  //   if (startIndex + VISIBLE_COUNT < dummyUser.watchingLectures.length)
+  //     setStartIndex(startIndex + 1);
+  // };
 
-  const visibleLectures = dummyUser.watchingLectures.slice(
-    startIndex,
-    startIndex + VISIBLE_COUNT
-  );
+  // const visibleLectures = dummyUser.watchingLectures.slice(
+  //   startIndex,
+  //   startIndex + VISIBLE_COUNT
+  // );
 
   // 2. 이전 페이지로 이동하는 함수
   const handlePostPrev = () => {
@@ -326,7 +325,7 @@ function MyPage() {
         <ScrollAnchor ref={userInfoRef}>
           <UserInfoWrapper>
             <UserProfile>
-              <Thumbnail src={userThumbnail} alt="썸네일" />
+              <Thumbnail src={user.thumbnail} alt="썸네일" />
               <Nickname>{user.nickname}</Nickname>
             </UserProfile>
             <Buttons>
@@ -338,12 +337,13 @@ function MyPage() {
 
         {/* 2. 유저 상태 */}
         <StatusSection>
-          <StatusItem>👨‍👩‍👧 가족정보: {user.familyRole ?? "정보 없음"}</StatusItem>
-          <StatusItem>👥 가입한 동아리: {user.clubCount}개</StatusItem>
+          <StatusItem>👨‍👩‍👧 가족정보: {user.userType ?? "정보 없음"}</StatusItem>
+          {/* <StatusItem>👥 가입한 동아리: {user.clubCount}개</StatusItem> */}
+          <StatusItem>👥 가입한 동아리: 3 개</StatusItem>
         </StatusSection>
         {/* 3. 내가 시청 중인 강의 */}
         <ScrollAnchor ref={lectureSectionRef}>
-          <LectureSection
+          {/* <LectureSection
             user={user}
             startIndex={startIndex}
             handlePrev={handlePrev}
@@ -354,7 +354,7 @@ function MyPage() {
                 ? "내가 시청중인 강의"
                 : `${groupLeaderName} 님이 시청하는 강의`
             }
-          />
+          /> */}
         </ScrollAnchor>
 
         {/* 4. 내 동아리 */}
@@ -376,6 +376,7 @@ function MyPage() {
         <ScrollAnchor ref={postSectionRef}>
           <PostSection
             user={user}
+            userPosts={userPosts}
             visiblePosts={visiblePosts}
             selectedPostType={selectedPostType}
             postVisibleCount={postVisibleCount}
@@ -394,7 +395,7 @@ function MyPage() {
 
         {/* 내 호스트 영상  */}
         <ScrollAnchor ref={hostVideoRef}>
-          <HostVideoSection
+          {/* <HostVideoSection
             user={user}
             startIndex={startIndex}
             handlePrev={handlePrev}
@@ -405,7 +406,7 @@ function MyPage() {
                 ? "내 호스트 영상"
                 : `${groupLeaderName} 님의 호스트 영상`
             }
-          />
+          /> */}
         </ScrollAnchor>
 
         {/* 7. 가족구성원 */}

@@ -82,7 +82,7 @@ function HostVideoSection({
       <DividerWrapper>
         <Divider />
         <LectureSliderWrapper>
-          {startIndex > 0 && <LeftButton onClick={handlePrev}>‹</LeftButton>}
+          {/* {startIndex > 0 && <LeftButton onClick={handlePrev}>‹</LeftButton>}
           <LectureList
             style={{
               transform: `translateX(-${startIndex * 132}px)`,
@@ -98,7 +98,7 @@ function HostVideoSection({
           </LectureList>
           {startIndex + VISIBLE_COUNT < user.watchingLectures.length && (
             <RightButton onClick={handleNext}>›</RightButton>
-          )}
+          )} */}
         </LectureSliderWrapper>
         <Divider />
       </DividerWrapper>
