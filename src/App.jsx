@@ -91,9 +91,9 @@ function App() {
           <Route
             path="/mypage"
             element={
-              <PrivateRoute>
-                <MyPage />
-              </PrivateRoute>
+              // <PrivateRoute>
+              <MyPage />
+              // </PrivateRoute>
             }
           />
           <Route path="/club" element={<ClubPage />} />
@@ -105,17 +105,17 @@ function App() {
           <Route
             path="/create-club"
             element={
-              <PrivateRoute>
-                <CreateClubPage />
-              </PrivateRoute>
+              // <PrivateRoute>
+              <CreateClubPage />
+              // </PrivateRoute>
             }
           />
           <Route
             path="/chat"
             element={
-              <PrivateRoute>
-                <ChatTestPage />
-              </PrivateRoute>
+              // <PrivateRoute>
+              <ChatTestPage />
+              // </PrivateRoute>
             }
           />
         </Routes>

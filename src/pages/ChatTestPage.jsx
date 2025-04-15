@@ -43,13 +43,6 @@ const ChatWindow = styled.div`
   height: 100%;
 `;
 
-const ChatContentWrapper = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`;
-
 const ChatContent = styled.div`
   flex: 1;
   min-height: 0;
@@ -57,6 +50,14 @@ const ChatContent = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  background-color: #e8f5e9;
+`;
+
+const ChatContentWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `;
 
 const InputArea = styled.div`
@@ -154,7 +155,7 @@ const ChatDate = styled.div`
 `;
 
 const ChatBubble = styled.div`
-  max-width: 70%;
+  max-width: 85%;
   padding: 12px 18px;
   border-radius: 14px;
   position: relative;
@@ -518,7 +519,7 @@ function ChatTestPage() {
                   <ChatTimeSmall isMe={msg.isMe}>{currentTime}</ChatTimeSmall>
                 )}
               </div>
-              {msg.isMe && (
+              {/* {msg.isMe && (
                 <img
                   src={user.thumbnail}
                   alt="profile"
@@ -530,7 +531,7 @@ function ChatTestPage() {
                     marginTop: "4px",
                   }}
                 />
-              )}
+              )} */}
             </div>
           );
         })}
