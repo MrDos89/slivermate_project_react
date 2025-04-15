@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import PostVo from "../../vo/PostVo";
 import styled from "styled-components";
 
 const WriterWrapper = styled.div`
@@ -139,13 +140,17 @@ const hobbyOptions = [
   { id: 18, name: "족구" },
 ];
 
-const MyPostWriter = ({ onSubmit }) => {
+const MyPostWriter = ({ onSubmit, user }) => {
   const [expanded, setExpanded] = useState(false);
   const [content, setContent] = useState("");
   const [images, setImages] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const fileRef = useRef();
   const writerRef = useRef();
+
+  const API_POST_URL = `http://${import.meta.env.VITE_API_ADDRESS}:${
+    import.meta.env.VITE_API_PORT
+  }/api/post`;
 
   const toggleTag = (tagId) => {
     setSelectedTags((prev) =>
@@ -172,27 +177,54 @@ const MyPostWriter = ({ onSubmit }) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = () => {
-    if (!content.trim()) return alert("내용을 입력해주세요!");
+  const handleSubmit = async () => {
+    if (!content.trim()) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
 
-    const newPost = {
-      id: Date.now(), // 고유 ID 생성
-      user: "복채리~",
-      userThumbnail: "../src/images/thumb3.png",
-      content: content,
-      images: images,
-      tags: selectedTags,
-      likes: 0,
-      comments: 0,
-      createdAt: new Date().toISOString(),
+    if (!user) {
+      alert("로그인 정보가 없습니다.");
+      return;
+    }
+
+    const payload = {
+      post_user_id: user.uid,
+      post_note: content,
+      post_images: images.map((img) => img),
+      post_category_id: 1, // 기본 카테고리 지정 (필요 시 수정 가능)
+      post_sub_category_id: selectedTags[0] ?? 0,
+      region_id: user.regionId ?? 0, // 사용자 지역 ID 사용 (옵션)
+      club_id: 0, // 자유게시판이므로 club_id는 기본 0
     };
 
-    onSubmit(newPost); // 부모 컴포넌트로 전달
+    try {
+      const response = await fetch(API_POST_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
 
-    setContent("");
-    setImages([]);
-    setSelectedTags([]);
-    setExpanded(false);
+      if (!response.ok) {
+        throw new Error("게시글 등록 실패");
+      }
+
+      const result = await response.json();
+
+      // PostVo 포맷에 맞춰 변환하여 상위 컴포넌트로 전달
+      const newPost = PostVo.fromJson(result);
+      onSubmit(newPost);
+
+      // 입력 초기화
+      setContent("");
+      setImages([]);
+      setSelectedTags([]);
+      setExpanded(false);
+    } catch (error) {
+      console.error("게시글 등록 중 오류 발생:", error);
+      alert("게시글 등록에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   useEffect(() => {
@@ -208,8 +240,8 @@ const MyPostWriter = ({ onSubmit }) => {
   return (
     <WriterWrapper ref={writerRef}>
       <ProfileRow>
-        <ProfileImage src="../src/images/thumb3.png" alt="user" />
-        <UserName>복채리~</UserName>
+        <ProfileImage src={`${user.thumbnail}`} alt="user" />
+        <UserName>user.nickname</UserName>
       </ProfileRow>
 
       <InputArea
@@ -239,7 +271,7 @@ const MyPostWriter = ({ onSubmit }) => {
         <ImagePreviewWrapper>
           {images.map((img, i) => (
             <ImageBox key={i}>
-              <img src={img.url} alt={`preview-${i}`} />
+              <img src={img} alt={`preview-${i}`} />
               <RemoveButton onClick={() => removeImage(i)}>×</RemoveButton>
             </ImageBox>
           ))}

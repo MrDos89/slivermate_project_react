@@ -190,7 +190,7 @@ const FreeBoardPage = () => {
       </FixedPostBar>
 
       <Wrapper>
-        <MyPostWriter onSubmit={handleAddPost} />
+        <MyPostWriter onSubmit={handleAddPost} user={user} />
         <FeedList posts={filteredPosts} />
       </Wrapper>
     </>
