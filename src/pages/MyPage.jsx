@@ -13,6 +13,7 @@ import UserVo from "../vo/UserVo";
 import PostVo from "../vo/PostVo";
 import ClubVo from "../vo/ClubVo";
 import CommentVo from "../vo/CommentVo";
+import AnnounceVo from "../vo/AnnounceVo";
 
 import {
   MyPageContainer,
