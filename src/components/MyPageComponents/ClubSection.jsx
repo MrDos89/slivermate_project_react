@@ -115,6 +115,9 @@ function ClubSection({
 
   const sortedClubs = [...userClubs].sort((a, b) => isOwner(b) - isOwner(a));
 
+  console.log("넘겨받은 userClubs 확인 👉", userClubs);
+  console.log("넘겨받은 sortedClubs 확인 👉", sortedClubs);
+
   return (
     <ClubSectionWrapper>
       <SectionTitle>{sectionTitle}</SectionTitle>

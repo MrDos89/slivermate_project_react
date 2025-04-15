@@ -59,7 +59,9 @@ const PaidTag = styled.span`
   font-weight: bold;
 `;
 
-function SchedulePaymentSection() {
+function SchedulePaymentSection({ userAnnouncements }) {
+  console.log("넘겨받은 userAnnouncements 확인 👉", userAnnouncements);
+
   return (
     <SectionWrapper>
       <Title>📅 일정 및 결제 확인</Title>

@@ -71,6 +71,7 @@ const PageButton = styled.button`
 function PostSection({
   user,
   userPosts,
+  userComments,
   visiblePosts,
   selectedPostType,
   postVisibleCount,
@@ -81,6 +82,9 @@ function PostSection({
   hobbyMap,
   sectionTitle,
 }) {
+  console.log("넘겨받은 userPosts 확인 👉", userPosts);
+  console.log("넘겨받은 userComments 확인 👉", userComments);
+
   return (
     <PostSectionWrapper>
       <PostTitle>{sectionTitle}</PostTitle>
