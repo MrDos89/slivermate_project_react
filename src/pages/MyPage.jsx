@@ -223,16 +223,16 @@ function MyPage() {
 
   // fetchClubData 호출 추가
   useEffect(() => {
-    if (!user?.groupId) return;
+    if (!user?.group_id) return;
 
-    console.log("📦 그룹 ID 확인:", user?.groupId);
+    console.log("📦 그룹 ID 확인:", user?.group_id);
 
     const fetchUserClubs = async () => {
       try {
         const response = await fetch(
           `http://${import.meta.env.VITE_API_ADDRESS}:${
             import.meta.env.VITE_API_PORT
-          }/api/club/${user.groupId}/joined`
+          }/api/club/${user.group_id}/joined`
         );
 
         if (!response.ok) throw new Error("모임 불러오기 실패");
