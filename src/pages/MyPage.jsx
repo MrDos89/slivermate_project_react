@@ -223,7 +223,10 @@ function MyPage() {
 
   // fetchClubData 호출 추가
   useEffect(() => {
-    if (!user?.uid) return;
+    if (!user || typeof user.groupId !== "number" || isNaN(user.groupId))
+      return;
+
+    console.log("📦 그룹 ID 확인:", user?.groupId);
 
     const fetchUserClubs = async () => {
       try {
