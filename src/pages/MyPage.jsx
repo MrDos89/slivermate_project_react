@@ -9,6 +9,11 @@ import HostVideoSection from "../components/MyPageComponents/HostVideoSection";
 import FamilySection from "../components/MyPageComponents/FamilySection";
 import SchedulePaymentSection from "../components/MyPageComponents/SchedulePaymentSection";
 import { useAuth } from "../components/Context/AuthContext";
+import UserVo from "../vo/UserVo";
+import PostVo from "../vo/PostVo";
+import ClubVo from "../vo/ClubVo";
+import CommentVo from "../vo/CommentVo";
+import AnnounceVo from "../vo/AnnounceVo";
 
 import {
   MyPageContainer,
@@ -179,24 +184,31 @@ function MyPage() {
   const familySectionRef = useRef(null);
   const scheduleSectionRef = useRef(null);
 
-  const [groupUsers, setGroupUsers] = useState([]); // 같은 groupId 유저 목록
-  const [groupLeaderName, setGroupLeaderName] = useState("");
-
   // fetchUserData 호출 추가
   useEffect(() => {
     if (user?.group_id) {
       fetch(
         `http://${import.meta.env.VITE_API_ADDRESS}:${
           import.meta.env.VITE_API_PORT
-        }/api/user/group/${user.group_id}`
+        }/api/usergroup/${user.group_id}`
       )
         .then((res) => res.json())
-        .then((data) => {
-          setGroupUsers(data);
+        .then((resData) => {
+          const data = resData;
 
-          const leader = data.find((member) => member.user_type === 1); // 부모1
+          if (!Array.isArray(data)) {
+            console.error("data가 배열이 아님:", data);
+            return;
+          }
+
+          // ✅ UserVo 인스턴스로 변환
+          const userList = data.map((item) => UserVo.fromJson(item));
+          setGroupUsers(userList);
+
+          // ✅ 리더 찾기 (user_type === 1인 유저)
+          const leader = userList.find((member) => member.userType === 1);
           if (leader) {
-            setGroupLeaderName(leader.user_name);
+            setGroupLeaderName(leader.userName);
           }
         })
         .catch((err) => console.error("그룹 유저 불러오기 오류:", err));
@@ -263,7 +275,7 @@ function MyPage() {
             유저 정보
           </MenuButton>
 
-          <MenuButton
+          {/* <MenuButton
             onClick={() => {
               setSelectedTabIndex(1);
               handleScrollTo(lectureSectionRef);
@@ -272,14 +284,14 @@ function MyPage() {
             $color={tabColors[1]}
           >
             내 강의
-          </MenuButton>
+          </MenuButton> */}
           <MenuButton
             onClick={() => {
               setSelectedTabIndex(2);
               handleScrollTo(clubSectionRef);
             }}
             $isActive={selectedTabIndex === 2}
-            $color={tabColors[2]}
+            $color={tabColors[1]}
           >
             내 동아리
           </MenuButton>
@@ -290,12 +302,12 @@ function MyPage() {
               handleScrollTo(postSectionRef);
             }}
             $isActive={selectedTabIndex === 3}
-            $color={tabColors[3]}
+            $color={tabColors[2]}
           >
             내가 쓴 글
           </MenuButton>
 
-          <MenuButton
+          {/* <MenuButton
             onClick={() => {
               setSelectedTabIndex(4);
               handleScrollTo(hostVideoRef);
@@ -304,7 +316,7 @@ function MyPage() {
             $color={tabColors[4]}
           >
             내 수업
-          </MenuButton>
+          </MenuButton> */}
 
           <MenuButton
             onClick={() => {
@@ -312,7 +324,7 @@ function MyPage() {
               handleScrollTo(familySectionRef);
             }}
             $isActive={selectedTabIndex === 5}
-            $color={tabColors[5]}
+            $color={tabColors[3]}
           >
             가족 구성원
           </MenuButton>
@@ -323,7 +335,7 @@ function MyPage() {
               handleScrollTo(scheduleSectionRef);
             }}
             $isActive={selectedTabIndex === 6}
-            $color={tabColors[6]}
+            $color={tabColors[4]}
           >
             일정 및 결제
           </MenuButton>
@@ -370,6 +382,7 @@ function MyPage() {
         <ScrollAnchor ref={clubSectionRef}>
           <ClubSection
             dummyClubs={dummyClubs}
+            userClubs={userClubs}
             regionMap={regionMap}
             hobbyMap={hobbyMap}
             sectionTitle={
@@ -388,9 +401,9 @@ function MyPage() {
             visiblePosts={visiblePosts}
             selectedPostType={selectedPostType}
             postVisibleCount={postVisibleCount}
+            selectedPostType={selectedPostType}
             startPostIndex={startPostIndex}
-            handlePostPrev={handlePostPrev}
-            handlePostNext={handlePostNext}
+            setStartPostIndex={setStartPostIndex}
             handlePostTypeChange={handlePostTypeChange}
             hobbyMap={hobbyMap}
             sectionTitle={
@@ -419,12 +432,12 @@ function MyPage() {
 
         {/* 7. 가족구성원 */}
         <ScrollAnchor ref={familySectionRef}>
-          <FamilySection groupId={user?.group_id} />
+          <FamilySection groupId={user?.group_id} groupUsers={groupUsers} />
         </ScrollAnchor>
 
         {/* 8. 일정 및 결제 확인 */}
         <ScrollAnchor ref={scheduleSectionRef}>
-          <SchedulePaymentSection />
+          <SchedulePaymentSection userAnnouncements={userAnnouncements} />
         </ScrollAnchor>
       </MyPageContainer>
     </>

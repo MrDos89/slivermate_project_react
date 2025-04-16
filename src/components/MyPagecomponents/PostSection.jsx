@@ -74,12 +74,34 @@ function PostSection({
   selectedPostType,
   postVisibleCount,
   startPostIndex,
-  handlePostPrev,
-  handlePostNext,
+  setStartPostIndex,
   handlePostTypeChange,
   hobbyMap,
   sectionTitle,
 }) {
+  console.log("넘겨받은 userPosts 확인 👉", userPosts);
+  console.log("넘겨받은 userComments 확인 👉", userComments);
+
+  // 필터링 후 슬라이스
+  const selectedList =
+    selectedPostType === 1 ? userPosts || [] : userComments || [];
+  const totalCount = selectedList.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / postVisibleCount));
+  const slicedList = selectedList.slice(
+    startPostIndex,
+    startPostIndex + postVisibleCount
+  );
+
+  const handlePostPrev = () => {
+    setStartPostIndex((prev) => Math.max(prev - postVisibleCount, 0));
+  };
+
+  const handlePostNext = () => {
+    if (startPostIndex + postVisibleCount < selectedList.length) {
+      setStartPostIndex((prev) => prev + postVisibleCount);
+    }
+  };
+
   return (
     <PostSectionWrapper>
       <PostTitle>{sectionTitle}</PostTitle>
@@ -89,35 +111,58 @@ function PostSection({
       </PostDropdown>
 
       <TableWrapper>
-        <Table>
-          <thead>
-            <tr>
-              <TableHeader>번호</TableHeader>
-              <TableHeader>내용</TableHeader>
-              <TableHeader>작성일</TableHeader>
-              <TableHeader>유저이름</TableHeader>
-              <TableHeader>취미</TableHeader>
-              <TableHeader>동아리 이름</TableHeader>
-            </tr>
-          </thead>
-          <tbody>
-            {visiblePosts.map((post, index) => (
-              <TableRow key={post.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{post.postNote}</TableCell>
-                <TableCell>{post.date}</TableCell>
-                <TableCell>{user.nickname}</TableCell>
-                <TableCell>
-                  {
-                    hobbyMap[post.hobby.categoryId === 1 ? "indoor" : "outdoor"]
-                      ?.list[post.hobby.hobbyId]
-                  }
-                </TableCell>
-                <TableCell>{post.clubName}</TableCell>
-              </TableRow>
-            ))}
-          </tbody>
-        </Table>
+        {selectedPostType === 1 ? (
+          <Table>
+            <thead>
+              <tr>
+                <TableHeader>번호</TableHeader>
+                <TableHeader>내용</TableHeader>
+                <TableHeader>작성일</TableHeader>
+                <TableHeader>유저이름</TableHeader>
+                <TableHeader>취미</TableHeader>
+              </tr>
+            </thead>
+            <tbody>
+              {slicedList.map((post, index) => (
+                <TableRow key={post.postId}>
+                  <TableCell>{startPostIndex + index + 1}</TableCell>
+                  <TableCell>{post.postNote}</TableCell>
+                  <TableCell>
+                    {new Date(post.registerDate).toLocaleDateString("ko-KR")}
+                  </TableCell>
+                  <TableCell>{post.userNickname}</TableCell>
+                  <TableCell>
+                    {hobbyMap[post.postCategoryId === 1 ? "indoor" : "outdoor"]
+                      ?.list?.[post.postSubCategoryId] || "-"}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </tbody>
+          </Table>
+        ) : (
+          <Table>
+            <thead>
+              <tr>
+                <TableHeader>번호</TableHeader>
+                <TableHeader>내용</TableHeader>
+                <TableHeader>작성일</TableHeader>
+                <TableHeader>유저이름</TableHeader>
+              </tr>
+            </thead>
+            <tbody>
+              {slicedList.map((post, index) => (
+                <TableRow key={post.commentId}>
+                  <TableCell>{startPostIndex + index + 1}</TableCell>
+                  <TableCell>{post.commentText}</TableCell>
+                  <TableCell>
+                    {new Date(post.updDate).toLocaleDateString("ko-KR")}
+                  </TableCell>
+                  <TableCell>{post.userNickname}</TableCell>
+                </TableRow>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </TableWrapper>
 
       <PaginationWrapper>

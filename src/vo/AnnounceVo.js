@@ -1,23 +1,25 @@
 class AnnounceVo {
     constructor({
-      title = "",
-      date = "", // yyyy-MM-dd
-      time = "",
-      location = "",
-      description = "",
+      clubId = 0,
+      announceTitle = "",
+      announceDate = "", // yyyy-MM-dd
+      announceTime = "",
+      announceLocation = "",
+      announceDescription = "",
       meetingPrice = "",
-      attendingCount = 0,
-      type = 1, // 1: 공지, 2: 모임
+      attendCount = 0,
+      announceType = 1, // 1: 공지, 2: 모임
       updDate = new Date(),
     }) {
-      this.title = title;
-      this.date = date;
-      this.time = time;
-      this.location = location;
-      this.description = description;
+      this.clubId = clubId;
+      this.announceTitle = announceTitle;
+      this.announceDate = announceDate;
+      this.announceTime = announceTime;
+      this.announceLocation = announceLocation;
+      this.announceDescription = announceDescription;
       this.meetingPrice = meetingPrice;
-      this.attendingCount = attendingCount;
-      this.type = type;
+      this.attendCount = attendCount;
+      this.announceType = announceType;
       this.updDate = new Date(updDate);
     }
   
@@ -31,15 +33,16 @@ class AnnounceVo {
   
     static fromJson(json) {
       return new AnnounceVo({
-        title: json.title || "",
-        date: json.date || "",
-        time: json.time || "",
-        location: json.location || "",
-        description: json.description || "",
-        meetingPrice: json.meetingPrice || "",
-        attendingCount: json.attendingCount || 0,
-        type: json.type || 1,
-        updDate: json.updDate || new Date(),
+        clubId: json.club_id || 0,
+        announceTitle: json.announce_title || "",
+        announceDate: json.announce_date || "",
+        announceTime: json.announce_time || "",
+        announceLocation: json.announce_location || "",
+        announceDescription: json.announce_description || "",
+        meetingPrice: json.meeting_price || "",
+        attendCount: json.attend_count || 0,
+        announceType: json.announce_type || 1,
+        updDate: json.upd_date || new Date(),
       });
     }
   

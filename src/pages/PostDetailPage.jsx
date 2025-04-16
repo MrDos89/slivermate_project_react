@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { useAuth } from "../components/Context/AuthContext";
 import PostVo from "../vo/PostVo";
-import CommentVo from "../vo/commentVo";
+import CommentVo from "../vo/CommentVo";
 
 // 전체 페이지 배경
 const PageContainer = styled.div`
